@@ -4,6 +4,7 @@ import {GestureResponderEvent} from "react-native";
 import {FC, RefObject, useEffect, useRef} from "react";
 import colors from "../../styles/colors";
 import {Hotel} from "../../shared/types";
+import {compareWithHotel, deltaPathScale, pathsCenter, pathsRotate, propsDHotels} from "./data";
 
 type Props = {
   onPress?: (ref: RefObject<Path | null>, refParent: RefObject<Svg | null>, hotelType: Hotel, deltaX?: number) => void,
@@ -33,86 +34,78 @@ export const MapSvgComponent: FC<Props> = ({onPress, typeHotelSelected, ...props
   const hotelSeven = useRef<Path>(null);
   const hotelTen = useRef<Path>(null);
 
-
-  const compareWithHotel = (e: GestureResponderEvent, ref: RefObject<Path | null>) => {
-    const boxHotel = ref.current!.getBBox()!;
-
-    return (e.nativeEvent.locationX * 17122 / 1000 >= boxHotel.x && e.nativeEvent.locationX * 17122 / 1000 <= boxHotel.x + boxHotel.width)
-      && (e.nativeEvent.locationY * 19161 / 1000 >= boxHotel.y && e.nativeEvent.locationY * 19161 / 1000 <= boxHotel.y + boxHotel.height);
-  }
-
   const onLongPress = (e: GestureResponderEvent) => {
     switch (true) {
       case compareWithHotel(e, hotelOne): {
-        onPress?.(hotelOne, parent, Hotel.ONE, -0.25)
+        onPress?.(hotelOne, parent, Hotel.ONE, deltaPathScale[Hotel.ONE])
       }
       break;
       case compareWithHotel(e, hotelTwo): {
-        onPress?.(hotelTwo, parent, Hotel.TWO)
+        onPress?.(hotelTwo, parent, Hotel.TWO, deltaPathScale[Hotel.TWO])
       }
         break;
       case compareWithHotel(e, hotelThree): {
-        onPress?.(hotelThree, parent, Hotel.THREE)
+        onPress?.(hotelThree, parent, Hotel.THREE, deltaPathScale[Hotel.THREE])
       }
         break;
       case compareWithHotel(e, hotelFour): {
-        onPress?.(hotelFour, parent, Hotel.FOUR, -0.25)
+        onPress?.(hotelFour, parent, Hotel.FOUR, deltaPathScale[Hotel.FOUR])
       }
         break;
       case compareWithHotel(e, hotelFive): {
-        onPress?.(hotelFive, parent, Hotel.FIVE, -0.25)
+        onPress?.(hotelFive, parent, Hotel.FIVE, deltaPathScale[Hotel.FIVE])
       }
         break;
       case compareWithHotel(e, hotelSix): {
-        onPress?.(hotelSix, parent, Hotel.SIX)
+        onPress?.(hotelSix, parent, Hotel.SIX, deltaPathScale[Hotel.SIX])
       }
         break;
       case compareWithHotel(e, hotelSeven): {
-        onPress?.(hotelSeven, parent, Hotel.SEVEN, 0.1)
+        onPress?.(hotelSeven, parent, Hotel.SEVEN, deltaPathScale[Hotel.SEVEN])
       }
         break;
       case compareWithHotel(e, hotelEight): {
-        onPress?.(hotelEight, parent, Hotel.EIGHT, -0.2)
+        onPress?.(hotelEight, parent, Hotel.EIGHT, deltaPathScale[Hotel.EIGHT])
       }
         break;
       case compareWithHotel(e, hotelNine): {
-        onPress?.(hotelNine, parent, Hotel.NINE)
+        onPress?.(hotelNine, parent, Hotel.NINE, deltaPathScale[Hotel.NINE])
       }
         break;
       case compareWithHotel(e, hotelTen): {
-        onPress?.(hotelTen, parent, Hotel.TEN, 0.1)
+        onPress?.(hotelTen, parent, Hotel.TEN, deltaPathScale[Hotel.TEN])
       }
         break;
       case compareWithHotel(e, hotelEleven): {
-        onPress?.(hotelEleven, parent, Hotel.ELEVEN, -0.1)
+        onPress?.(hotelEleven, parent, Hotel.ELEVEN, deltaPathScale[Hotel.ELEVEN])
       }
         break;
       case compareWithHotel(e, hotelTwelve): {
-        onPress?.(hotelTwelve, parent, Hotel.TWELVE, 0.1)
+        onPress?.(hotelTwelve, parent, Hotel.TWELVE, deltaPathScale[Hotel.TWELVE])
       }
         break;
       case compareWithHotel(e, hotelThirteen): {
-        onPress?.(hotelThirteen, parent, Hotel.THIRTEEN, 0.2)
+        onPress?.(hotelThirteen, parent, Hotel.THIRTEEN, deltaPathScale[Hotel.THIRTEEN])
       }
         break;
       case compareWithHotel(e, hotelFourteen): {
-        onPress?.(hotelFourteen, parent, Hotel.FOURTEEN)
+        onPress?.(hotelFourteen, parent, Hotel.FOURTEEN, deltaPathScale[Hotel.FOURTEEN])
       }
         break;
       case compareWithHotel(e, hotelFifteen): {
-        onPress?.(hotelFifteen, parent, Hotel.FIFTEEN)
+        onPress?.(hotelFifteen, parent, Hotel.FIFTEEN, deltaPathScale[Hotel.FIFTEEN])
       }
         break;
       case compareWithHotel(e, hotelSixteen): {
-        onPress?.(hotelSixteen, parent, Hotel.SIXTEEN, 0.15)
+        onPress?.(hotelSixteen, parent, Hotel.SIXTEEN, deltaPathScale[Hotel.SIXTEEN])
       }
         break;
       case compareWithHotel(e, hotelSeventeen): {
-        onPress?.(hotelSeventeen, parent, Hotel.SEVENTEEN, 0.25)
+        onPress?.(hotelSeventeen, parent, Hotel.SEVENTEEN, deltaPathScale[Hotel.SEVENTEEN])
       }
         break;
       case compareWithHotel(e, hotelEighteen): {
-        onPress?.(hotelEighteen, parent, Hotel.EIGHTEEN, 0.25)
+        onPress?.(hotelEighteen, parent, Hotel.EIGHTEEN, deltaPathScale[Hotel.EIGHTEEN])
       }
         break;
     }
@@ -145,7 +138,10 @@ export const MapSvgComponent: FC<Props> = ({onPress, typeHotelSelected, ...props
           stroke="#8E92FB"
           strokeOpacity={0.5}
           strokeWidth={20}
-          d="M3092.9 16430.5c-107.72 389.2-157.68 694.6-155.73 998.5 1.96 303.9 55.82 606.3 155.68 989.5H983.5v-1988h2109.4Z"
+          d={propsDHotels[Hotel.ONE]}
+          transform={`rotate(
+            ${typeHotelSelected === Hotel.ONE ? pathsRotate[Hotel.ONE] : 0}, ${pathsCenter[Hotel.ONE].x}, ${pathsCenter[Hotel.ONE].y})`
+          }
         />
         <Path
           fill="#8E92FB"
@@ -166,7 +162,10 @@ export const MapSvgComponent: FC<Props> = ({onPress, typeHotelSelected, ...props
           stroke="#8E92FB"
           strokeWidth={20}
           strokeOpacity={0.5}
-          d="M8061.97 18438.5H5978.5c128.61-383.2 190.95-682.3 189.96-981.5-.98-299.1-65.3-598.2-189.96-981.5h2083.47v1963Z"
+          d={propsDHotels[Hotel.TWO]}
+          transform={`rotate(
+            ${typeHotelSelected === Hotel.TWO ? pathsRotate[Hotel.TWO] : 0}, ${pathsCenter[Hotel.TWO].x}, ${pathsCenter[Hotel.TWO].y})`
+          }
         />
         <Path
           fill="#8E92FB"
@@ -178,9 +177,12 @@ export const MapSvgComponent: FC<Props> = ({onPress, typeHotelSelected, ...props
           ref={hotelThree}
           fill={typeHotelSelected === Hotel.THREE ? colors.white : '#E8E9FE'}
           stroke="#8E92FB"
+          transform={`rotate(
+            ${typeHotelSelected === Hotel.THREE ? pathsRotate[Hotel.THREE] : 0}, ${pathsCenter[Hotel.THREE].x}, ${pathsCenter[Hotel.THREE].y})`
+          }
           strokeWidth={20}
           strokeOpacity={0.5}
-          d="m9275.33 16727.1 1680.082 296.244-296.244 1680.082-1680.082-296.244z"
+          d={propsDHotels[Hotel.THREE]}
         />
         <Path
           fill="#8E92FB"
@@ -194,7 +196,10 @@ export const MapSvgComponent: FC<Props> = ({onPress, typeHotelSelected, ...props
           stroke="#8E92FB"
           strokeWidth={20}
           strokeOpacity={0.5}
-          d="m10047.8 13946 1640.044 501.412-502.81 1644.614-1640.043-501.411z"
+          d={propsDHotels[Hotel.SEVEN]}
+          transform={`rotate(
+            ${typeHotelSelected === Hotel.SEVEN ? pathsRotate[Hotel.SEVEN] : 0}, ${pathsCenter[Hotel.SEVEN].x}, ${pathsCenter[Hotel.SEVEN].y})`
+          }
         />
         <Path
           fill="#8E92FB"
@@ -208,7 +213,11 @@ export const MapSvgComponent: FC<Props> = ({onPress, typeHotelSelected, ...props
           stroke="#8E92FB"
           strokeWidth={20}
           strokeOpacity={0.5}
-          d="m11385 11182.2 1485.216 857.49-859.88 1489.356-1485.216-857.49z"
+          d={propsDHotels[Hotel.TEN]}
+
+          transform={`rotate(
+            ${typeHotelSelected === Hotel.TEN ? pathsRotate[Hotel.TEN] : 0}, ${pathsCenter[Hotel.TEN].x}, ${pathsCenter[Hotel.TEN].y})`
+          }
         />
         <Path
           fill="#8E92FB"
@@ -222,7 +231,10 @@ export const MapSvgComponent: FC<Props> = ({onPress, typeHotelSelected, ...props
           stroke="#8E92FB"
           strokeWidth={20}
           strokeOpacity={0.5}
-          d="m13193 8799.59 1313.75 1102.368-1105.44 1317.412-1313.75-1102.367z"
+          d={propsDHotels[Hotel.THIRTEEN]}
+          transform={`rotate(
+            ${typeHotelSelected === Hotel.THIRTEEN ? pathsRotate[Hotel.THIRTEEN] : 0}, ${pathsCenter[Hotel.THIRTEEN].x}, ${pathsCenter[Hotel.THIRTEEN].y})`
+          }
         />
         <Path
           fill="#8E92FB"
@@ -236,7 +248,10 @@ export const MapSvgComponent: FC<Props> = ({onPress, typeHotelSelected, ...props
           stroke="#8E92FB"
           strokeWidth={20}
           strokeOpacity={0.5}
-          d="m15438.1 6802.56 1079.272 1332.79-1336.505 1082.28-1079.272-1332.79z"
+          d={propsDHotels[Hotel.EIGHTEEN]}
+          transform={`rotate(
+            ${typeHotelSelected === Hotel.EIGHTEEN ? pathsRotate[Hotel.EIGHTEEN] : 0}, ${pathsCenter[Hotel.EIGHTEEN].x}, ${pathsCenter[Hotel.EIGHTEEN].y})`
+          }
         />
         <Path
           fill="#8E92FB"
@@ -250,7 +265,10 @@ export const MapSvgComponent: FC<Props> = ({onPress, typeHotelSelected, ...props
           stroke="#8E92FB"
           strokeWidth={20}
           strokeOpacity={0.5}
-          d="m13963.4 4551.09 931.28 1680.074-1668.275 924.74-931.28-1680.074z"
+          d={propsDHotels[Hotel.SEVENTEEN]}
+          transform={`rotate(
+            ${typeHotelSelected === Hotel.SEVENTEEN ? pathsRotate[Hotel.SEVENTEEN] : 0}, ${pathsCenter[Hotel.SEVENTEEN].x}, ${pathsCenter[Hotel.SEVENTEEN].y})`
+          }
         />
         <Path
           fill="#8E92FB"
@@ -264,7 +282,10 @@ export const MapSvgComponent: FC<Props> = ({onPress, typeHotelSelected, ...props
           stroke="#8E92FB"
           strokeWidth={20}
           strokeOpacity={0.5}
-          d="m11504.9 2154.77-.1.11L13132 3211.6l-1049.7 1616.48-1627.1-1056.67-.3.36-.9-.42c119.2-383.33 236.5-663.31 396.7-909.62 160.1-246.32 363.1-458.95 653.5-707.61l.7.65Z"
+          d={propsDHotels[Hotel.SIXTEEN]}
+          transform={`rotate(
+            ${typeHotelSelected === Hotel.SIXTEEN ? pathsRotate[Hotel.SIXTEEN] : 0}, ${pathsCenter[Hotel.SIXTEEN].x}, ${pathsCenter[Hotel.SIXTEEN].y})`
+          }
         />
         <Path
           fill="#8E92FB"
@@ -278,7 +299,10 @@ export const MapSvgComponent: FC<Props> = ({onPress, typeHotelSelected, ...props
           stroke="#8E92FB"
           strokeWidth={20}
           strokeOpacity={0.5}
-          d="m5251.79 834.085 1909.02 336.612-336.398 1907.809-1909.02-336.612z"
+          d={propsDHotels[Hotel.FOURTEEN]}
+          transform={`rotate(
+            ${typeHotelSelected === Hotel.FOURTEEN ? pathsRotate[Hotel.FOURTEEN] : 0}, ${pathsCenter[Hotel.FOURTEEN].x}, ${pathsCenter[Hotel.FOURTEEN].y})`
+          }
         />
         <Path
           fill="#8E92FB"
@@ -292,7 +316,10 @@ export const MapSvgComponent: FC<Props> = ({onPress, typeHotelSelected, ...props
           stroke="#8E92FB"
           strokeWidth={20}
           strokeOpacity={0.5}
-          d="M10035.5 1709.27v.17l-.5-.12c-296.43 755.79-372.22 1167.31-331.01 1877.09L7692.5 3231.73l331.01-1877.23 2011.99 354.77Z"
+          d={propsDHotels[Hotel.FIFTEEN]}
+          transform={`rotate(
+            ${typeHotelSelected === Hotel.FIFTEEN ? pathsRotate[Hotel.FIFTEEN] : 0}, ${pathsCenter[Hotel.FIFTEEN].x}, ${pathsCenter[Hotel.FIFTEEN].y})`
+          }
         />
         <Path
           fill="#8E92FB"
@@ -306,7 +333,10 @@ export const MapSvgComponent: FC<Props> = ({onPress, typeHotelSelected, ...props
           stroke="#8E92FB"
           strokeWidth={20}
           strokeOpacity={0.5}
-          d="m6878.41 4510.22 1625.558 976.734-976.894 1625.823-1625.557-976.733z"
+          d={propsDHotels[Hotel.ELEVEN]}
+          transform={`rotate(
+            ${typeHotelSelected === Hotel.ELEVEN ? pathsRotate[Hotel.ELEVEN] : 0}, ${pathsCenter[Hotel.ELEVEN].x}, ${pathsCenter[Hotel.ELEVEN].y})`
+          }
         />
         <Path
           fill="#8E92FB"
@@ -320,7 +350,10 @@ export const MapSvgComponent: FC<Props> = ({onPress, typeHotelSelected, ...props
           stroke="#8E92FB"
           strokeWidth={20}
           strokeOpacity={0.5}
-          d="m10206.9 6484.1 1811.068 588.452-588.869 1812.352-1811.068-588.452z"
+          d={propsDHotels[Hotel.TWELVE]}
+          transform={`rotate(
+            ${typeHotelSelected === Hotel.TWELVE ? pathsRotate[Hotel.TWELVE] : 0}, ${pathsCenter[Hotel.TWELVE].x}, ${pathsCenter[Hotel.TWELVE].y})`
+          }
         />
         <Path
           fill="#8E92FB"
@@ -334,7 +367,10 @@ export const MapSvgComponent: FC<Props> = ({onPress, typeHotelSelected, ...props
           stroke="#8E92FB"
           strokeWidth={20}
           strokeOpacity={0.5}
-          d="m4676.4 6595.19 1261.974 1401.564-1403.526 1263.74L3272.874 7858.93z"
+          d={propsDHotels[Hotel.EIGHT]}
+          transform={`rotate(
+            ${typeHotelSelected === Hotel.EIGHT ? pathsRotate[Hotel.EIGHT] : 0}, ${pathsCenter[Hotel.EIGHT].x}, ${pathsCenter[Hotel.EIGHT].y})`
+          }
         />
         <Path
           fill="#8E92FB"
@@ -348,7 +384,10 @@ export const MapSvgComponent: FC<Props> = ({onPress, typeHotelSelected, ...props
           stroke="#8E92FB"
           strokeWidth={20}
           strokeOpacity={0.5}
-          d="m7716.01 9778.78 1895.11-99.318 98.87 1886.57-1895.109 99.319z"
+          d={propsDHotels[Hotel.NINE]}
+          transform={`rotate(
+            ${typeHotelSelected === Hotel.NINE ? pathsRotate[Hotel.NINE] : 0}, ${pathsCenter[Hotel.NINE].x}, ${pathsCenter[Hotel.NINE].y})`
+          }
         />
         <Path
           fill="#8E92FB"
@@ -362,7 +401,10 @@ export const MapSvgComponent: FC<Props> = ({onPress, typeHotelSelected, ...props
           stroke="#8E92FB"
           strokeWidth={20}
           strokeOpacity={0.5}
-          d="m3357.18 9839.7 1743.081 776.07-779.828 1751.522-1743.081-776.07z"
+          d={propsDHotels[Hotel.FIVE]}
+          transform={`rotate(
+            ${typeHotelSelected === Hotel.FIVE ? pathsRotate[Hotel.FIVE] : 0}, ${pathsCenter[Hotel.FIVE].x}, ${pathsCenter[Hotel.FIVE].y})`
+          }
         />
         <Path
           fill="#8E92FB"
@@ -376,7 +418,10 @@ export const MapSvgComponent: FC<Props> = ({onPress, typeHotelSelected, ...props
           stroke="#8E92FB"
           strokeWidth={20}
           strokeOpacity={0.5}
-          d="m6743.35 12763.7 1730.867 770.632-769.781 1728.958-1730.868-770.632z"
+          d={propsDHotels[Hotel.SIX]}
+          transform={`rotate(
+            ${typeHotelSelected === Hotel.SIX ? pathsRotate[Hotel.SIX] : 0}, ${pathsCenter[Hotel.SIX].x}, ${pathsCenter[Hotel.SIX].y})`
+          }
         />
         <Path
           fill="#8E92FB"
@@ -390,7 +435,10 @@ export const MapSvgComponent: FC<Props> = ({onPress, typeHotelSelected, ...props
           stroke="#8E92FB"
           strokeWidth={20}
           strokeOpacity={0.5}
-          d="m1562.35 13450.3 1884.036-332.206L3781.214 15017l-1884.036 332.206z"
+          d={propsDHotels[Hotel.FOUR]}
+          transform={`rotate(
+            ${typeHotelSelected === Hotel.FOUR ? pathsRotate[Hotel.FOUR] : 0}, ${pathsCenter[Hotel.FOUR].x}, ${pathsCenter[Hotel.FOUR].y})`
+          }
         />
         <Path
           fill="#8E92FB"

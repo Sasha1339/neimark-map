@@ -44,7 +44,7 @@ export const MapServiceComponent: FC = () => {
       startScale.value = scale.value;
     })
     .onUpdate((e) => {
-      const newScale = Math.min(Math.max(0.8, startScale.value * e.scale), 2);
+      const newScale = Math.min(Math.max(0.8, startScale.value * e.scale), 3);
 
       scale.value = newScale;
     });
@@ -75,7 +75,7 @@ export const MapServiceComponent: FC = () => {
   }
 
   const onPress = async (ref: RefObject<Path | null>, refParent: RefObject<Svg | null>, hotelType: Hotel, deltaX: number = 0) => {
-    scale.value = withTiming(2, {duration: 50})
+    scale.value = withTiming(3, {duration: 50})
     setSelectHotel(hotelType);
      setTimeout(async () => {
       refParent.current?.measure(async  (x, y, width, height, pageX, pageY) => {
