@@ -86,7 +86,7 @@ export const MapServiceComponent: FC = () => {
           translateY.value = withTiming(translateY.value - pageY - (bbox!.y * height / 19161) + heightPhone / 2 - (bbox!.height * height / 19161) / 2, {duration: 300})
         }
       });
-    }, 70)
+    }, 350)
 
   }
 
