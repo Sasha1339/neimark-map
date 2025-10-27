@@ -2,6 +2,7 @@ import {Hotel} from "../../shared/types";
 import {GestureResponderEvent} from "react-native";
 import {RefObject} from "react";
 import {Path} from "react-native-svg";
+import { svgPathBbox } from 'svg-path-bbox';
 
 export const propsDHotels = {
     [Hotel.ONE]: "M3092.9 16430.5c-107.72 389.2-157.68 694.6-155.73 998.5 1.96 303.9 55.82 606.3 155.68 989.5H983.5v-1988h2109.4Z",
@@ -25,32 +26,11 @@ export const propsDHotels = {
 }
 
 const getPathCenter = (pathData?: string): { x: number; y: number } => {
-    if (!pathData) return { x: 0, y: 0 };
-
-    const numbers = pathData.match(/-?\d+\.?\d*/g)?.map(Number) || [];
-
-    // Для разных форматов path данных
-    if (numbers.length >= 8) {
-        // Формат: m x y dx1 dy1 dx2 dy2 dx3 dy3
-        const startX = numbers[0];
-        const startY = numbers[1];
-        const dx1 = numbers[2];
-        const dy1 = numbers[3];
-        const dx2 = numbers[4];
-        const dy2 = numbers[5];
-        const dx3 = numbers[6];
-        const dy3 = numbers[7];
-
-        const centerX = startX + (dx1 + dx2) / 2;
-        const centerY = startY + (dy1 + dy2 + dy3) / 2;
-
-        return { x: centerX, y: centerY };
-    } else if (numbers.length >= 2) {
-        // Простой fallback - возвращаем первую точку
-        return { x: numbers[0], y: numbers[1] };
-    }
-
-    return { x: 0, y: 0 };
+    const [x1, y1, x2, y2] = svgPathBbox(pathData!);
+    return {
+        x: (x1 + x2) / 2,
+        y: (y1 + y2) / 2,
+    };
 };
 
 export  const compareWithHotel = (e: GestureResponderEvent, ref: RefObject<Path | null>) => {
@@ -64,21 +44,21 @@ export const deltaPathScale = {
     [Hotel.ONE]: -0.3,
     [Hotel.TWO]: -0.1,
     [Hotel.THREE]: 0.1,
-    [Hotel.FOUR]: -0.25,
-    [Hotel.FIVE]: -0.25,
-    [Hotel.SIX]: 0,
+    [Hotel.FOUR]: -0.275,
+    [Hotel.FIVE]: -0.2,
+    [Hotel.SIX]: -0.05,
     [Hotel.SEVEN]: 0.1,
-    [Hotel.EIGHT]: -0.2,
+    [Hotel.EIGHT]: -0.15,
     [Hotel.NINE]: 0,
     [Hotel.TEN]: 0.1,
-    [Hotel.ELEVEN]: -0.1,
+    [Hotel.ELEVEN]: -0.05,
     [Hotel.TWELVE]: 0.1,
     [Hotel.THIRTEEN]: 0.2,
-    [Hotel.FOURTEEN]: 0,
+    [Hotel.FOURTEEN]: -0.1,
     [Hotel.FIFTEEN]: 0,
     [Hotel.SIXTEEN]: 0.15,
-    [Hotel.SEVENTEEN]: 0.25,
-    [Hotel.EIGHTEEN]: 0.25
+    [Hotel.SEVENTEEN]: 0.2,
+    [Hotel.EIGHTEEN]: 0.3
 }
 
 export const pathsRotate = {
@@ -97,7 +77,7 @@ export const pathsRotate = {
     [Hotel.THIRTEEN]: -40,
     [Hotel.FOURTEEN]: -10,
     [Hotel.FIFTEEN]: -10,
-    [Hotel.SIXTEEN]: -0,
+    [Hotel.SIXTEEN]: -33,
     [Hotel.SEVENTEEN]: -61,
     [Hotel.EIGHTEEN]: -51
 }

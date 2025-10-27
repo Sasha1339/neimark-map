@@ -1,10 +1,14 @@
 import * as React from "react"
 import Svg, {Path, G} from "react-native-svg"
 import {GestureResponderEvent} from "react-native";
-import {FC, RefObject, useEffect, useRef} from "react";
+import {FC, RefObject, useCallback, useEffect, useMemo, useRef, useState} from "react";
 import colors from "../../styles/colors";
 import {Hotel} from "../../shared/types";
 import {compareWithHotel, deltaPathScale, pathsCenter, pathsRotate, propsDHotels} from "./data";
+import { Animated } from 'react-native';
+import {useAnimationTransform} from "./hooks/useAnimationTransform";
+
+export const AnimatedPath = Animated.createAnimatedComponent(Path);
 
 type Props = {
   onPress?: (ref: RefObject<Path | null>, refParent: RefObject<Svg | null>, hotelType: Hotel, deltaX?: number) => void,
@@ -12,6 +16,8 @@ type Props = {
 }
 
 export const MapSvgComponent: FC<Props> = ({onPress, typeHotelSelected, ...props}) => {
+
+  const transform = useAnimationTransform(typeHotelSelected);
 
   const parent = useRef<Svg>(null);
 
@@ -132,16 +138,14 @@ export const MapSvgComponent: FC<Props> = ({onPress, typeHotelSelected, ...props
         mask="url(#path-2-inside-1_0_1)"
       />
       <G>
-        <Path
+        <AnimatedPath
           ref={hotelOne}
           fill={typeHotelSelected === Hotel.ONE ? colors.white : '#E8E9FE'}
           stroke="#8E92FB"
           strokeOpacity={0.5}
           strokeWidth={20}
           d={propsDHotels[Hotel.ONE]}
-          transform={`rotate(
-            ${typeHotelSelected === Hotel.ONE ? pathsRotate[Hotel.ONE] : 0}, ${pathsCenter[Hotel.ONE].x}, ${pathsCenter[Hotel.ONE].y})`
-          }
+          transform={transform(Hotel.ONE)}
         />
         <Path
           fill="#8E92FB"
@@ -156,16 +160,14 @@ export const MapSvgComponent: FC<Props> = ({onPress, typeHotelSelected, ...props
         d="M5234.5 17732.5h-1540v-1280h577v-162h385v162h578v1280Z"
       />
       <G>
-        <Path
+        <AnimatedPath
           ref={hotelTwo}
           fill={typeHotelSelected === Hotel.TWO ? colors.white : '#E8E9FE'}
           stroke="#8E92FB"
           strokeWidth={20}
           strokeOpacity={0.5}
           d={propsDHotels[Hotel.TWO]}
-          transform={`rotate(
-            ${typeHotelSelected === Hotel.TWO ? pathsRotate[Hotel.TWO] : 0}, ${pathsCenter[Hotel.TWO].x}, ${pathsCenter[Hotel.TWO].y})`
-          }
+          transform={transform(Hotel.TWO)}
         />
         <Path
           fill="#8E92FB"
@@ -173,13 +175,11 @@ export const MapSvgComponent: FC<Props> = ({onPress, typeHotelSelected, ...props
         />
       </G>
       <G>
-        <Path
+        <AnimatedPath
           ref={hotelThree}
           fill={typeHotelSelected === Hotel.THREE ? colors.white : '#E8E9FE'}
           stroke="#8E92FB"
-          transform={`rotate(
-            ${typeHotelSelected === Hotel.THREE ? pathsRotate[Hotel.THREE] : 0}, ${pathsCenter[Hotel.THREE].x}, ${pathsCenter[Hotel.THREE].y})`
-          }
+          transform={transform(Hotel.THREE)}
           strokeWidth={20}
           strokeOpacity={0.5}
           d={propsDHotels[Hotel.THREE]}
@@ -190,16 +190,14 @@ export const MapSvgComponent: FC<Props> = ({onPress, typeHotelSelected, ...props
         />
       </G>
       <G>
-        <Path
+        <AnimatedPath
           ref={hotelSeven}
           fill={typeHotelSelected === Hotel.SEVEN ? colors.white : '#E8E9FE'}
           stroke="#8E92FB"
           strokeWidth={20}
           strokeOpacity={0.5}
           d={propsDHotels[Hotel.SEVEN]}
-          transform={`rotate(
-            ${typeHotelSelected === Hotel.SEVEN ? pathsRotate[Hotel.SEVEN] : 0}, ${pathsCenter[Hotel.SEVEN].x}, ${pathsCenter[Hotel.SEVEN].y})`
-          }
+          transform={transform(Hotel.SEVEN)}
         />
         <Path
           fill="#8E92FB"
@@ -207,17 +205,14 @@ export const MapSvgComponent: FC<Props> = ({onPress, typeHotelSelected, ...props
         />
       </G>
       <G>
-        <Path
+        <AnimatedPath
           ref={hotelTen}
           fill={typeHotelSelected === Hotel.TEN ? colors.white : '#E8E9FE'}
           stroke="#8E92FB"
           strokeWidth={20}
           strokeOpacity={0.5}
           d={propsDHotels[Hotel.TEN]}
-
-          transform={`rotate(
-            ${typeHotelSelected === Hotel.TEN ? pathsRotate[Hotel.TEN] : 0}, ${pathsCenter[Hotel.TEN].x}, ${pathsCenter[Hotel.TEN].y})`
-          }
+          transform={transform(Hotel.TEN)}
         />
         <Path
           fill="#8E92FB"
@@ -225,16 +220,14 @@ export const MapSvgComponent: FC<Props> = ({onPress, typeHotelSelected, ...props
         />
       </G>
       <G>
-        <Path
+        <AnimatedPath
           ref={hotelThirteen}
           fill={typeHotelSelected === Hotel.THIRTEEN ? colors.white : '#E8E9FE'}
           stroke="#8E92FB"
           strokeWidth={20}
           strokeOpacity={0.5}
           d={propsDHotels[Hotel.THIRTEEN]}
-          transform={`rotate(
-            ${typeHotelSelected === Hotel.THIRTEEN ? pathsRotate[Hotel.THIRTEEN] : 0}, ${pathsCenter[Hotel.THIRTEEN].x}, ${pathsCenter[Hotel.THIRTEEN].y})`
-          }
+          transform={transform(Hotel.THIRTEEN)}
         />
         <Path
           fill="#8E92FB"
@@ -242,16 +235,14 @@ export const MapSvgComponent: FC<Props> = ({onPress, typeHotelSelected, ...props
         />
       </G>
       <G>
-        <Path
+        <AnimatedPath
           ref={hotelEighteen}
           fill={typeHotelSelected === Hotel.EIGHTEEN ? colors.white : '#E8E9FE'}
           stroke="#8E92FB"
           strokeWidth={20}
           strokeOpacity={0.5}
           d={propsDHotels[Hotel.EIGHTEEN]}
-          transform={`rotate(
-            ${typeHotelSelected === Hotel.EIGHTEEN ? pathsRotate[Hotel.EIGHTEEN] : 0}, ${pathsCenter[Hotel.EIGHTEEN].x}, ${pathsCenter[Hotel.EIGHTEEN].y})`
-          }
+          transform={transform(Hotel.EIGHTEEN)}
         />
         <Path
           fill="#8E92FB"
@@ -259,16 +250,14 @@ export const MapSvgComponent: FC<Props> = ({onPress, typeHotelSelected, ...props
         />
       </G>
       <G>
-        <Path
+        <AnimatedPath
           ref={hotelSeventeen}
           fill={typeHotelSelected === Hotel.SEVENTEEN ? colors.white : '#E8E9FE'}
           stroke="#8E92FB"
           strokeWidth={20}
           strokeOpacity={0.5}
           d={propsDHotels[Hotel.SEVENTEEN]}
-          transform={`rotate(
-            ${typeHotelSelected === Hotel.SEVENTEEN ? pathsRotate[Hotel.SEVENTEEN] : 0}, ${pathsCenter[Hotel.SEVENTEEN].x}, ${pathsCenter[Hotel.SEVENTEEN].y})`
-          }
+          transform={transform(Hotel.SEVENTEEN)}
         />
         <Path
           fill="#8E92FB"
@@ -276,16 +265,14 @@ export const MapSvgComponent: FC<Props> = ({onPress, typeHotelSelected, ...props
         />
       </G>
       <G>
-        <Path
+        <AnimatedPath
           ref={hotelSixteen}
           fill={typeHotelSelected === Hotel.SIXTEEN ? colors.white : '#E8E9FE'}
           stroke="#8E92FB"
           strokeWidth={20}
           strokeOpacity={0.5}
           d={propsDHotels[Hotel.SIXTEEN]}
-          transform={`rotate(
-            ${typeHotelSelected === Hotel.SIXTEEN ? pathsRotate[Hotel.SIXTEEN] : 0}, ${pathsCenter[Hotel.SIXTEEN].x}, ${pathsCenter[Hotel.SIXTEEN].y})`
-          }
+          transform={transform(Hotel.SIXTEEN)}
         />
         <Path
           fill="#8E92FB"
@@ -293,16 +280,14 @@ export const MapSvgComponent: FC<Props> = ({onPress, typeHotelSelected, ...props
         />
       </G>
       <G>
-        <Path
+        <AnimatedPath
           ref={hotelFourteen}
           fill={typeHotelSelected === Hotel.FOURTEEN ? colors.white : '#E8E9FE'}
           stroke="#8E92FB"
           strokeWidth={20}
           strokeOpacity={0.5}
           d={propsDHotels[Hotel.FOURTEEN]}
-          transform={`rotate(
-            ${typeHotelSelected === Hotel.FOURTEEN ? pathsRotate[Hotel.FOURTEEN] : 0}, ${pathsCenter[Hotel.FOURTEEN].x}, ${pathsCenter[Hotel.FOURTEEN].y})`
-          }
+          transform={transform(Hotel.FOURTEEN)}
         />
         <Path
           fill="#8E92FB"
@@ -310,16 +295,14 @@ export const MapSvgComponent: FC<Props> = ({onPress, typeHotelSelected, ...props
         />
       </G>
       <G>
-        <Path
+        <AnimatedPath
           ref={hotelFifteen}
           fill={typeHotelSelected === Hotel.FIFTEEN ? colors.white : '#E8E9FE'}
           stroke="#8E92FB"
           strokeWidth={20}
           strokeOpacity={0.5}
           d={propsDHotels[Hotel.FIFTEEN]}
-          transform={`rotate(
-            ${typeHotelSelected === Hotel.FIFTEEN ? pathsRotate[Hotel.FIFTEEN] : 0}, ${pathsCenter[Hotel.FIFTEEN].x}, ${pathsCenter[Hotel.FIFTEEN].y})`
-          }
+          transform={transform(Hotel.FIFTEEN)}
         />
         <Path
           fill="#8E92FB"
@@ -327,16 +310,14 @@ export const MapSvgComponent: FC<Props> = ({onPress, typeHotelSelected, ...props
         />
       </G>
       <G>
-        <Path
+        <AnimatedPath
           ref={hotelEleven}
           fill={typeHotelSelected === Hotel.ELEVEN ? colors.white : '#E8E9FE'}
           stroke="#8E92FB"
           strokeWidth={20}
           strokeOpacity={0.5}
           d={propsDHotels[Hotel.ELEVEN]}
-          transform={`rotate(
-            ${typeHotelSelected === Hotel.ELEVEN ? pathsRotate[Hotel.ELEVEN] : 0}, ${pathsCenter[Hotel.ELEVEN].x}, ${pathsCenter[Hotel.ELEVEN].y})`
-          }
+          transform={transform(Hotel.ELEVEN)}
         />
         <Path
           fill="#8E92FB"
@@ -344,16 +325,14 @@ export const MapSvgComponent: FC<Props> = ({onPress, typeHotelSelected, ...props
         />
       </G>
       <G>
-        <Path
+        <AnimatedPath
           ref={hotelTwelve}
           fill={typeHotelSelected === Hotel.TWELVE ? colors.white : '#E8E9FE'}
           stroke="#8E92FB"
           strokeWidth={20}
           strokeOpacity={0.5}
           d={propsDHotels[Hotel.TWELVE]}
-          transform={`rotate(
-            ${typeHotelSelected === Hotel.TWELVE ? pathsRotate[Hotel.TWELVE] : 0}, ${pathsCenter[Hotel.TWELVE].x}, ${pathsCenter[Hotel.TWELVE].y})`
-          }
+          transform={transform(Hotel.TWELVE)}
         />
         <Path
           fill="#8E92FB"
@@ -361,16 +340,14 @@ export const MapSvgComponent: FC<Props> = ({onPress, typeHotelSelected, ...props
         />
       </G>
       <G>
-        <Path
+        <AnimatedPath
           ref={hotelEight}
           fill={typeHotelSelected === Hotel.EIGHT ? colors.white : '#E8E9FE'}
           stroke="#8E92FB"
           strokeWidth={20}
           strokeOpacity={0.5}
           d={propsDHotels[Hotel.EIGHT]}
-          transform={`rotate(
-            ${typeHotelSelected === Hotel.EIGHT ? pathsRotate[Hotel.EIGHT] : 0}, ${pathsCenter[Hotel.EIGHT].x}, ${pathsCenter[Hotel.EIGHT].y})`
-          }
+          transform={transform(Hotel.EIGHT)}
         />
         <Path
           fill="#8E92FB"
@@ -378,16 +355,14 @@ export const MapSvgComponent: FC<Props> = ({onPress, typeHotelSelected, ...props
         />
       </G>
       <G>
-        <Path
+        <AnimatedPath
           ref={hotelNine}
           fill={typeHotelSelected === Hotel.NINE ? colors.white : '#E8E9FE'}
           stroke="#8E92FB"
           strokeWidth={20}
           strokeOpacity={0.5}
           d={propsDHotels[Hotel.NINE]}
-          transform={`rotate(
-            ${typeHotelSelected === Hotel.NINE ? pathsRotate[Hotel.NINE] : 0}, ${pathsCenter[Hotel.NINE].x}, ${pathsCenter[Hotel.NINE].y})`
-          }
+          transform={transform(Hotel.NINE)}
         />
         <Path
           fill="#8E92FB"
@@ -395,16 +370,14 @@ export const MapSvgComponent: FC<Props> = ({onPress, typeHotelSelected, ...props
         />
       </G>
       <G>
-        <Path
+        <AnimatedPath
           ref={hotelFive}
           fill={typeHotelSelected === Hotel.FIVE ? colors.white : '#E8E9FE'}
           stroke="#8E92FB"
           strokeWidth={20}
           strokeOpacity={0.5}
           d={propsDHotels[Hotel.FIVE]}
-          transform={`rotate(
-            ${typeHotelSelected === Hotel.FIVE ? pathsRotate[Hotel.FIVE] : 0}, ${pathsCenter[Hotel.FIVE].x}, ${pathsCenter[Hotel.FIVE].y})`
-          }
+          transform={transform(Hotel.FIVE)}
         />
         <Path
           fill="#8E92FB"
@@ -412,16 +385,14 @@ export const MapSvgComponent: FC<Props> = ({onPress, typeHotelSelected, ...props
         />
       </G>
       <G>
-        <Path
+        <AnimatedPath
           ref={hotelSix}
           fill={typeHotelSelected === Hotel.SIX ? colors.white : '#E8E9FE'}
           stroke="#8E92FB"
           strokeWidth={20}
           strokeOpacity={0.5}
           d={propsDHotels[Hotel.SIX]}
-          transform={`rotate(
-            ${typeHotelSelected === Hotel.SIX ? pathsRotate[Hotel.SIX] : 0}, ${pathsCenter[Hotel.SIX].x}, ${pathsCenter[Hotel.SIX].y})`
-          }
+          transform={transform(Hotel.SIX)}
         />
         <Path
           fill="#8E92FB"
@@ -429,16 +400,14 @@ export const MapSvgComponent: FC<Props> = ({onPress, typeHotelSelected, ...props
         />
       </G>
       <G>
-        <Path
+        <AnimatedPath
           ref={hotelFour}
           fill={typeHotelSelected === Hotel.FOUR ? colors.white : '#E8E9FE'}
           stroke="#8E92FB"
           strokeWidth={20}
           strokeOpacity={0.5}
           d={propsDHotels[Hotel.FOUR]}
-          transform={`rotate(
-            ${typeHotelSelected === Hotel.FOUR ? pathsRotate[Hotel.FOUR] : 0}, ${pathsCenter[Hotel.FOUR].x}, ${pathsCenter[Hotel.FOUR].y})`
-          }
+          transform={transform(Hotel.FOUR)}
         />
         <Path
           fill="#8E92FB"
