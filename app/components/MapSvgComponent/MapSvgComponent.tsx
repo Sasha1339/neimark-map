@@ -117,6 +117,7 @@ export const MapSvgComponent: FC<Props> = ({onPress, typeHotelSelected, ...props
     }
   }
 
+
   return (
     <Svg
       onLongPress={onLongPress}
