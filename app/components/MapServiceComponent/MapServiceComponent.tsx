@@ -17,12 +17,14 @@ import {font_family, font_sizes} from "../../styles/fonts";
 import {MapSearchingComponent} from "../MapSearchingComponent/MapSearchingComponent";
 import Svg, {Path} from "react-native-svg";
 import {Hotel} from "../../shared/types";
+import {MapFloorComponent} from "../MapFloorComponent/MapFloorComponent";
 
 export const MapServiceComponent: FC = () => {
 
   const {width: widthPhone, height: heightPhone} = useWindowDimensions()
 
   const [openSearch, setOpenSearch] = useState(false);
+  const [openFloors, setOpenFloors] = useState<Hotel | null>(null);
   const [selectHotel, setSelectHotel] = useState<Hotel | undefined>(undefined)
 
   const scaleButton = useSharedValue(1);
@@ -70,8 +72,12 @@ export const MapServiceComponent: FC = () => {
     ],
   }));
 
-  const onClose = () => {
+  const onCloseSearch = () => {
     setOpenSearch(false);
+  }
+
+  const onCloseFloor = () => {
+    setOpenFloors(null);
   }
 
   const onPress = async (ref: RefObject<Path | null>, refParent: RefObject<Svg | null>, hotelType: Hotel, deltaX: number = 0) => {
@@ -98,7 +104,7 @@ export const MapServiceComponent: FC = () => {
         </Animated.View>
       </GestureDetector>
       {selectHotel && <View style={styles.hintContainer}>
-        <TouchableOpacity style={styles.hintRow}>
+        <TouchableOpacity style={styles.hintRow} onPress={() => setOpenFloors(selectHotel)}>
             <Text style={styles.hintText}>Открыть</Text>
         </TouchableOpacity>
       </View>}
@@ -112,8 +118,9 @@ export const MapServiceComponent: FC = () => {
           <Text style={styles.text}>Поиск</Text>
         </Animated.View>
       </Pressable>
-      {openSearch && <View style={styles.overlay}></View>}
-      {openSearch && <MapSearchingComponent isOpen={openSearch} onClose={onClose} />}
+      {(openSearch || openFloors) && <View style={styles.overlay}></View>}
+      {openSearch && <MapSearchingComponent isOpen={openSearch} onClose={onCloseSearch} />}
+      {!!openFloors && <MapFloorComponent hotel={openFloors} isOpen={!!openFloors} onClose={onCloseFloor} />}
     </View>
   )
 
