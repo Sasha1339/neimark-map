@@ -3,6 +3,8 @@
     "name": "neimark-map",
     "slug": "neimark-map",
     "version": "1.0.0",
+    "owner": "sesh1339",
+    "privacy": "public",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
