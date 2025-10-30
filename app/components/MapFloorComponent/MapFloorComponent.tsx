@@ -53,7 +53,6 @@ export const MapFloorComponent: FC<Props> = ({isOpen, hotel, onClose, ...props})
   };
 
   const panGesture = Gesture.Pan()
-    .enabled(scrollY.value <= 0)
     .onStart((e) => {
       startY.value = translateY.value;
     })

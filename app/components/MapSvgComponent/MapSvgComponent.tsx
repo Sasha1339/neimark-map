@@ -120,7 +120,7 @@ export const MapSvgComponent: FC<Props> = ({onPress, typeHotelSelected, ...props
 
   return (
     <Svg
-      onLongPress={onLongPress}
+      onPress={onLongPress}
       ref={parent}
       viewBox="0 0 17122 19161"
       {...props}
