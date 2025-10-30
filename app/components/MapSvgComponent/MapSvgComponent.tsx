@@ -7,6 +7,8 @@ import {Hotel} from "../../shared/types";
 import {compareWithHotel, deltaPathScale, pathsCenter, pathsRotate, propsDHotels} from "./data";
 import { Animated } from 'react-native';
 import {useAnimationTransform} from "./hooks/useAnimationTransform";
+import {MapCommonAreasComponent} from "../MapCommonAreasComponent/MapCommonAreasComponent";
+import {areas, compareWithAreas} from "../MapCommonAreasComponent/data";
 
 export const AnimatedPath = Animated.createAnimatedComponent(Path);
 
@@ -42,6 +44,8 @@ export const MapSvgComponent: FC<Props> = ({onPress, typeHotelSelected, ...props
 
   const onLongPress = (e: GestureResponderEvent) => {
     switch (true) {
+      case compareWithAreas(e): {}
+      break;
       case compareWithHotel(e, hotelOne): {
         onPress?.(hotelOne, parent, Hotel.ONE, deltaPathScale[Hotel.ONE])
       }
@@ -421,6 +425,9 @@ export const MapSvgComponent: FC<Props> = ({onPress, typeHotelSelected, ...props
           d="M2370.95 14212.4h11.77v39h23.43l21.25-39h13.18l-23.81 42.7v2.6l27.52 44.8h-13.57l-24.57-40.1h-23.43v40.1h-11.77v-90.1Zm112.1 20.6h2.56c23.42 0 33.79 10.5 33.79 34.4v3c0 23.7-10.37 34.1-33.79 34.1h-2.56c-23.17 0-33.54-10.4-33.54-34.1v-3c0-23.9 10.37-34.4 33.54-34.4Zm.51 60.8h1.79c11.39 0 17.66-2.8 20.48-9.6 1.41-3.5 2.05-8.2 2.05-14.2v-1.9c0-12.4-2.56-19-9.09-22-3.2-1.6-7.68-2.4-13.44-2.4h-1.79c-11.39 0-17.54 2.9-20.35 9.8-1.41 3.4-2.18 8.3-2.18 14.6v1.9c0 12.1 2.56 18.5 9.09 21.5 3.2 1.5 7.68 2.3 13.44 2.3Zm61.66-3.7h-1.79v40.6h-11.26v-95.7h11.26v12.1h1.79c4.74-9.4 12.55-14.1 23.43-14.1h2.17c19.97 0 29.06 10.6 29.06 34.6v2.1c0 24.1-9.09 34.8-29.06 34.8h-2.17c-11.91 0-19.72-4.8-23.43-14.4Zm19.59 3.8h1.4c5.64 0 9.99-.7 13.19-2.3 6.27-3.1 8.96-9.8 8.96-22.1v-1.6c0-12.4-2.43-19-8.83-22.1-3.2-1.5-7.68-2.3-13.32-2.3h-1.28c-14.97 0-21.5 9.7-21.5 24.4v1.6c0 6.8 1.79 12.5 5.5 17.3 3.59 4.7 8.84 7.1 15.88 7.1Zm110.58 8.6h-11.27v-57h-40.19v57h-11.26v-67.5h62.72v67.5Zm8.27-67.5h12.41l23.04 51.1h1.92l22.79-51.1h12.16l-30.21 67.5v22.5c0 4.5-1.15 5.7-5.63 5.7h-25.22v-10.4h19.33v-17.8l-30.59-67.5Zm113.4 69.5h-2.43c-21.89 0-31.62-10.4-31.62-34.1v-3c0-23.7 9.73-34.4 31.62-34.4h2.43c19.07 0 28.54 7.7 30.97 25h-11.64c-1.92-10.7-7.04-14.3-19.72-14.3h-1.66c-10.37 0-16 2.9-18.56 9.8-1.28 3.4-1.92 8.3-1.92 14.3v2.1c0 18.1 4.86 23.9 20.48 23.9h1.66c13.19 0 18.56-3.6 20.48-14h11.65c-2.17 17.1-11.9 24.7-31.74 24.7Zm134.12-63.3v28.9h8.96v11h-8.96v21.4h-11.78v-21.4h-50.56v-23.3h.52c7.55 0 13.44-1.4 17.66-4.1 8.58-5.2 12.03-17 12.03-38.9v-2.4h11.78v2.2c0 35.4-10.75 52.1-35.2 54.1v1.4h43.77v-28.9h11.78Z"
         />
       </G>
+
+      {typeHotelSelected === undefined && <MapCommonAreasComponent areas={areas} />}
+
 
     </Svg>
   )
