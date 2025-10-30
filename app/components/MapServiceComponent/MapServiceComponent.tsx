@@ -40,7 +40,6 @@ export const MapServiceComponent: FC = () => {
   const startY = useSharedValue(0);
   const startScale = useSharedValue(1);
   const scale = useSharedValue(1);
-  const backgroundHotelColor = useSharedValue(colors.background_hotel);
 
   const pinchGesture = Gesture.Pinch()
     .onBegin((e) => {

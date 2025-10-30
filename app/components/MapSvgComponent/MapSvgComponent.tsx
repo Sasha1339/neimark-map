@@ -2,16 +2,13 @@ import * as React from "react"
 import Svg, {Path, G, Rect} from "react-native-svg"
 import {GestureResponderEvent} from "react-native";
 import {FC, RefObject, useCallback, useContext, useEffect, useMemo, useRef, useState} from "react";
-import colors from "../../styles/colors";
 import {Hotel} from "../../shared/types";
-import {compareWithHotel, deltaPathScale, hotelsData, pathsCenter, pathsRotate, propsDHotels} from "./data";
-import { Animated } from 'react-native';
+import {compareWithHotel, deltaPathScale, hotelsData} from "./data";
 import {useAnimationTransform} from "./hooks/useAnimationTransform";
 import {MapHotelSvgComponent} from "./Hotels/MapHotelSvgComponent";
 import {MapHotelsContext} from "../../providers/Hotels/MapHotelsContext";
 import {HotelMapInfo} from "./Hotels/types";
 
-export const AnimatedPath = Animated.createAnimatedComponent(Path);
 
 type Props = {
   onPress?: (ref: RefObject<Path | null>, data: HotelMapInfo, refParent: RefObject<Svg | null>, deltaX?: number) => void,
