@@ -5,7 +5,8 @@ const colors = {
   white: '#FFFFFF',
   blue_main: '#4C648F',
   black: '#000000',
-  background_hotel: '#E8E9FE'
+  background_hotel: '#E8E9FE',
+  color_stroke_hotel: '#8E92FB' ,
 };
 
 export default colors;

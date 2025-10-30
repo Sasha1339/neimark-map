@@ -18,6 +18,7 @@ import {MapSearchingComponent} from "../MapSearchingComponent/MapSearchingCompon
 import Svg, {Path} from "react-native-svg";
 import {Hotel} from "../../shared/types";
 import {MapFloorComponent} from "../MapFloorComponent/MapFloorComponent";
+import {HotelMapInfo} from "../MapSvgComponent/Hotels/types";
 
 export const MapServiceComponent: FC = () => {
 
@@ -80,16 +81,16 @@ export const MapServiceComponent: FC = () => {
     setOpenFloors(null);
   }
 
-  const onPress = async (ref: RefObject<Path | null>, refParent: RefObject<Svg | null>, hotelType: Hotel, deltaX: number = 0) => {
+  const onPress = (ref: RefObject<Path | null>, dataHotel: HotelMapInfo, refParent: RefObject<Svg | null>, deltaX: number = 0) => {
     scale.value = withTiming(3, {duration: 50})
-    setSelectHotel(hotelType);
+    setSelectHotel(dataHotel.type);
      setTimeout(async () => {
       refParent.current?.measure(async  (x, y, width, height, pageX, pageY) => {
         if (ref.current && refParent.current) {
           const bbox = ref.current.getBBox();
 
-          translateX.value = withTiming(translateX.value - pageX - (bbox!.x * width / 17122) + widthPhone / 2 - (bbox!.width * width / 17122) / 2 + deltaX * (bbox!.width * width / 17122), {duration: 300})
-          translateY.value = withTiming(translateY.value - pageY - (bbox!.y * height / 19161) + heightPhone / 2 - (bbox!.height * height / 19161) / 2, {duration: 300})
+          translateX.value = withTiming(translateX.value - pageX - (dataHotel!.x * width / 17122) + widthPhone / 2 - (bbox!.width * width / 17122) / 2 + deltaX * (bbox!.width * width / 17122), {duration: 300})
+          translateY.value = withTiming(translateY.value - pageY - (dataHotel!.y * height / 19161) + heightPhone / 2 - (bbox!.height * height / 19161) / 2, {duration: 300})
         }
       });
     }, 350)
