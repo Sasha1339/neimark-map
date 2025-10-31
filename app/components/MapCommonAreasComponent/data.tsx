@@ -19,7 +19,7 @@ export const areas: AreasInfo[] = [
   { type: AreaType.SPORT, title: 'Зал единоборств', x: 12700, y: 8900, id: 'a13' },
   { type: AreaType.STUDIO, title: 'Фотостудия', x: 3700, y: 11900, id: 'a14' },
   { type: AreaType.SPORT, title: 'Групповые тренировки', x: 1400, y: 13900, id: 'a15' },
-  { type: AreaType.LIVING, title: 'Гостинная', x: 7600, y: 11000, id: 'a6' },
+  { type: AreaType.LIVING, title: 'Гостинная', x: 7600, y: 11000, id: 'a16' },
   { type: AreaType.DINING, title: 'Столовая', x: 9500, y: 10000, id: 'a17' },
   { type: AreaType.REPAIR, title: 'Ремонт техники', x: 7900, y: 9500, id: 'a18' },
   { type: AreaType.REPAIR, title: '3D печать', x: 10500, y: 12000, id: 'a19' },
