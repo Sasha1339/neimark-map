@@ -28,6 +28,8 @@ export const MapSvgComponent: FC<Props> = ({onPress, typeHotelSelected, ...props
 
   const onPressSvg = (e: GestureResponderEvent) => {
 
+    if (compareWithAreas(e)) return;
+
     const hotelFind = hotelsContext?.hotelsRef.find((ref) => compareWithHotel(e, ref))
 
     if (hotelFind) {
