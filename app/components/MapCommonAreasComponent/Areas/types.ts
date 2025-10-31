@@ -4,6 +4,7 @@ export type PropsAreas = {
   title?: string,
   x?: number,
   y?: number,
+  deltaX?: number,
 }
 
 export enum AreaType {
@@ -11,14 +12,26 @@ export enum AreaType {
   SPORT = 'SPORT',
   PIZZA = 'PIZZA',
   BARBERSHOP = 'BARBERSHOP',
+  FLOWER = 'FLOWER',
   IT = 'IT',
   GAMES = 'GAMES',
-  FRUIT_SHOP = 'FRUIT_SHOP'
+  SCHOOL = 'SCHOOL',
+  COFFEE = 'COFFEE',
+  RECEPTION = 'RECEPTION',
+  STUDIO = 'STUDIO',
+  REPAIR = 'REPAIR',
+  LIVING = 'LIVING',
+  DINING = 'DINING',
+  HEARTH = 'HEARTH',
+  BEAUTY = 'BEAUTY',
+  BOOK = 'BOOK',
+  SHOP = 'SHOP'
 }
 
 export interface AreasInfo {
   type: AreaType,
   x: number,
   y: number,
-  title: string
+  title: string,
+  deltaX?: number,
 }

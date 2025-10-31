@@ -28,7 +28,7 @@ export const MapServiceComponent: FC = () => {
   const [openFloors, setOpenFloors] = useState<Hotel | null>(null);
   const [selectHotel, setSelectHotel] = useState<Hotel | undefined>(undefined)
 
-  const scaleButton = useSharedValue(1);
+  const scaleButton = useSharedValue(0.3);
 
   const animatedStyleSearch = useAnimatedStyle(() => ({
     transform: [{ scale: scaleButton.value }],
@@ -46,7 +46,7 @@ export const MapServiceComponent: FC = () => {
       startScale.value = scale.value;
     })
     .onUpdate((e) => {
-      const newScale = Math.min(Math.max(0.8, startScale.value * e.scale), 3);
+      const newScale = Math.min(Math.max(0.5, startScale.value * e.scale), 3);
 
       scale.value = newScale;
     });
