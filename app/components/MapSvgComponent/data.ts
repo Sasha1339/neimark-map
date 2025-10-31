@@ -1,11 +1,12 @@
-import {Hotel} from "../../shared/types";
+import {Hotel, ObjectsMapRefCoords} from "../../shared/types";
 import {GestureResponderEvent} from "react-native";
 import {RefObject} from "react";
 import {Path} from "react-native-svg";
 import {svgPathBbox} from 'svg-path-bbox';
 import {HotelMapInfo, HotelRefData} from "./Hotels/types";
-import {mainHeight, mainWidth} from "../MapServiceComponent/MapServiceComponent";
 
+export const mainWidth = 893.58;
+export const mainHeight = 1000;
 
 export const propsDHotels = {
     [Hotel.ONE]: "M2053.68 10C2086.73 10 2110.67 41.534 2102.15 73.4651C2006.34 432.786 1961.83 721.313 1963.67 1008.5C1965.52 1295.63 2013.7 1581.42 2103.24 1935.29C2111.27 1967.03 2087.38 1998 2054.65 1998H60C32.3858 1998 10 1975.61 10 1948V60C10 32.3857 32.3858 10 60 10H2053.68Z",
@@ -50,24 +51,24 @@ export const propsDHotels = {
 // ]
 
 export const hotelsData: HotelMapInfo[] = [
-    { type: Hotel.ONE, dProps: propsDHotels[Hotel.ONE], y: 16430.5, x: 983.5, rotationDefault: 0, name: '' },
-    { type: Hotel.TWO, dProps: propsDHotels[Hotel.TWO], y: 16475.50, x: 5989.30, rotationDefault: 0, name: '' },
-    { type: Hotel.THREE, dProps: propsDHotels[Hotel.THREE], y: 16731, x: 8982.97, rotationDefault: 0, name: '' },
-    { type: Hotel.FOUR, dProps: propsDHotels[Hotel.FOUR], y: 13122.00, x: 1566.24, rotationDefault: 0, name: '' },
-    { type: Hotel.FIVE, dProps: propsDHotels[Hotel.FIVE], y: 9860.04, x: 2586.46, rotationDefault: 0, name: '' },
-    { type: Hotel.SIX, dProps: propsDHotels[Hotel.SIX], y: 12772.8, x: 5993.91, rotationDefault: 0, name: '' },
-    { type: Hotel.SEVEN, dProps: propsDHotels[Hotel.SEVEN], x: 9559.61, y: 13952.5, rotationDefault: 0, name: '' },
-    { type: Hotel.EIGHT, dProps: propsDHotels[Hotel.EIGHT], x: 3287.86, y: 6610.17, rotationDefault: 0, name: '' },
-    { type: Hotel.NINE, dProps: propsDHotels[Hotel.NINE], y: 9680.63, x: 7717.18, rotationDefault: 0, name: '' },
-    { type: Hotel.TEN, dProps: propsDHotels[Hotel.TEN], y: 11193.4, x: 10536.3, rotationDefault: 0, name: '' },
-    { type: Hotel.ELEVEN, dProps: propsDHotels[Hotel.ELEVEN], y: 4521.75, x: 5852.66, rotationDefault: 0, name: '' },
-    { type: Hotel.TWELVE, dProps: propsDHotels[Hotel.TWELVE], y: 6491.02, x: 9633.48, rotationDefault: 0, name: '' },
-    { type: Hotel.THIRTEEN, dProps: propsDHotels[Hotel.THIRTEEN], y: 8813.98, x: 12102.0, rotationDefault: 0, name: '' },
-    { type: Hotel.FOURTEEN, dProps: propsDHotels[Hotel.FOURTEEN], y: 837.97, x: 4924.07, rotationDefault: 0, name: '' },
-    { type: Hotel.FIFTEEN, dProps: propsDHotels[Hotel.FIFTEEN], y: 1363.18, x: 7701.18, rotationDefault: 0, name: '' },
-    { type: Hotel.SIXTEEN, dProps: propsDHotels[Hotel.SIXTEEN], y: 2154.42, x: 10454.1, rotationDefault: 0, name: '' },
-    { type: Hotel.SEVENTEEN, dProps: propsDHotels[Hotel.SEVENTEEN], y: 4561.94, x: 12306.0, rotationDefault: 0, name: '' },
-    { type: Hotel.EIGHTEEN, dProps: propsDHotels[Hotel.EIGHTEEN], y: 6816.65, x: 14115.7, rotationDefault: 0, name: '' }
+    { type: Hotel.ONE, dProps: propsDHotels[Hotel.ONE], y: 16430.5, x: 983.5, rotationDefault: 0, name: '', id: 'h1' },
+    { type: Hotel.TWO, dProps: propsDHotels[Hotel.TWO], y: 16475.50, x: 5989.30, rotationDefault: 0, name: '', id: 'h2' },
+    { type: Hotel.THREE, dProps: propsDHotels[Hotel.THREE], y: 16731, x: 8982.97, rotationDefault: 0, name: '', id: 'h3' },
+    { type: Hotel.FOUR, dProps: propsDHotels[Hotel.FOUR], y: 13122.00, x: 1566.24, rotationDefault: 0, name: '', id: 'h4' },
+    { type: Hotel.FIVE, dProps: propsDHotels[Hotel.FIVE], y: 9860.04, x: 2586.46, rotationDefault: 0, name: '', id: 'h5' },
+    { type: Hotel.SIX, dProps: propsDHotels[Hotel.SIX], y: 12772.8, x: 5993.91, rotationDefault: 0, name: '', id: 'h6' },
+    { type: Hotel.SEVEN, dProps: propsDHotels[Hotel.SEVEN], x: 9559.61, y: 13952.5, rotationDefault: 0, name: '', id: 'h7' },
+    { type: Hotel.EIGHT, dProps: propsDHotels[Hotel.EIGHT], x: 3287.86, y: 6610.17, rotationDefault: 0, name: '', id: 'h8' },
+    { type: Hotel.NINE, dProps: propsDHotels[Hotel.NINE], y: 9680.63, x: 7717.18, rotationDefault: 0, name: '', id: 'h9' },
+    { type: Hotel.TEN, dProps: propsDHotels[Hotel.TEN], y: 11193.4, x: 10536.3, rotationDefault: 0, name: '', id: 'h10' },
+    { type: Hotel.ELEVEN, dProps: propsDHotels[Hotel.ELEVEN], y: 4521.75, x: 5852.66, rotationDefault: 0, name: '', id: 'h11' },
+    { type: Hotel.TWELVE, dProps: propsDHotels[Hotel.TWELVE], y: 6491.02, x: 9633.48, rotationDefault: 0, name: '', id: 'h12' },
+    { type: Hotel.THIRTEEN, dProps: propsDHotels[Hotel.THIRTEEN], y: 8813.98, x: 12102.0, rotationDefault: 0, name: '', id: 'h13' },
+    { type: Hotel.FOURTEEN, dProps: propsDHotels[Hotel.FOURTEEN], y: 837.97, x: 4924.07, rotationDefault: 0, name: '', id: 'h14' },
+    { type: Hotel.FIFTEEN, dProps: propsDHotels[Hotel.FIFTEEN], y: 1363.18, x: 7701.18, rotationDefault: 0, name: '', id: 'h15' },
+    { type: Hotel.SIXTEEN, dProps: propsDHotels[Hotel.SIXTEEN], y: 2154.42, x: 10454.1, rotationDefault: 0, name: '', id: 'h16' },
+    { type: Hotel.SEVENTEEN, dProps: propsDHotels[Hotel.SEVENTEEN], y: 4561.94, x: 12306.0, rotationDefault: 0, name: '', id: 'h17' },
+    { type: Hotel.EIGHTEEN, dProps: propsDHotels[Hotel.EIGHTEEN], y: 6816.65, x: 14115.7, rotationDefault: 0, name: '', id: 'h18' }
 ]
 
 
@@ -79,11 +80,11 @@ const getPathCenter = (pathData?: string): { x: number; y: number } => {
     };
 };
 
-export const compareWithHotel = (e: GestureResponderEvent, info: HotelRefData) => {
+export const compareWithHotel = (e: GestureResponderEvent, info: ObjectsMapRefCoords) => {
     const boxHotel = info.ref.current!.getBBox()!;
 
-    return (e.nativeEvent.locationX * 17122 / mainWidth >= info.data.x && e.nativeEvent.locationX * 17122 / mainWidth <= info.data.x + boxHotel.width)
-        && (e.nativeEvent.locationY * 19161 / mainHeight >= info.data.y && e.nativeEvent.locationY * 19161 / mainHeight <= info.data.y + boxHotel.height);
+    return (e.nativeEvent.locationX * 17122 / mainWidth >= info.x && e.nativeEvent.locationX * 17122 / mainWidth <= info.x + boxHotel.width)
+        && (e.nativeEvent.locationY * 19161 / mainHeight >= info.y && e.nativeEvent.locationY * 19161 / mainHeight <= info.y + boxHotel.height);
 }
 
 
