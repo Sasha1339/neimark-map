@@ -22,9 +22,10 @@ import {BookSvgComponent} from "./Areas/BookSvgComponent";
 
 type Props = {
   areas: AreasInfo[];
+  opacity?: number;
 }
 
-export const MapCommonAreasComponent: FC<Props> = ({areas}) => {
+export const MapCommonAreasComponent: FC<Props> = ({areas, opacity = 1}) => {
 
   const marketplaces = areas.filter((e) => e.type === AreaType.MARKETPLACE);
   const sports = areas.filter((e) => e.type === AreaType.SPORT);
@@ -49,92 +50,92 @@ export const MapCommonAreasComponent: FC<Props> = ({areas}) => {
     <>
       {
         marketplaces.map((e, i) => (
-          <MarketplaceSvgComponent x={e.x} y={e.y} title={e.title} deltaX={e.deltaX} key={i} />
+          <MarketplaceSvgComponent key={i} {...e} opacity={opacity}/>
         ))
       }
       {
         sports.map((e, i) => (
-          <SportSvgComponent x={e.x} y={e.y} title={e.title} deltaX={e.deltaX} key={i} />
+          <SportSvgComponent key={i} {...e} opacity={opacity} />
         ))
       }
       {
         fruitsShop.map((e, i) => (
-          <ShopSvgComponent x={e.x} y={e.y} title={e.title} deltaX={e.deltaX} key={i} />
+          <ShopSvgComponent key={i} {...e} opacity={opacity} />
         ))
       }
       {
         barbershops.map((e, i) => (
-          <BarbershopSvgComponent x={e.x} y={e.y} title={e.title} deltaX={e.deltaX} key={i} />
+          <BarbershopSvgComponent key={i} {...e} opacity={opacity} />
         ))
       }
       {
         its.map((e, i) => (
-          <ITSvgComponent x={e.x} y={e.y} title={e.title} deltaX={e.deltaX} key={i} />
+          <ITSvgComponent key={i} {...e} opacity={opacity} />
         ))
       }
       {
         games.map((e, i) => (
-          <GameSvgComponent x={e.x} y={e.y} title={e.title} deltaX={e.deltaX} key={i} />
+          <GameSvgComponent key={i} {...e} opacity={opacity} />
         ))
       }
       {
         pizza.map((e, i) => (
-          <PizzaSvgComponent x={e.x} y={e.y} title={e.title} deltaX={e.deltaX} key={i} />
+          <PizzaSvgComponent key={i} {...e} opacity={opacity} />
         ))
       }
       {
         reception.map((e, i) => (
-          <ReceptionSvgComponent x={e.x} y={e.y} title={e.title} deltaX={e.deltaX} key={i} />
+          <ReceptionSvgComponent key={i} {...e} opacity={opacity} />
         ))
       }
       {
         coffee.map((e, i) => (
-          <CoffeeSvgComponent x={e.x} y={e.y} title={e.title} deltaX={e.deltaX} key={i} />
+          <CoffeeSvgComponent key={i} {...e} opacity={opacity} />
         ))
       }
       {
         studio.map((e, i) => (
-          <StudioSvgComponent x={e.x} y={e.y} title={e.title} deltaX={e.deltaX} key={i} />
+          <StudioSvgComponent key={i} {...e} opacity={opacity} />
         ))
       }
       {
         school.map((e, i) => (
-          <SchoolSvgComponent x={e.x} y={e.y} title={e.title} deltaX={e.deltaX} key={i} />
+          <SchoolSvgComponent key={i} {...e} opacity={opacity} />
         ))
       }
       {
         flower.map((e, i) => (
-          <FlowerSvgComponent x={e.x} y={e.y} title={e.title} deltaX={e.deltaX} key={i} />
+          <FlowerSvgComponent key={i} {...e} opacity={opacity} />
         ))
       }
       {
         living.map((e, i) => (
-          <LivingSvgComponent x={e.x} y={e.y} title={e.title} deltaX={e.deltaX} key={i} />
+          <LivingSvgComponent key={i} {...e} opacity={opacity} />
         ))
       }
       {
         diving.map((e, i) => (
-          <DivingSvgComponent x={e.x} y={e.y} title={e.title} deltaX={e.deltaX} key={i} />
+          <DivingSvgComponent key={i} {...e} opacity={opacity} />
         ))
       }
       {
         repair.map((e, i) => (
-          <RepairSvgComponent x={e.x} y={e.y} title={e.title} deltaX={e.deltaX} key={i} />
+          <RepairSvgComponent key={i} {...e} opacity={opacity} />
         ))
       }
       {
         hearth.map((e, i) => (
-          <HearthSvgComponent x={e.x} y={e.y} title={e.title} deltaX={e.deltaX} key={i} />
+          <HearthSvgComponent key={i} {...e} opacity={opacity} />
         ))
       }
       {
         beauty.map((e, i) => (
-          <BeautySvgComponent x={e.x} y={e.y} title={e.title} deltaX={e.deltaX} key={i} />
+          <BeautySvgComponent key={i} {...e} opacity={opacity} />
         ))
       }
       {
         book.map((e, i) => (
-          <BookSvgComponent x={e.x} y={e.y} title={e.title} deltaX={e.deltaX} key={i} />
+          <BookSvgComponent key={i} {...e} opacity={opacity} />
         ))
       }
     </>

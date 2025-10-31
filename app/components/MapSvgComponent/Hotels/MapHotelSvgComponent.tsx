@@ -1,14 +1,13 @@
-import {Hotel} from "../../../shared/types";
+import {Hotel, ObjectsType} from "../../../shared/types";
 import colors from "../../../styles/colors";
-import {G, Path, SvgProps, Text} from "react-native-svg";
+import {G, Path, Text} from "react-native-svg";
 import * as React from "react";
-import {FC, forwardRef, useContext, useEffect, useRef, useState} from "react";
+import {FC, useContext, useEffect, useRef, useState} from "react";
 import {Animated} from "react-native";
 import {HotelMapInfo} from "./types";
-import {MapHotelsContext} from "../../../providers/Hotels/MapHotelsContext";
 import {font_family} from "../../../styles/fonts";
-import {SVGRect} from "react-native-svg/src/elements/Shape";
 import {svgPathBbox} from "svg-path-bbox";
+import {MapObjectsContext} from "../../../providers/Objects/MapObjectsContext";
 
 type Props = {
   data: HotelMapInfo;
@@ -25,7 +24,7 @@ const AnimatedPath = Animated.createAnimatedComponent(Path);
 export const MapHotelSvgComponent: FC<Props> = ({data, typeHotelSelected, transform, ...props}) => {
 
   const ref = useRef<Path>(null);
-  const hotelsContext = useContext(MapHotelsContext);
+  const objectsContext = useContext(MapObjectsContext);
 
   const [layout, setLayout] = useState<{width: number, height: number} | undefined>(undefined);
 
@@ -36,9 +35,17 @@ export const MapHotelSvgComponent: FC<Props> = ({data, typeHotelSelected, transf
 
   useEffect(() => {
     if (ref.current) {
-      hotelsContext?.addHotelRef(ref, data);
+      objectsContext?.addHotelRef({
+        id: data.id,
+        ref: ref,
+        width: layout?.width,
+        height: layout?.height,
+        x: data.x,
+        y: data.y,
+      }, ObjectsType.Hotel)
     }
   }, [ref]);
+
 
   return (
     <><G fillOpacity={typeHotelSelected === data.type || typeHotelSelected === undefined ? 1 : 0.2}

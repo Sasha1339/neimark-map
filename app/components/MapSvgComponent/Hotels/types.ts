@@ -8,6 +8,7 @@ export interface HotelRefData {
 }
 
 export interface HotelMapInfo {
+  id?: string;
   type: Hotel;
   dProps: string;
   name: string;

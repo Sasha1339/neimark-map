@@ -1,10 +1,11 @@
 import {ReactNode} from "react";
 
 export type PropsAreas = {
+  id?: string;
   title?: string,
   x?: number,
   y?: number,
-  deltaX?: number,
+  opacity?: number
 }
 
 export enum AreaType {
@@ -29,6 +30,7 @@ export enum AreaType {
 }
 
 export interface AreasInfo {
+  id?: string;
   type: AreaType,
   x: number,
   y: number,

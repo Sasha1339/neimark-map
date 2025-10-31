@@ -1,5 +1,5 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import {StatusBar} from 'expo-status-bar';
+import {StyleSheet, Text, View} from 'react-native';
 import colors from "./app/styles/colors";
 import {useFonts} from "expo-font";
 import * as SplashScreen from 'expo-splash-screen';
@@ -7,7 +7,7 @@ import {useEffect, useRef, useState} from "react";
 import {SafeAreaProvider, SafeAreaView} from "react-native-safe-area-context";
 import {GestureHandlerRootView} from "react-native-gesture-handler";
 import {MapServiceComponent} from "./app/components/MapServiceComponent/MapServiceComponent";
-import {MapHotelsProvider} from "./app/providers/Hotels/MapHotelsProvider";
+import {MapObjectsProvider} from "./app/providers/Objects/MapObjectsProvider";
 
 export default function App() {
   const [loaded, error] = useFonts({
@@ -23,12 +23,12 @@ export default function App() {
   if (!loaded && !error) return null;
 
   return (
-    <GestureHandlerRootView style={{flex: 1}} >
+    <GestureHandlerRootView style={{flex: 1}}>
       <SafeAreaProvider>
         <SafeAreaView style={styles.areaContent}>
-          <MapHotelsProvider>
-            <MapServiceComponent />
-          </MapHotelsProvider>
+          <MapObjectsProvider>
+            <MapServiceComponent/>
+          </MapObjectsProvider>
         </SafeAreaView>
       </SafeAreaProvider>
     </GestureHandlerRootView>
