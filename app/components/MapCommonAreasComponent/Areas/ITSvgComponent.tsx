@@ -10,7 +10,7 @@ import {font_family} from "../../../styles/fonts";
 export const ITSvgComponent: FC<PropsAreas> = ({x = 0, y = 0, deltaX = 200, title = '', ...props }) => {
 
   return (
-    <G fill="none" transform={`translate(${x + deltaX}, ${y})`}>
+    <G fill="none" transform={`translate(${x}, ${y})`}>
       <Circle cx={200} cy={200} r={200} fill="#D7D3FF" />
       <Circle
         cx={200}

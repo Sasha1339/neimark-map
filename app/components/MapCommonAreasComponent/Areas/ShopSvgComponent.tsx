@@ -10,7 +10,7 @@ import {font_family} from "../../../styles/fonts";
 export const ShopSvgComponent: FC<PropsAreas> = ({x = 0, y = 0, deltaX = -600, title = '', ...props }) => {
 
   return (
-    <G fill="none" transform={`translate(${x + deltaX}, ${y})`}>
+    <G fill="none" transform={`translate(${x}, ${y})`}>
       <Circle cx={200} cy={200} r={200} fill="#CBDEB9" />
       <Circle
         cx={200}

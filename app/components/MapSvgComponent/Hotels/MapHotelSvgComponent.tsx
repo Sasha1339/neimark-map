@@ -1,6 +1,5 @@
 import {Hotel} from "../../../shared/types";
 import colors from "../../../styles/colors";
-import {deltaPathScale, hotelsData, pathsRotate, propsDHotels} from "../data";
 import {G, Path, SvgProps, Text} from "react-native-svg";
 import * as React from "react";
 import {FC, forwardRef, useContext, useEffect, useRef, useState} from "react";

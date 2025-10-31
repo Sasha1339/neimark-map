@@ -3,7 +3,7 @@ import Svg, {Path, G, Rect} from "react-native-svg"
 import {GestureResponderEvent} from "react-native";
 import {FC, RefObject, useCallback, useContext, useEffect, useMemo, useRef, useState} from "react";
 import {Hotel} from "../../shared/types";
-import {compareWithHotel, deltaPathScale, hotelsData} from "./data";
+import {compareWithHotel, hotelsData} from "./data";
 import {useAnimationTransform} from "./hooks/useAnimationTransform";
 import {MapCommonAreasComponent} from "../MapCommonAreasComponent/MapCommonAreasComponent";
 import {areas, compareWithAreas} from "../MapCommonAreasComponent/data";
@@ -13,7 +13,7 @@ import {HotelMapInfo} from "./Hotels/types";
 
 
 type Props = {
-  onPress?: (ref: RefObject<Path | null>, data: HotelMapInfo, refParent: RefObject<Svg | null>, deltaX?: number) => void,
+  onPress?: (ref: RefObject<Path | null>, data: HotelMapInfo, refParent: RefObject<Svg | null>) => void,
   typeHotelSelected?: Hotel,
 }
 
@@ -33,7 +33,7 @@ export const MapSvgComponent: FC<Props> = ({onPress, typeHotelSelected, ...props
     const hotelFind = hotelsContext?.hotelsRef.find((ref) => compareWithHotel(e, ref))
 
     if (hotelFind) {
-      onPress?.(hotelFind.ref, hotelFind.data, parent, deltaPathScale[hotelFind.data.type])
+      onPress?.(hotelFind.ref, hotelFind.data, parent)
     }
   }
 

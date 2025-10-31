@@ -4,6 +4,7 @@ import {RefObject} from "react";
 import {Path} from "react-native-svg";
 import {svgPathBbox} from 'svg-path-bbox';
 import {HotelMapInfo, HotelRefData} from "./Hotels/types";
+import {mainHeight, mainWidth} from "../MapServiceComponent/MapServiceComponent";
 
 
 export const propsDHotels = {
@@ -25,27 +26,6 @@ export const propsDHotels = {
     [Hotel.SIXTEEN]: "M1060.72 10.4317C1060.75 10.4574 1060.75 10.5004 1060.72 10.5282C1060.69 10.5595 1060.7 10.6089 1060.73 10.632L2645.93 1040.08C2669.09 1055.12 2675.68 1086.08 2660.64 1109.24L1665.4 2641.85C1650.36 2665.01 1619.39 2671.6 1596.23 2656.55L11.2778 1627.25C11.1578 1627.18 10.9984 1627.2 10.9068 1627.31C10.8248 1627.41 10.6866 1627.44 10.5703 1627.39L10.3456 1627.28C10.0716 1627.15 9.93534 1626.84 10.0251 1626.55C129.171 1243.48 246.438 963.639 406.567 717.438C566.604 471.216 769.506 258.657 1059.72 10.1242C1059.92 9.95668 1060.21 9.96036 1060.4 10.1356L1060.72 10.4317Z",
     [Hotel.SEVENTEEN]: "M2567.35 1628.38L1684.55 35.77C1671.17 11.6181 1640.73 2.8919 1616.58 16.2796L35.7674 892.539C11.6155 905.927 2.88926 936.359 16.2769 960.51L899.076 2553.12C912.464 2577.27 942.896 2586 967.048 2572.61L2547.86 1696.35C2572.01 1682.97 2580.74 1652.53 2567.35 1628.38Z",
     [Hotel.EIGHTEEN]: "M2373.99 1283.61L1357.65 28.537C1340.27 7.07669 1308.78 3.76746 1287.32 21.1457L28.5322 1040.49C7.07191 1057.87 3.76272 1089.36 21.1409 1110.82L1037.48 2365.89C1054.86 2387.35 1086.34 2390.66 1107.8 2373.28L2366.59 1353.94C2388.05 1336.56 2391.36 1305.07 2373.99 1283.61Z"
-}
-
-export const deltaPathScale = {
-    [Hotel.ONE]: -0.3,
-    [Hotel.TWO]: -0.1,
-    [Hotel.THREE]: 0.1,
-    [Hotel.FOUR]: -0.275,
-    [Hotel.FIVE]: -0.2,
-    [Hotel.SIX]: -0.05,
-    [Hotel.SEVEN]: 0.1,
-    [Hotel.EIGHT]: -0.15,
-    [Hotel.NINE]: 0,
-    [Hotel.TEN]: 0.1,
-    [Hotel.ELEVEN]: -0.05,
-    [Hotel.TWELVE]: 0.1,
-    [Hotel.THIRTEEN]: 0.2,
-    [Hotel.FOURTEEN]: -0.1,
-    [Hotel.FIFTEEN]: 0,
-    [Hotel.SIXTEEN]: 0.15,
-    [Hotel.SEVENTEEN]: 0.2,
-    [Hotel.EIGHTEEN]: 0.3
 }
 
 // export const hotelsData: HotelMapInfo[] = [
@@ -102,8 +82,8 @@ const getPathCenter = (pathData?: string): { x: number; y: number } => {
 export const compareWithHotel = (e: GestureResponderEvent, info: HotelRefData) => {
     const boxHotel = info.ref.current!.getBBox()!;
 
-    return (e.nativeEvent.locationX * 17122 / 1000 >= info.data.x - deltaPathScale[info.data.type] * boxHotel.width && e.nativeEvent.locationX * 17122 / 1000 <= info.data.x - deltaPathScale[info.data.type] * boxHotel.width + boxHotel.width)
-        && (e.nativeEvent.locationY * 19161 / 1000 >= info.data.y && e.nativeEvent.locationY * 19161 / 1000 <= info.data.y + boxHotel.height);
+    return (e.nativeEvent.locationX * 17122 / mainWidth >= info.data.x && e.nativeEvent.locationX * 17122 / mainWidth <= info.data.x + boxHotel.width)
+        && (e.nativeEvent.locationY * 19161 / mainHeight >= info.data.y && e.nativeEvent.locationY * 19161 / mainHeight <= info.data.y + boxHotel.height);
 }
 
 

@@ -20,6 +20,9 @@ import {Hotel} from "../../shared/types";
 import {MapFloorComponent} from "../MapFloorComponent/MapFloorComponent";
 import {HotelMapInfo} from "../MapSvgComponent/Hotels/types";
 
+export const mainWidth = 893.58;
+export const mainHeight = 1000;
+
 export const MapServiceComponent: FC = () => {
 
   const {width: widthPhone, height: heightPhone} = useWindowDimensions()
@@ -28,7 +31,7 @@ export const MapServiceComponent: FC = () => {
   const [openFloors, setOpenFloors] = useState<Hotel | null>(null);
   const [selectHotel, setSelectHotel] = useState<Hotel | undefined>(undefined)
 
-  const scaleButton = useSharedValue(0.3);
+  const scaleButton = useSharedValue(1);
 
   const animatedStyleSearch = useAnimatedStyle(() => ({
     transform: [{ scale: scaleButton.value }],
@@ -80,7 +83,7 @@ export const MapServiceComponent: FC = () => {
     setOpenFloors(null);
   }
 
-  const onPress = (ref: RefObject<Path | null>, dataHotel: HotelMapInfo, refParent: RefObject<Svg | null>, deltaX: number = 0) => {
+  const onPress = (ref: RefObject<Path | null>, dataHotel: HotelMapInfo, refParent: RefObject<Svg | null>) => {
     scale.value = withTiming(3, {duration: 50})
     setSelectHotel(dataHotel.type);
      setTimeout(async () => {
@@ -88,7 +91,7 @@ export const MapServiceComponent: FC = () => {
         if (ref.current && refParent.current) {
           const bbox = ref.current.getBBox();
 
-          translateX.value = withTiming(translateX.value - pageX - (dataHotel!.x * width / 17122) + widthPhone / 2 - (bbox!.width * width / 17122) / 2 + deltaX * (bbox!.width * width / 17122), {duration: 300})
+          translateX.value = withTiming(translateX.value - pageX - (dataHotel!.x * width / 17122) + widthPhone / 2 - (bbox!.width * width / 17122) / 2, {duration: 300})
           translateY.value = withTiming(translateY.value - pageY - (dataHotel!.y * height / 19161) + heightPhone / 2 - (bbox!.height * height / 19161) / 2, {duration: 300})
         }
       });
@@ -159,8 +162,8 @@ const styles = StyleSheet.create({
     color: colors.blue_main
   },
   mapView: {
-    height: 1000,
-    width: 1000,
+    height: mainHeight,
+    width: mainWidth,
   },
   touchContainer: {
     position: 'absolute',

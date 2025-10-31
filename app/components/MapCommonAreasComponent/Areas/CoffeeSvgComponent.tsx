@@ -10,7 +10,7 @@ import {font_family} from "../../../styles/fonts";
 export const CoffeeSvgComponent: FC<PropsAreas> = ({x = 0, y = 0, deltaX = 100, title = '', ...props }) => {
 
   return (
-    <G fill="none" transform={`translate(${x + deltaX}, ${y})`}>
+    <G fill="none" transform={`translate(${x}, ${y})`}>
       <Circle cx={200} cy={200} r={200} fill="#D4CECC" />
       <Circle
         cx={200}

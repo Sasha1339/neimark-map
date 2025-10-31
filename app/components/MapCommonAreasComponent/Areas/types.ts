@@ -32,6 +32,5 @@ export interface AreasInfo {
   type: AreaType,
   x: number,
   y: number,
-  title: string,
-  deltaX?: number,
+  title: string
 }
