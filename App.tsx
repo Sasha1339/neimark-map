@@ -7,6 +7,7 @@ import {useEffect, useRef, useState} from "react";
 import {SafeAreaProvider, SafeAreaView} from "react-native-safe-area-context";
 import {GestureHandlerRootView} from "react-native-gesture-handler";
 import {MapServiceComponent} from "./app/components/MapServiceComponent/MapServiceComponent";
+import {MapHotelsProvider} from "./app/providers/Hotels/MapHotelsProvider";
 
 export default function App() {
   const [loaded, error] = useFonts({
@@ -25,7 +26,9 @@ export default function App() {
     <GestureHandlerRootView style={{flex: 1}} >
       <SafeAreaProvider>
         <SafeAreaView style={styles.areaContent}>
-          <MapServiceComponent />
+          <MapHotelsProvider>
+            <MapServiceComponent />
+          </MapHotelsProvider>
         </SafeAreaView>
       </SafeAreaProvider>
     </GestureHandlerRootView>
