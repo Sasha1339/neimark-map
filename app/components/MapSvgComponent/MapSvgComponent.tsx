@@ -3,15 +3,17 @@ import Svg, {Path, G, Rect} from "react-native-svg"
 import {GestureResponderEvent} from "react-native";
 import {FC, RefObject, useCallback, useContext, useEffect, useMemo, useRef, useState} from "react";
 import {Hotel} from "../../shared/types";
-import {compareWithHotel, deltaPathScale, hotelsData} from "./data";
+import {compareWithHotel, hotelsData} from "./data";
 import {useAnimationTransform} from "./hooks/useAnimationTransform";
+import {MapCommonAreasComponent} from "../MapCommonAreasComponent/MapCommonAreasComponent";
+import {areas, compareWithAreas} from "../MapCommonAreasComponent/data";
 import {MapHotelSvgComponent} from "./Hotels/MapHotelSvgComponent";
 import {MapHotelsContext} from "../../providers/Hotels/MapHotelsContext";
 import {HotelMapInfo} from "./Hotels/types";
 
 
 type Props = {
-  onPress?: (ref: RefObject<Path | null>, data: HotelMapInfo, refParent: RefObject<Svg | null>, deltaX?: number) => void,
+  onPress?: (ref: RefObject<Path | null>, data: HotelMapInfo, refParent: RefObject<Svg | null>) => void,
   typeHotelSelected?: Hotel,
 }
 
@@ -26,10 +28,12 @@ export const MapSvgComponent: FC<Props> = ({onPress, typeHotelSelected, ...props
 
   const onPressSvg = (e: GestureResponderEvent) => {
 
+    if (compareWithAreas(e)) return;
+
     const hotelFind = hotelsContext?.hotelsRef.find((ref) => compareWithHotel(e, ref))
 
     if (hotelFind) {
-      onPress?.(hotelFind.ref, hotelFind.data, parent, deltaPathScale[hotelFind.data.type])
+      onPress?.(hotelFind.ref, hotelFind.data, parent)
     }
   }
 
@@ -72,6 +76,9 @@ export const MapSvgComponent: FC<Props> = ({onPress, typeHotelSelected, ...props
         strokeOpacity={typeHotelSelected === undefined ? 0.5 : 0.2}
         d="M5234.5 17682.5C5234.5 17710.1 5212.11 17732.5 5184.5 17732.5H3744.5C3716.89 17732.5 3694.5 17710.1 3694.5 17682.5V16502.5C3694.5 16474.9 3716.89 16452.5 3744.5 16452.5H4221.5C4249.11 16452.5 4271.5 16430.1 4271.5 16402.5V16340.5C4271.5 16312.9 4293.89 16290.5 4321.5 16290.5H4606.5C4634.11 16290.5 4656.5 16312.9 4656.5 16340.5V16402.5C4656.5 16430.1 4678.89 16452.5 4706.5 16452.5H5184.5C5212.11 16452.5 5234.5 16474.9 5234.5 16502.5V17682.5Z"
       />
+
+      {typeHotelSelected === undefined && <MapCommonAreasComponent areas={areas} />}
+
 
     </Svg>
   )
