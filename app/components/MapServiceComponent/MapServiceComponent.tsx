@@ -18,9 +18,10 @@ import {MapSearchingComponent} from "../MapSearchingComponent/MapSearchingCompon
 import Svg, {Path} from "react-native-svg";
 import {Hotel, ObjectsMapRefCoords} from "../../shared/types";
 import {MapFloorComponent} from "../MapFloorComponent/MapFloorComponent";
-import {HotelMapInfo} from "../MapSvgComponent/Hotels/types";
 import {MapObjectsContext} from "../../providers/Objects/MapObjectsContext";
-import {mainHeight, mainWidth} from "../MapSvgComponent/data";
+import {hotelsData, mainHeight, mainWidth} from "../MapSvgComponent/data";
+import {MapNavigatorContext} from "../../providers/Navigator/MapNavigatorContext";
+import {MapNavigatorComponent} from "../MapNavigatorComponent/MapNavigatorComponent";
 
 export const MapServiceComponent: FC = () => {
 
@@ -30,6 +31,7 @@ export const MapServiceComponent: FC = () => {
   const [openFloors, setOpenFloors] = useState<Hotel | undefined>(undefined);
 
   const objectsContext = useContext(MapObjectsContext);
+  const navigatorContext = useContext(MapNavigatorContext);
 
   const scaleButton = useSharedValue(1);
 
@@ -55,16 +57,8 @@ export const MapServiceComponent: FC = () => {
       .onStart((e) => {
         focalX.value = e.focalX;
         focalY.value = e.focalY;
-        //allowed.value = 0;
       })
     .onUpdate((e) => {
-    //   if (!allowed.value) {
-    //     focalX.value = e.focalX;
-    //     focalY.value = e.focalY;
-    //     allowed.value = 1;
-    //   }
-
-
       const newScale = Math.min(Math.max(0.6, startScale.value * e.scale), 3);
 
       scale.value = newScale;
@@ -84,13 +78,13 @@ export const MapServiceComponent: FC = () => {
     })
     .onUpdate((event) => {
       translateX.value = Math.max(-200 * scale.value * scale.value, Math.min(200 * scale.value * scale.value, startX.value + event.translationX));
-      translateY.value = Math.max(-200 * scale.value * scale.value, Math.min(200 * scale.value * scale.value, startY.value + event.translationY));
+      translateY.value = Math.max(-400 * scale.value * scale.value, Math.min(400 * scale.value * scale.value, startY.value + event.translationY));
     })
 
   const composedGesture = Gesture.Simultaneous(panGesture, pinchGesture);
 
   const animatedStyleMap = useAnimatedStyle(() => ({
-    transformOrigin: [focalX.value, focalY.value, 0],
+    // transformOrigin: [focalX.value, focalY.value, 0],
     transform: [
       {translateX: translateX.value},
       {translateY: translateY.value},
@@ -121,8 +115,22 @@ export const MapServiceComponent: FC = () => {
 
   }
 
+  const setRouteHotel = (type: 'from' | 'to', hotel?: Hotel) => {
+
+    const selectedId = hotelsData.find((e) => e.type === hotel)?.id;
+
+    if (type === 'from') {
+      const from = objectsContext?.refs.hotels.find((e) => e.id === selectedId);
+      from && navigatorContext?.setRoute([from.idGeoJson, navigatorContext?.route[1]])
+    } else {
+      const to = objectsContext?.refs.hotels.find((e) => e.id === selectedId);
+      to && navigatorContext?.setRoute([navigatorContext?.route[0], to.idGeoJson])
+    }
+  }
+
   return (
     <View style={[styles.container, {overflow: openSearch ? 'hidden' : 'visible'}]}>
+      <MapNavigatorComponent />
       <GestureDetector gesture={composedGesture}>
         <Animated.View style={[styles.mapView, animatedStyleMap]}>
           <MapSvgComponent onPress={onPress}/>
@@ -132,10 +140,10 @@ export const MapServiceComponent: FC = () => {
         <TouchableOpacity style={styles.hintRow} onPress={() => setOpenFloors(objectsContext.selectedObject.hotel)}>
           <Text style={styles.hintText}>Открыть</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.hintRow}>
+        <TouchableOpacity style={styles.hintRow} onPress={() => setRouteHotel('from', objectsContext.selectedObject.hotel)}>
           <Text style={styles.hintText}>Маршрут отсюда</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.hintRow}>
+        <TouchableOpacity style={styles.hintRow} onPress={() => setRouteHotel('to', objectsContext.selectedObject.hotel)}>
           <Text style={styles.hintText}>Маршрут сюда</Text>
         </TouchableOpacity>
       </View>}
