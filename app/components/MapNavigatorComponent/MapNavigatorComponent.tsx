@@ -3,8 +3,7 @@ import {MapNavigatorContext} from "../../providers/Navigator/MapNavigatorContext
 import mapData, { default as GeoJson } from './map/map_with_line.json';
 import PathFinder from "geojson-path-finder";
 import geojson, { default as GeoJsonTest } from "./map/test.json";
-import {geoToPixelCorrect} from "./data";
-import {rotatedCorners} from "./skewback";
+import {transformPoints} from "./data";
 
 const pathFinder = new PathFinder(geojson);
 
@@ -49,10 +48,10 @@ export const MapNavigatorComponent: FC<Props> = () => {
           [
             43.98163441172832,
             56.31430335843851
-          ],
+          ]
         ];
 
-        const newCoords = rotatedCorners(coordsSvg).map((e) => geoToPixelCorrect(e[0], e[1]));
+        const newCoords = path?.path.map((e) => transformPoints([e[0], e[1]]));
 
         navigatorContext?.setPathCoords(newCoords);
 
