@@ -26,31 +26,6 @@ export const MapNavigatorComponent: FC<Props> = () => {
       if (from && to) {
         const path = pathFinder.findPath(from, to);
 
-        console.log(path);
-
-        const coordsSvg = [
-          [
-            43.98163441172832,
-            56.31430335843851
-          ],
-          [
-            43.98149534721557,
-            56.31413256956836
-          ],
-          [
-            43.98178521545225,
-            56.314053936312746
-          ],
-          [
-            43.98191254075269,
-            56.31422472553453
-          ],
-          [
-            43.98163441172832,
-            56.31430335843851
-          ]
-        ];
-
         const newCoords = path?.path.map((e) => transformPoints([e[0], e[1]]));
 
         navigatorContext?.setPathCoords(newCoords);
