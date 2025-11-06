@@ -11,9 +11,25 @@ export const mainHeight = 1000;
 export const svgWidth = 17122;
 export const svgHeight = 19161;
 
-export const pathD = (coords: number[][]) => coords
-  .map(([x, y], i) => (i === 0 ? `M ${x} ${y}` : `L ${x} ${y}`))
-  .join(" ");
+export const pathD = (pts: number[][]) => {
+    if (pts.length < 2) return "";
+
+    let d = `M ${pts[0][0]} ${pts[0][1]}`;
+
+    for (let i = 1; i < pts.length - 1; i++) {
+        const [x, y] = pts[i];
+        const [nx, ny] = pts[i + 1];
+        const cx = (x + nx) / 2;
+        const cy = (y + ny) / 2;
+        d += ` Q ${x} ${y}, ${cx} ${cy}`;
+    }
+
+    // Последняя точка
+    const [lx, ly] = pts[pts.length - 1];
+    d += ` T ${lx} ${ly}`;
+
+    return d;
+};
 
 export const propsDHotels = {
     [Hotel.ONE]: "M2053.68 10C2086.73 10 2110.67 41.534 2102.15 73.4651C2006.34 432.786 1961.83 721.313 1963.67 1008.5C1965.52 1295.63 2013.7 1581.42 2103.24 1935.29C2111.27 1967.03 2087.38 1998 2054.65 1998H60C32.3858 1998 10 1975.61 10 1948V60C10 32.3857 32.3858 10 60 10H2053.68Z",
