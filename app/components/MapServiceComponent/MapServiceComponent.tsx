@@ -56,27 +56,12 @@ export const MapServiceComponent: FC = () => {
     })
       .onStart((e) => {
 
-        const dFocalX = - focalX.value + mainWidth / 2;
-        const dFocalY = - focalY.value + mainHeight / 2;
-
-        focalX.value = mainWidth / 2;
-        focalY.value = mainHeight / 2;
-
-        translateX.value = translateX.value + dFocalX * (scale.value - 1);
-        translateY.value = translateY.value + dFocalY * (scale.value - 1);
-
       })
     .onUpdate((e) => {
       const newScale = Math.min(Math.max(0.5, startScale.value * e.scale), 3);
 
       scale.value = newScale;
-    });
-
-
-
-  const panGesture = Gesture.Pan()
-    .onStart((e) => {
-
+    }).onEnd(() => {
       const dFocalX = - focalX.value + mainWidth / 2;
       const dFocalY = - focalY.value + mainHeight / 2;
 
@@ -85,7 +70,12 @@ export const MapServiceComponent: FC = () => {
 
       translateX.value = translateX.value + dFocalX * (scale.value - 1);
       translateY.value = translateY.value + dFocalY * (scale.value - 1);
+    });
 
+
+
+  const panGesture = Gesture.Pan()
+    .onStart((e) => {
       startX.value = translateX.value;
       startY.value = translateY.value;
       runOnJS(clearSelection)();
@@ -107,7 +97,16 @@ export const MapServiceComponent: FC = () => {
       } else if (mainHeight / 2 - (startY.value + event.translationY) / scale.value >= mainHeight) {
         translateY.value = -mainHeight / 2 * scale.value
       }
-    });
+    }).onEnd(() => {
+      const dFocalX = - focalX.value + mainWidth / 2;
+      const dFocalY = - focalY.value + mainHeight / 2;
+
+      focalX.value = mainWidth / 2;
+      focalY.value = mainHeight / 2;
+
+      translateX.value = translateX.value + dFocalX * (scale.value - 1);
+      translateY.value = translateY.value + dFocalY * (scale.value - 1);
+    });;
 
   const composedGesture = Gesture.Simultaneous(panGesture, pinchGesture);
 
