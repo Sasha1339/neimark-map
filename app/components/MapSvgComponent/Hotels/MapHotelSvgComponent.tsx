@@ -36,6 +36,7 @@ export const MapHotelSvgComponent: FC<Props> = ({data, typeHotelSelected, transf
   useEffect(() => {
     if (ref.current) {
       objectsContext?.addHotelRef({
+        idGeoJson: data.idGeoJson,
         id: data.id,
         ref: ref,
         width: layout?.width,

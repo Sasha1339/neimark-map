@@ -9,6 +9,7 @@ export interface HotelRefData {
 
 export interface HotelMapInfo {
   id?: string;
+  idGeoJson?: string;
   type: Hotel;
   dProps: string;
   name: string;

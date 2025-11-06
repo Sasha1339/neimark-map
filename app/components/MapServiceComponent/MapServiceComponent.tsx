@@ -15,15 +15,28 @@ import {useAnimatedStyle, useSharedValue} from "react-native-reanimated";
 import colors from "../../styles/colors";
 import {font_family, font_sizes} from "../../styles/fonts";
 import {MapSearchingComponent} from "../MapSearchingComponent/MapSearchingComponent";
-import Svg from "react-native-svg";
 import {Hotel, ObjectsMapRefCoords} from "../../shared/types";
 import {MapFloorComponent} from "../MapFloorComponent/MapFloorComponent";
 import {MapObjectsContext} from "../../providers/Objects/MapObjectsContext";
-import {mainHeight, mainWidth} from "../MapSvgComponent/data";
+import {hotelsData, mainHeight, mainWidth, svgHeight, svgWidth} from "../MapSvgComponent/data";
+import {MapNavigatorComponent} from "../MapNavigatorComponent/MapNavigatorComponent";
+import {useRouterHotel} from "./hooks/useRouterHotel";
 
 export const MapServiceComponent: FC = () => {
 
-  const {width: widthPhone, height: heightPhone} = useWindowDimensions()
+  const {
+    translateX,
+    translateY,
+    startX,
+    startY,
+    focalX,
+    focalY,
+    startScale,
+    scale,
+    onPress,
+    clearSelection,
+    setRouteHotel
+  } = useRouterHotel()
 
   const [openSearch, setOpenSearch] = useState(false);
   const [openFloors, setOpenFloors] = useState<Hotel | undefined>(undefined);
@@ -36,16 +49,6 @@ export const MapServiceComponent: FC = () => {
     transform: [{scale: scaleButton.value}],
   }));
 
-  const translateX = useSharedValue(0);
-  const translateY = useSharedValue(0);
-  const startX = useSharedValue(0);
-  const startY = useSharedValue(0);
-  const focalX = useSharedValue(mainWidth / 2);
-  const focalY = useSharedValue(mainHeight / 2);
-  const allowed = useSharedValue(0);
-  const startScale = useSharedValue(1);
-  const scale = useSharedValue(1);
-
   const pinchGesture = Gesture.Pinch()
     .onBegin((e) => {
       startScale.value = scale.value;
@@ -53,56 +56,35 @@ export const MapServiceComponent: FC = () => {
     })
       .onStart((e) => {
 
-        //
-        // console.log('Старое')
-        // console.log(focalX.value)
-        // console.log(focalY.value)
-        // console.log('Новое')
-        // console.log(e.focalX)
-        // console.log(e.focalY)
+        const dFocalX = - focalX.value + mainWidth / 2;
+        const dFocalY = - focalY.value + mainHeight / 2;
 
-        //translateX.value = translateX.value + (focalX.value - e.focalX) / 2;
-        //translateY.value = translateY.value + (focalY.value - e.focalY) / 2;
+        focalX.value = mainWidth / 2;
+        focalY.value = mainHeight / 2;
 
-        //focalX.value = e.focalX;
-        //focalY.value = e.focalY;
+        translateX.value = translateX.value + dFocalX * (scale.value - 1);
+        translateY.value = translateY.value + dFocalY * (scale.value - 1);
 
-
-        //allowed.value = 0;
       })
     .onUpdate((e) => {
-    //   if (!allowed.value) {
-    //     focalX.value = e.focalX;
-    //     focalY.value = e.focalY;
-    //     allowed.value = 1;
-    //   }
-
-      //console.log(translateX.value)
-
-      //translateX.value = startX.value / scale.value
-      //translateY.value = startX.value / scale.value
-
-
-      const newScale = Math.min(Math.max(0.6, startScale.value * e.scale), 3);
+      const newScale = Math.min(Math.max(0.5, startScale.value * e.scale), 3);
 
       scale.value = newScale;
-    }).onEnd(() => {
-      //translateX.value = translateX.value * scale.value
-      //translateY.value = translateY.value * scale.value
     });
 
-  const clearSelection = () => {
-    objectsContext?.setSelectedObjects({hotel: undefined, areas: undefined});
-  }
+
 
   const panGesture = Gesture.Pan()
     .onStart((e) => {
-      // allowed.value = 1
-      //
-      // if (e.numberOfPointers > 1) {
-      //   allowed.value = 0;
-      //   return;
-      // }
+
+      const dFocalX = - focalX.value + mainWidth / 2;
+      const dFocalY = - focalY.value + mainHeight / 2;
+
+      focalX.value = mainWidth / 2;
+      focalY.value = mainHeight / 2;
+
+      translateX.value = translateX.value + dFocalX * (scale.value - 1);
+      translateY.value = translateY.value + dFocalY * (scale.value - 1);
 
       startX.value = translateX.value;
       startY.value = translateY.value;
@@ -110,11 +92,6 @@ export const MapServiceComponent: FC = () => {
 
     })
     .onUpdate((event) => {
-      //console.log(event.numberOfPointers)
-
-      // if (allowed.value === 0) {
-      //   return;
-      // }
 
       if (mainWidth / 2 - (startX.value + event.translationX) / scale.value > 0 && mainWidth / 2 - (startX.value + event.translationX) / scale.value < mainWidth) {
         translateX.value = startX.value + event.translationX
@@ -130,14 +107,12 @@ export const MapServiceComponent: FC = () => {
       } else if (mainHeight / 2 - (startY.value + event.translationY) / scale.value >= mainHeight) {
         translateY.value = -mainHeight / 2 * scale.value
       }
-    }).onEnd(() => {
-
-    })
+    });
 
   const composedGesture = Gesture.Simultaneous(panGesture, pinchGesture);
 
   const animatedStyleMap = useAnimatedStyle(() => ({
-    //transformOrigin: [focalX.value, focalY.value, 0],
+    transformOrigin: [focalX.value, focalY.value, 0],
     transform: [
       {translateX: translateX.value},
       {translateY: translateY.value},
@@ -153,32 +128,10 @@ export const MapServiceComponent: FC = () => {
     setOpenFloors(undefined);
   }
 
-  const onPress = (info: ObjectsMapRefCoords, refParent: RefObject<Svg | null>) => {
-    scale.value = withTiming(3, {duration: 50})
-    setTimeout(async () => {
-      refParent.current?.measure(async (x, y, width, height, pageX, pageY) => {
-        if (info.ref.current && refParent.current) {
-          const bbox = info.ref.current.getBBox();
-
-          translateX.value = withTiming(translateX.value - pageX - (info!.x * width / 17122) + widthPhone / 2 - (bbox!.width * width / 17122) / 2, {duration: 300})
-          translateY.value = withTiming(translateY.value - pageY - (info!.y * height / 19161) + heightPhone / 2 - (bbox!.height * height / 19161) / 2, {duration: 300})
-
-          // const focalXOld = translateX.value;
-          // const focalYOld = translateY.value;
-          //
-          // translateX.value = translateX.value + (focalX.value - focalXOld) / 2;
-          // translateY.value = translateY.value + (focalY.value - focalYOld) / 2;
-          //
-          // focalX.value = focalXOld;
-          // focalY.value = focalYOld;
-        }
-      });
-    }, 350)
-
-  }
 
   return (
     <View style={[styles.container, {overflow: openSearch ? 'hidden' : 'visible'}]}>
+      <MapNavigatorComponent />
       <GestureDetector gesture={composedGesture}>
         <Animated.View style={[styles.mapView, animatedStyleMap]}>
           <MapSvgComponent onPress={onPress}/>
@@ -188,10 +141,10 @@ export const MapServiceComponent: FC = () => {
         <TouchableOpacity style={styles.hintRow} onPress={() => setOpenFloors(objectsContext.selectedObject.hotel)}>
           <Text style={styles.hintText}>Открыть</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.hintRow}>
+        <TouchableOpacity style={styles.hintRow} onPress={() => setRouteHotel('from', objectsContext.selectedObject.hotel)}>
           <Text style={styles.hintText}>Маршрут отсюда</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.hintRow}>
+        <TouchableOpacity style={styles.hintRow} onPress={() => setRouteHotel('to', objectsContext.selectedObject.hotel)}>
           <Text style={styles.hintText}>Маршрут сюда</Text>
         </TouchableOpacity>
       </View>}

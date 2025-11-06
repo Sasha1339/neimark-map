@@ -1,6 +1,8 @@
 import {RefObject} from "react";
 import {Path} from "react-native-svg";
 
+export type LonLat = [number, number];
+
 export enum Hotel {
   ONE = 'ONE',
   TWO = 'TWO',
@@ -30,6 +32,7 @@ export enum ObjectsType {
 export interface ObjectsMapRefCoords {
   ref: RefObject<Path | null>;
   id?: string;
+  idGeoJson?: string;
   width?: number;
   height?: number;
   x: number;

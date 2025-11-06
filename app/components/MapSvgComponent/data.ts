@@ -4,9 +4,33 @@ import {RefObject} from "react";
 import {Path} from "react-native-svg";
 import {svgPathBbox} from 'svg-path-bbox';
 import {HotelMapInfo, HotelRefData} from "./Hotels/types";
+import {withTiming} from "react-native-reanimated";
 
 export const mainWidth = 893.58;
 export const mainHeight = 1000;
+
+export const svgWidth = 17122;
+export const svgHeight = 19161;
+
+export const pathD = (pts: number[][]) => {
+    if (pts.length < 2) return "";
+
+    let d = `M ${pts[0][0]} ${pts[0][1]}`;
+
+    for (let i = 1; i < pts.length - 1; i++) {
+        const [x, y] = pts[i];
+        const [nx, ny] = pts[i + 1];
+        const cx = (x + nx) / 2;
+        const cy = (y + ny) / 2;
+        d += ` Q ${x} ${y}, ${cx} ${cy}`;
+    }
+
+    // Последняя точка
+    const [lx, ly] = pts[pts.length - 1];
+    d += ` T ${lx} ${ly}`;
+
+    return d;
+};
 
 export const propsDHotels = {
     [Hotel.ONE]: "M2053.68 10C2086.73 10 2110.67 41.534 2102.15 73.4651C2006.34 432.786 1961.83 721.313 1963.67 1008.5C1965.52 1295.63 2013.7 1581.42 2103.24 1935.29C2111.27 1967.03 2087.38 1998 2054.65 1998H60C32.3858 1998 10 1975.61 10 1948V60C10 32.3857 32.3858 10 60 10H2053.68Z",
@@ -29,46 +53,25 @@ export const propsDHotels = {
     [Hotel.EIGHTEEN]: "M2373.99 1283.61L1357.65 28.537C1340.27 7.07669 1308.78 3.76746 1287.32 21.1457L28.5322 1040.49C7.07191 1057.87 3.76272 1089.36 21.1409 1110.82L1037.48 2365.89C1054.86 2387.35 1086.34 2390.66 1107.8 2373.28L2366.59 1353.94C2388.05 1336.56 2391.36 1305.07 2373.99 1283.61Z"
 }
 
-// export const hotelsData: HotelMapInfo[] = [
-//     { type: Hotel.ONE, dProps: propsDHotels[Hotel.ONE], y: 16430.5, x: 983.5, rotationDefault: 0, name: '' },
-//     { type: Hotel.TWO, dProps: propsDHotels[Hotel.TWO], y: 0, x: 0, rotationDefault: 0, name: '' },
-//     { type: Hotel.THREE, dProps: propsDHotels[Hotel.THREE], y: 0, x: 0, rotationDefault: 0, name: '' },
-//     { type: Hotel.FOUR, dProps: propsDHotels[Hotel.FOUR], y: 0, x: 0, rotationDefault: 0, name: '' },
-//     { type: Hotel.FIVE, dProps: propsDHotels[Hotel.FIVE], y: 0, x: 0, rotationDefault: 0, name: '' },
-//     { type: Hotel.SIX, dProps: propsDHotels[Hotel.SIX], y: 0, x: 0, rotationDefault: 0, name: '' },
-//     { type: Hotel.SEVEN, dProps: propsDHotels[Hotel.SEVEN], y: 0, x: 0, rotationDefault: 0, name: '' },
-//     { type: Hotel.EIGHT, dProps: propsDHotels[Hotel.EIGHT], y: 0, x: 0, rotationDefault: 0, name: '' },
-//     { type: Hotel.NINE, dProps: propsDHotels[Hotel.NINE], y: 0, x: 0, rotationDefault: 0, name: '' },
-//     { type: Hotel.TEN, dProps: propsDHotels[Hotel.TEN], y: 0, x: 0, rotationDefault: 0, name: '' },
-//     { type: Hotel.ELEVEN, dProps: propsDHotels[Hotel.ELEVEN], y: 0, x: 0, rotationDefault: 0, name: '' },
-//     { type: Hotel.TWELVE, dProps: propsDHotels[Hotel.TWELVE], y: 0, x: 0, rotationDefault: 0, name: '' },
-//     { type: Hotel.THIRTEEN, dProps: propsDHotels[Hotel.THIRTEEN], y: 0, x: 0, rotationDefault: 0, name: '' },
-//     { type: Hotel.FOURTEEN, dProps: propsDHotels[Hotel.FOURTEEN], y: 0, x: 0, rotationDefault: 0, name: '' },
-//     { type: Hotel.FIFTEEN, dProps: propsDHotels[Hotel.FIFTEEN], y: 0, x: 0, rotationDefault: 0, name: '' },
-//     { type: Hotel.SIXTEEN, dProps: propsDHotels[Hotel.SIXTEEN], y: 0, x: 0, rotationDefault: 0, name: '' },
-//     { type: Hotel.SEVENTEEN, dProps: propsDHotels[Hotel.SEVENTEEN], y: 0, x: 0, rotationDefault: 0, name: '' },
-//     { type: Hotel.EIGHTEEN, dProps: propsDHotels[Hotel.EIGHTEEN], y: 0, x: 0, rotationDefault: 0, name: '' }
-// ]
-
 export const hotelsData: HotelMapInfo[] = [
-    { type: Hotel.ONE, dProps: propsDHotels[Hotel.ONE], y: 16430.5, x: 983.5, rotationDefault: 0, name: '', id: 'h1' },
-    { type: Hotel.TWO, dProps: propsDHotels[Hotel.TWO], y: 16475.50, x: 5989.30, rotationDefault: 0, name: '', id: 'h2' },
-    { type: Hotel.THREE, dProps: propsDHotels[Hotel.THREE], y: 16731, x: 8982.97, rotationDefault: 0, name: '', id: 'h3' },
-    { type: Hotel.FOUR, dProps: propsDHotels[Hotel.FOUR], y: 13122.00, x: 1566.24, rotationDefault: 0, name: '', id: 'h4' },
-    { type: Hotel.FIVE, dProps: propsDHotels[Hotel.FIVE], y: 9860.04, x: 2586.46, rotationDefault: 0, name: '', id: 'h5' },
-    { type: Hotel.SIX, dProps: propsDHotels[Hotel.SIX], y: 12772.8, x: 5993.91, rotationDefault: 0, name: '', id: 'h6' },
-    { type: Hotel.SEVEN, dProps: propsDHotels[Hotel.SEVEN], x: 9559.61, y: 13952.5, rotationDefault: 0, name: '', id: 'h7' },
-    { type: Hotel.EIGHT, dProps: propsDHotels[Hotel.EIGHT], x: 3287.86, y: 6610.17, rotationDefault: 0, name: '', id: 'h8' },
-    { type: Hotel.NINE, dProps: propsDHotels[Hotel.NINE], y: 9680.63, x: 7717.18, rotationDefault: 0, name: '', id: 'h9' },
-    { type: Hotel.TEN, dProps: propsDHotels[Hotel.TEN], y: 11193.4, x: 10536.3, rotationDefault: 0, name: '', id: 'h10' },
-    { type: Hotel.ELEVEN, dProps: propsDHotels[Hotel.ELEVEN], y: 4521.75, x: 5852.66, rotationDefault: 0, name: '', id: 'h11' },
-    { type: Hotel.TWELVE, dProps: propsDHotels[Hotel.TWELVE], y: 6491.02, x: 9633.48, rotationDefault: 0, name: '', id: 'h12' },
-    { type: Hotel.THIRTEEN, dProps: propsDHotels[Hotel.THIRTEEN], y: 8813.98, x: 12102.0, rotationDefault: 0, name: '', id: 'h13' },
-    { type: Hotel.FOURTEEN, dProps: propsDHotels[Hotel.FOURTEEN], y: 837.97, x: 4924.07, rotationDefault: 0, name: '', id: 'h14' },
-    { type: Hotel.FIFTEEN, dProps: propsDHotels[Hotel.FIFTEEN], y: 1363.18, x: 7701.18, rotationDefault: 0, name: '', id: 'h15' },
-    { type: Hotel.SIXTEEN, dProps: propsDHotels[Hotel.SIXTEEN], y: 2154.42, x: 10454.1, rotationDefault: 0, name: '', id: 'h16' },
-    { type: Hotel.SEVENTEEN, dProps: propsDHotels[Hotel.SEVENTEEN], y: 4561.94, x: 12306.0, rotationDefault: 0, name: '', id: 'h17' },
-    { type: Hotel.EIGHTEEN, dProps: propsDHotels[Hotel.EIGHTEEN], y: 6816.65, x: 14115.7, rotationDefault: 0, name: '', id: 'h18' }
+    { type: Hotel.ONE, dProps: propsDHotels[Hotel.ONE], y: 16430.5, x: 983.5, rotationDefault: 0, name: '', id: 'h1', idGeoJson: 'entrance_1_1' },
+    { type: Hotel.TWO, dProps: propsDHotels[Hotel.TWO], y: 16475.50, x: 5989.30, rotationDefault: 0, name: '', id: 'h2', idGeoJson: 'entrance_2_1' },
+    { type: Hotel.THREE, dProps: propsDHotels[Hotel.THREE], y: 16731, x: 8982.97, rotationDefault: 0, name: '', id: 'h3', idGeoJson: 'entrance_3_1' },
+    { type: Hotel.FOUR, dProps: propsDHotels[Hotel.FOUR], y: 13122.00, x: 1566.24, rotationDefault: 0, name: '', id: 'h4', idGeoJson: 'entrance_4_1' },
+    { type: Hotel.FIVE, dProps: propsDHotels[Hotel.FIVE], y: 9860.04, x: 2586.46, rotationDefault: 0, name: '', id: 'h5', idGeoJson: 'entrance_5_1' },
+    { type: Hotel.SIX, dProps: propsDHotels[Hotel.SIX], y: 12772.8, x: 5993.91, rotationDefault: 0, name: '', id: 'h6', idGeoJson: 'entrance_6_1' },
+    { type: Hotel.SEVEN, dProps: propsDHotels[Hotel.SEVEN], x: 9559.61, y: 13952.5, rotationDefault: 0, name: '', id: 'h7', idGeoJson: 'entrance_7_1' },
+    { type: Hotel.EIGHT, dProps: propsDHotels[Hotel.EIGHT], x: 3287.86, y: 6610.17, rotationDefault: 0, name: '', id: 'h8', idGeoJson: 'entrance_8_1' },
+    { type: Hotel.NINE, dProps: propsDHotels[Hotel.NINE], y: 9680.63, x: 7717.18, rotationDefault: 0, name: '', id: 'h9', idGeoJson: 'entrance_9_1' },
+    { type: Hotel.TEN, dProps: propsDHotels[Hotel.TEN], y: 11193.4, x: 10536.3, rotationDefault: 0, name: '', id: 'h10', idGeoJson: 'entrance_10_1' },
+    { type: Hotel.ELEVEN, dProps: propsDHotels[Hotel.ELEVEN], y: 4521.75, x: 5852.66, rotationDefault: 0, name: '', id: 'h11', idGeoJson: 'entrance_11_1' },
+    { type: Hotel.TWELVE, dProps: propsDHotels[Hotel.TWELVE], y: 6491.02, x: 9633.48, rotationDefault: 0, name: '', id: 'h12', idGeoJson: 'entrance_12_1' },
+    { type: Hotel.THIRTEEN, dProps: propsDHotels[Hotel.THIRTEEN], y: 8813.98, x: 12102.0, rotationDefault: 0, name: '', id: 'h13', idGeoJson: 'entrance_13_1' },
+    { type: Hotel.FOURTEEN, dProps: propsDHotels[Hotel.FOURTEEN], y: 837.97, x: 4924.07, rotationDefault: 0, name: '', id: 'h14', idGeoJson: 'entrance_14_1' },
+    { type: Hotel.FIFTEEN, dProps: propsDHotels[Hotel.FIFTEEN], y: 1363.18, x: 7701.18, rotationDefault: 0, name: '', id: 'h15', idGeoJson: 'entrance_15_1' },
+    { type: Hotel.SIXTEEN, dProps: propsDHotels[Hotel.SIXTEEN], y: 2154.42, x: 10454.1, rotationDefault: 0, name: '', id: 'h16', idGeoJson: 'entrance_16_1' },
+    { type: Hotel.SEVENTEEN, dProps: propsDHotels[Hotel.SEVENTEEN], y: 4561.94, x: 12306.0, rotationDefault: 0, name: '', id: 'h17', idGeoJson: 'entrance_17_1' },
+    { type: Hotel.EIGHTEEN, dProps: propsDHotels[Hotel.EIGHTEEN], y: 6816.65, x: 14115.7, rotationDefault: 0, name: '', id: 'h18', idGeoJson: 'entrance_18_1' }
 ]
 
 
