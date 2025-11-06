@@ -39,16 +39,13 @@ export const RouteComponent: FC<Props> = ({ d, length }) => {
   }
 
   return (
-    <>
-      {d && <AnimatedPath
-        animatedProps={animatedProps}
-        ref={navigatorContext?.pathRouteElement}
-        d={d}
-        stroke="#FF0000"
-        strokeWidth={50}
-        fill="none"
-
-      />}
-    </>
+    <AnimatedPath
+      animatedProps={animatedProps}
+      ref={navigatorContext?.pathRouteElement}
+      d={d}
+      stroke="#FF0000"
+      strokeWidth={50}
+      fill="none"
+    />
   );
 }
