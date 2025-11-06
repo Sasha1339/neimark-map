@@ -1,4 +1,5 @@
-import {createContext} from "react";
+import {createContext, RefObject} from "react";
+import Svg, {Path} from "react-native-svg";
 
 
 interface MapRouteContextValue {
@@ -6,6 +7,8 @@ interface MapRouteContextValue {
   setRoute: (route: [string | undefined, string | undefined]) => void,
   pathCoords: number[][] | undefined;
   setPathCoords: (coords: number[][] | undefined) => void;
+  pathRouteElement: RefObject<Path | null>;
+  parentSvgElement: RefObject<Svg | null>;
 }
 
 export const MapNavigatorContext = createContext<MapRouteContextValue | null>(null);
