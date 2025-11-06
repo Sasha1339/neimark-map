@@ -15,12 +15,10 @@ import {useAnimatedStyle, useSharedValue} from "react-native-reanimated";
 import colors from "../../styles/colors";
 import {font_family, font_sizes} from "../../styles/fonts";
 import {MapSearchingComponent} from "../MapSearchingComponent/MapSearchingComponent";
-import Svg from "react-native-svg";
 import {Hotel, ObjectsMapRefCoords} from "../../shared/types";
 import {MapFloorComponent} from "../MapFloorComponent/MapFloorComponent";
 import {MapObjectsContext} from "../../providers/Objects/MapObjectsContext";
 import {hotelsData, mainHeight, mainWidth, svgHeight, svgWidth} from "../MapSvgComponent/data";
-import {MapNavigatorContext} from "../../providers/Navigator/MapNavigatorContext";
 import {MapNavigatorComponent} from "../MapNavigatorComponent/MapNavigatorComponent";
 import {useRouterHotel} from "./hooks/useRouterHotel";
 
@@ -44,7 +42,6 @@ export const MapServiceComponent: FC = () => {
   const [openFloors, setOpenFloors] = useState<Hotel | undefined>(undefined);
 
   const objectsContext = useContext(MapObjectsContext);
-  const navigatorContext = useContext(MapNavigatorContext);
 
   const scaleButton = useSharedValue(1);
 
