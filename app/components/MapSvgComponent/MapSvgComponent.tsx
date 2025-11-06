@@ -1,8 +1,8 @@
 import * as React from "react"
 import Svg, {Path, G, Rect} from "react-native-svg"
 import {GestureResponderEvent} from "react-native";
-import {FC, RefObject, useCallback, useContext, useEffect, useMemo, useRef, useState} from "react";
-import {Hotel, ObjectsMapRefCoords} from "../../shared/types";
+import {FC, useContext, useEffect, useState} from "react";
+import {ObjectsMapRefCoords} from "../../shared/types";
 import {compareWithHotel, hotelsData, pathD} from "./data";
 import {useAnimationTransform} from "./hooks/useAnimationTransform";
 import {MapCommonAreasComponent} from "../MapCommonAreasComponent/MapCommonAreasComponent";
@@ -10,6 +10,7 @@ import {areas} from "../MapCommonAreasComponent/data";
 import {MapHotelSvgComponent} from "./Hotels/MapHotelSvgComponent";
 import {MapObjectsContext} from "../../providers/Objects/MapObjectsContext";
 import {MapNavigatorContext} from "../../providers/Navigator/MapNavigatorContext";
+import {RouteComponent} from "./RouteComponent/RouteComponent";
 
 
 type Props = {
@@ -87,14 +88,7 @@ export const MapSvgComponent: FC<Props> = ({onPress, ...props}) => {
           mask="url(#path-2-inside-1_0_1)"
         />
 
-
-         <Path
-          ref={navigatorContext.pathRouteElement}
-          stroke="#FF0000"
-          strokeWidth="50"
-          fillOpacity={0}
-          d={pathNavigator ?? undefined}
-        />
+        <RouteComponent d={pathNavigator ?? undefined} />
 
 
         {hotelsData.map((e, i) => (
