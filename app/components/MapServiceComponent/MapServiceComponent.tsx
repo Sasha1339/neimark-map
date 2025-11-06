@@ -15,7 +15,7 @@ import {useAnimatedStyle, useSharedValue} from "react-native-reanimated";
 import colors from "../../styles/colors";
 import {font_family, font_sizes} from "../../styles/fonts";
 import {MapSearchingComponent} from "../MapSearchingComponent/MapSearchingComponent";
-import Svg, {Path} from "react-native-svg";
+import Svg from "react-native-svg";
 import {Hotel, ObjectsMapRefCoords} from "../../shared/types";
 import {MapFloorComponent} from "../MapFloorComponent/MapFloorComponent";
 import {MapObjectsContext} from "../../providers/Objects/MapObjectsContext";
@@ -43,8 +43,8 @@ export const MapServiceComponent: FC = () => {
   const translateY = useSharedValue(0);
   const startX = useSharedValue(0);
   const startY = useSharedValue(0);
-  const focalX = useSharedValue(0);
-  const focalY = useSharedValue(0);
+  const focalX = useSharedValue(mainWidth / 2);
+  const focalY = useSharedValue(mainHeight / 2);
   const allowed = useSharedValue(0);
   const startScale = useSharedValue(1);
   const scale = useSharedValue(1);
@@ -55,36 +55,92 @@ export const MapServiceComponent: FC = () => {
 
     })
       .onStart((e) => {
-        focalX.value = e.focalX;
-        focalY.value = e.focalY;
+
+        //
+        // console.log('Старое')
+        // console.log(focalX.value)
+        // console.log(focalY.value)
+        // console.log('Новое')
+        // console.log(e.focalX)
+        // console.log(e.focalY)
+
+        //translateX.value = translateX.value + (focalX.value - e.focalX) / 2;
+        //translateY.value = translateY.value + (focalY.value - e.focalY) / 2;
+
+        //focalX.value = e.focalX;
+        //focalY.value = e.focalY;
+
+
+        //allowed.value = 0;
       })
     .onUpdate((e) => {
+    //   if (!allowed.value) {
+    //     focalX.value = e.focalX;
+    //     focalY.value = e.focalY;
+    //     allowed.value = 1;
+    //   }
+
+      //console.log(translateX.value)
+
+      //translateX.value = startX.value / scale.value
+      //translateY.value = startX.value / scale.value
+
+
       const newScale = Math.min(Math.max(0.6, startScale.value * e.scale), 3);
 
       scale.value = newScale;
-    })
-    ;
+    }).onEnd(() => {
+      //translateX.value = translateX.value * scale.value
+      //translateY.value = translateY.value * scale.value
+    });
 
   const clearSelection = () => {
     objectsContext?.setSelectedObjects({hotel: undefined, areas: undefined});
   }
 
   const panGesture = Gesture.Pan()
-    .onStart(() => {
+    .onStart((e) => {
+      // allowed.value = 1
+      //
+      // if (e.numberOfPointers > 1) {
+      //   allowed.value = 0;
+      //   return;
+      // }
+
       startX.value = translateX.value;
       startY.value = translateY.value;
       runOnJS(clearSelection)();
 
     })
     .onUpdate((event) => {
-      translateX.value = Math.max(-200 * scale.value * scale.value, Math.min(200 * scale.value * scale.value, startX.value + event.translationX));
-      translateY.value = Math.max(-400 * scale.value * scale.value, Math.min(400 * scale.value * scale.value, startY.value + event.translationY));
+      //console.log(event.numberOfPointers)
+
+      // if (allowed.value === 0) {
+      //   return;
+      // }
+
+      if (mainWidth / 2 - (startX.value + event.translationX) / scale.value > 0 && mainWidth / 2 - (startX.value + event.translationX) / scale.value < mainWidth) {
+        translateX.value = startX.value + event.translationX
+      } else if (mainWidth / 2 - (startX.value + event.translationX) / scale.value  <= 0) {
+        translateX.value = mainWidth / 2 * scale.value
+      } else if (mainWidth / 2 - (startX.value + event.translationX) / scale.value >= mainWidth) {
+        translateX.value = -mainWidth / 2 * scale.value
+      }
+      if (mainHeight / 2 - (startY.value + event.translationY) / scale.value > 0 && mainHeight / 2 - (startY.value + event.translationY) / scale.value < mainHeight) {
+        translateY.value = startY.value + event.translationY
+      } else if (mainHeight / 2 - (startY.value + event.translationY) / scale.value  <= 0) {
+        translateY.value = mainHeight / 2 * scale.value
+      } else if (mainHeight / 2 - (startY.value + event.translationY) / scale.value >= mainHeight) {
+        translateY.value = -mainHeight / 2 * scale.value
+      }
+    }).onEnd(() => {
+
     })
 
   const composedGesture = Gesture.Simultaneous(panGesture, pinchGesture);
 
   const animatedStyleMap = useAnimatedStyle(() => ({
-    // transformOrigin: [focalX.value, focalY.value, 0],
+    //transformOrigin: [focalX.value, focalY.value, 0],
     transform: [
       {translateX: translateX.value},
       {translateY: translateY.value},
@@ -109,6 +165,15 @@ export const MapServiceComponent: FC = () => {
 
           translateX.value = withTiming(translateX.value - pageX - (info!.x * width / 17122) + widthPhone / 2 - (bbox!.width * width / 17122) / 2, {duration: 300})
           translateY.value = withTiming(translateY.value - pageY - (info!.y * height / 19161) + heightPhone / 2 - (bbox!.height * height / 19161) / 2, {duration: 300})
+
+          // const focalXOld = translateX.value;
+          // const focalYOld = translateY.value;
+          //
+          // translateX.value = translateX.value + (focalX.value - focalXOld) / 2;
+          // translateY.value = translateY.value + (focalY.value - focalYOld) / 2;
+          //
+          // focalX.value = focalXOld;
+          // focalY.value = focalYOld;
         }
       });
     }, 350)
