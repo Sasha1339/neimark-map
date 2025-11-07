@@ -88,8 +88,6 @@ export const MapSvgComponent: FC<Props> = ({onPress, ...props}) => {
           mask="url(#path-2-inside-1_0_1)"
         />
 
-
-
         <RouteComponent d={pathNavigator ?? undefined} />
 
 

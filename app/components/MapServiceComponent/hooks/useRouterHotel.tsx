@@ -16,8 +16,6 @@ export const useRouterHotel = () => {
   const startY = useSharedValue(0);
   const focalX = useSharedValue(mainWidth / 2);
   const focalY = useSharedValue(mainHeight / 2);
-  const startFocalX = useSharedValue(mainWidth / 2);
-  const startFocalY = useSharedValue(mainHeight / 2);
   const startScale = useSharedValue(1);
   const scale = useSharedValue(1);
 
@@ -116,6 +114,6 @@ export const useRouterHotel = () => {
       focalY.value = mainHeight / 2;
   }, [focalX, focalY])
 
-  return {translateY, translateX, focalY, focalX, startFocalX, startFocalY, scale, startScale, startX, startY, onPress, setRouteHotel, clearSelection, onCenterWindowFocal, onDefaultWindowFocal}
+  return {translateY, translateX, focalY, focalX, scale, startScale, startX, startY, onPress, setRouteHotel, clearSelection, onCenterWindowFocal, onDefaultWindowFocal}
 
 }

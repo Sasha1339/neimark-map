@@ -31,8 +31,6 @@ export const MapServiceComponent: FC = () => {
     startY,
     focalX,
     focalY,
-    startFocalX,
-    startFocalY,
     startScale,
     scale,
     onPress,
