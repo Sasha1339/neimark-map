@@ -69,7 +69,7 @@ export const AreasTemplateSvgComponent: FC<PropsWithChildren & PropsTemplate & P
 
       {children}
 
-      {objectsContext?.selectedObject.areas !== title && <Text opacity={opacity} x={180} y={500} fontSize={100} fill="#000" fontFamily={font_family.Biform} textAnchor="middle">
+      {objectsContext?.selectedObject.areas !== title && <Text fillOpacity={opacity} x={180} y={500} fontSize={100} fill="#000" fontFamily={font_family.Biform} textAnchor="middle">
         {title}
       </Text>}
     </G>
