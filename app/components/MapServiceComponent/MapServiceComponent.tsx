@@ -35,7 +35,9 @@ export const MapServiceComponent: FC = () => {
     scale,
     onPress,
     clearSelection,
-    setRouteHotel
+    setRouteHotel,
+    onCenterWindowFocal,
+    onDefaultWindowFocal
   } = useRouterHotel()
 
   const [openSearch, setOpenSearch] = useState(false);
@@ -61,16 +63,8 @@ export const MapServiceComponent: FC = () => {
       const newScale = Math.min(Math.max(0.5, startScale.value * e.scale), 3);
 
       scale.value = newScale;
-    }).onEnd(() => {
-      const dFocalX = - focalX.value + mainWidth / 2;
-      const dFocalY = - focalY.value + mainHeight / 2;
-
-      focalX.value = mainWidth / 2;
-      focalY.value = mainHeight / 2;
-
-      translateX.value = translateX.value + dFocalX * (scale.value - 1);
-      translateY.value = translateY.value + dFocalY * (scale.value - 1);
     });
+
 
 
 
@@ -83,30 +77,30 @@ export const MapServiceComponent: FC = () => {
     })
     .onUpdate((event) => {
 
+      if (scale.value > 0.8) {
+        runOnJS(onCenterWindowFocal)();
+      } else {
+        runOnJS(onDefaultWindowFocal)();
+      }
+
+
       if (mainWidth / 2 - (startX.value + event.translationX) / scale.value > 0 && mainWidth / 2 - (startX.value + event.translationX) / scale.value < mainWidth) {
-        translateX.value = startX.value + event.translationX
+        translateX.value = startX.value + event.translationX / (scale.value > 0.8 ? scale.value : 1);
       } else if (mainWidth / 2 - (startX.value + event.translationX) / scale.value  <= 0) {
-        translateX.value = mainWidth / 2 * scale.value
+        translateX.value = mainWidth / 2 * scale.value;
       } else if (mainWidth / 2 - (startX.value + event.translationX) / scale.value >= mainWidth) {
-        translateX.value = -mainWidth / 2 * scale.value
+        translateX.value = -mainWidth / 2 * scale.value;
       }
       if (mainHeight / 2 - (startY.value + event.translationY) / scale.value > 0 && mainHeight / 2 - (startY.value + event.translationY) / scale.value < mainHeight) {
-        translateY.value = startY.value + event.translationY
+        translateY.value = startY.value + event.translationY / (scale.value > 0.8 ? scale.value : 1);
       } else if (mainHeight / 2 - (startY.value + event.translationY) / scale.value  <= 0) {
         translateY.value = mainHeight / 2 * scale.value
       } else if (mainHeight / 2 - (startY.value + event.translationY) / scale.value >= mainHeight) {
-        translateY.value = -mainHeight / 2 * scale.value
+        translateY.value = -mainHeight / 2 * scale.value;
       }
-    }).onEnd(() => {
-      const dFocalX = - focalX.value + mainWidth / 2;
-      const dFocalY = - focalY.value + mainHeight / 2;
 
-      focalX.value = mainWidth / 2;
-      focalY.value = mainHeight / 2;
 
-      translateX.value = translateX.value + dFocalX * (scale.value - 1);
-      translateY.value = translateY.value + dFocalY * (scale.value - 1);
-    });;
+    });
 
   const composedGesture = Gesture.Simultaneous(panGesture, pinchGesture);
 

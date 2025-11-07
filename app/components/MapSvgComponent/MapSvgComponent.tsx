@@ -1,9 +1,9 @@
 import * as React from "react"
-import Svg, {Path, G, Rect} from "react-native-svg"
+import Svg, {Path, G, Rect, Circle} from "react-native-svg"
 import {GestureResponderEvent} from "react-native";
 import {FC, useContext, useEffect, useState} from "react";
 import {ObjectsMapRefCoords} from "../../shared/types";
-import {compareWithHotel, hotelsData, pathD} from "./data";
+import {compareWithHotel, hotelsData, mainHeight, mainWidth, pathD, svgHeight, svgWidth} from "./data";
 import {useAnimationTransform} from "./hooks/useAnimationTransform";
 import {MapCommonAreasComponent} from "../MapCommonAreasComponent/MapCommonAreasComponent";
 import {areas} from "../MapCommonAreasComponent/data";
@@ -106,7 +106,6 @@ export const MapSvgComponent: FC<Props> = ({onPress, ...props}) => {
         />
 
         <MapCommonAreasComponent areas={areas} opacity={objectsContext?.selectedObject.hotel === undefined ? 1 : 0}/>
-
 
       </Svg>}
     </>

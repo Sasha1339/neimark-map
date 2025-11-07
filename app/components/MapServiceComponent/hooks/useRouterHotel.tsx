@@ -102,8 +102,18 @@ export const useRouterHotel = () => {
 
   }, [onRoutePointSelected, clearSelection, navigatorContext?.setRoute, navigatorContext?.route, objectsContext?.refs.hotels])
 
+  const onCenterWindowFocal = useCallback(() => {
+    navigatorContext?.parentSvgElement.current?.measure(async (x, y, width, height, pageX, pageY) => {
+      focalX.value = (-pageX + widthPhone / 2) / scale.value;
+      focalY.value = (-pageY + heightPhone / 2) / scale.value;
+    })
+  }, [focalX, focalY, navigatorContext?.parentSvgElement, scale])
 
+  const onDefaultWindowFocal = useCallback(() => {
+      focalX.value = mainWidth / 2;
+      focalY.value = mainHeight / 2;
+  }, [focalX, focalY])
 
-  return {translateY, translateX, focalY, focalX, scale, startScale, startX, startY, onPress, setRouteHotel, clearSelection}
+  return {translateY, translateX, focalY, focalX, scale, startScale, startX, startY, onPress, setRouteHotel, clearSelection, onCenterWindowFocal, onDefaultWindowFocal}
 
 }
