@@ -4,13 +4,19 @@ import {Circle, G, Path, Text} from "react-native-svg";
 import {font_family} from "../../../styles/fonts";
 import {MapObjectsContext} from "../../../providers/Objects/MapObjectsContext";
 import {ObjectsType} from "../../../shared/types";
+import Animated, {useAnimatedProps, useSharedValue, withTiming} from "react-native-reanimated";
+
 
 type PropsTemplate = {
   mainColor?: string,
   backgroundColor?: string,
 }
 
+const AnimateCircle = Animated.createAnimatedComponent(Circle);
+
 export const AreasTemplateSvgComponent: FC<PropsWithChildren & PropsTemplate & PropsAreas> = ({children, opacity = 1, mainColor = '#fff', backgroundColor = '#000', x = 0, y = 0, title = '', id, ...props }) => {
+  const radius = useSharedValue(200);
+  const strokeWidth = useSharedValue(5);
 
   const ref = useRef<Path>(null);
 
@@ -29,24 +35,43 @@ export const AreasTemplateSvgComponent: FC<PropsWithChildren & PropsTemplate & P
     }
   }, [ref]);
 
+  useEffect(() => {
+    if (objectsContext?.selectedObject.areas === title) {
+      radius.value = withTiming(300, { duration: 500 });
+      strokeWidth.value = withTiming(50, { duration: 500 });
+    } else {
+      radius.value = withTiming(200, { duration: 200 });
+      strokeWidth.value = withTiming(5, { duration: 200 });
+    }
+  }, [objectsContext?.selectedObject.areas]);
+
+  const animatedPropsBack = useAnimatedProps(() => ({
+    r: radius.value,
+  }))
+
+  const animatedPropsStroke = useAnimatedProps(() => ({
+    strokeWidth: strokeWidth.value,
+    r: radius.value,
+  }))
+
+
   return (
     <G fill="none" transform={`translate(${x}, ${y})`}>
-      <Circle ref={ref} cx={200} cy={200} r={200} fill={backgroundColor} opacity={opacity} />
-      <Circle
+      <AnimateCircle animatedProps={animatedPropsBack} ref={ref} cx={200} cy={200} fill={backgroundColor} opacity={opacity} />
+      <AnimateCircle
+        animatedProps={animatedPropsStroke}
         cx={200}
         cy={200}
-        r={197.5}
         stroke={mainColor}
         opacity={opacity}
         strokeOpacity={opacity}
-        strokeWidth={5}
       />
 
       {children}
 
-      <Text opacity={opacity} x={180} y={500} fontSize={100} fill="#000" fontFamily={font_family.Biform} textAnchor="middle">
+      {objectsContext?.selectedObject.areas !== title && <Text opacity={opacity} x={180} y={500} fontSize={100} fill="#000" fontFamily={font_family.Biform} textAnchor="middle">
         {title}
-      </Text>
+      </Text>}
     </G>
 
   )
