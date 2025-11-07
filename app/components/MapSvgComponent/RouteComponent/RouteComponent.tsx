@@ -10,11 +10,11 @@ const AnimatedPath = Animated.createAnimatedComponent(Path);
 
 type Props = {
   d?: string,
-  length?: number
+  opacity?: number
 }
 
 
-export const RouteComponent: FC<Props> = ({ d, length }) => {
+export const RouteComponent: FC<Props> = ({ d, opacity }) => {
   const progress = useSharedValue(1);
   const navigatorContext = useContext(MapNavigatorContext);
 
@@ -42,6 +42,7 @@ export const RouteComponent: FC<Props> = ({ d, length }) => {
     <AnimatedPath
       animatedProps={animatedProps}
       ref={navigatorContext?.pathRouteElement}
+      opacity={opacity}
       d={d}
       stroke="#FF0000"
       strokeWidth={50}

@@ -88,7 +88,7 @@ export const MapSvgComponent: FC<Props> = ({onPress, ...props}) => {
           mask="url(#path-2-inside-1_0_1)"
         />
 
-        <RouteComponent d={pathNavigator ?? undefined} />
+        <RouteComponent d={pathNavigator ?? undefined} opacity={objectsContext?.selectedObject.hotel === undefined ? 1 : 0} />
 
 
         {hotelsData.map((e, i) => (
