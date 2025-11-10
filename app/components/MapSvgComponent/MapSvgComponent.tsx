@@ -108,7 +108,7 @@ export const MapSvgComponent: FC<Props> = ({onPress, ...props}) => {
 
         <MapCommonAreasComponent areas={areas} opacity={objectsContext?.selectedObject.hotel === undefined ? 1 : 0}/>
 
-        <UserSvgComponent opacity={objectsContext?.selectedObject.hotel === undefined ? 1 : 0} />
+        <UserSvgComponent opacity={1} />
 
       </Svg>}
     </>
