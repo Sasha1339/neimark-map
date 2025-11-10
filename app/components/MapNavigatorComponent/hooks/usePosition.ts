@@ -29,7 +29,7 @@ export const usePosition = () => {
   useEffect(() => {
     if (position) {
       const coords = transformPoints([position.longitude, position.latitude]);
-      console.log(coords)
+      alert(coords)
     }
 
   }, [position]);
