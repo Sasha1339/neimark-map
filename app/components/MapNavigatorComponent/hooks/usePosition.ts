@@ -31,8 +31,8 @@ export const usePosition = () => {
   useEffect(() => {
     if (position) {
       const coords = transformPoints([position.longitude, position.latitude]);
-      translateX.value = withTiming(coords[0], {duration: 500});
-      translateY.value = withTiming(coords[1], {duration: 500});
+      translateX.value = withTiming(coords[0], {duration: 200});
+      translateY.value = withTiming(coords[1], {duration: 200});
     }
 
   }, [position]);

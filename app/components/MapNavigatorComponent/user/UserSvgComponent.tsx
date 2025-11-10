@@ -11,30 +11,33 @@ import {usePosition} from "../hooks/usePosition";
 const AnimateG = Animated.createAnimatedComponent(G);
 
 type Props = {
-  opacity: number;
+    opacity: number;
 }
 
 export const UserSvgComponent: FC<Props> = ({opacity}) => {
 
-  const {animatedProps} = usePosition();
+    const {animatedProps, x, y} = usePosition();
 
 
-  return (
-    <AnimateG animatedProps={animatedProps} fill={'none'}>
-      <Circle cx={200} cy={200} r={200} fill={colors.white} opacity={opacity} />
-      <Circle
-        cx={200}
-        cy={200}
-        r={200}
-        stroke={colors.mainRed}
-        opacity={opacity}
-        strokeWidth={20}
-        strokeOpacity={opacity}
-      />
+    return (
+        <AnimateG animatedProps={animatedProps} fill={'none'}>
+            {(x.value !== 0 && y.value !== 0) &&
+                <>
+                    <Circle cx={200} cy={200} r={200} fill={colors.white} opacity={opacity}/>
+                    <Circle
+                        cx={200}
+                        cy={200}
+                        r={200}
+                        stroke={colors.mainRed}
+                        opacity={opacity}
+                        strokeWidth={20}
+                        strokeOpacity={opacity}
+                    />
 
-        <Circle cx={200} cy={200} r={100} fill={colors.mainRed} opacity={opacity} />
-    </AnimateG>
+                    <Circle cx={200} cy={200} r={100} fill={colors.mainRed} opacity={opacity}/>
+                </>}
+        </AnimateG>
 
-  )
+    )
 
 }
