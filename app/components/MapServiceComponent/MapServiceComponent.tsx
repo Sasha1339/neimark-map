@@ -21,6 +21,7 @@ import {MapObjectsContext} from "../../providers/Objects/MapObjectsContext";
 import {hotelsData, mainHeight, mainWidth, svgHeight, svgWidth} from "../MapSvgComponent/data";
 import {MapNavigatorComponent} from "../MapNavigatorComponent/MapNavigatorComponent";
 import {useRouterHotel} from "./hooks/useRouterHotel";
+import {Map3dGraphic} from "../Map3dGraphic/Map3dGraphic";
 
 export const MapServiceComponent: FC = () => {
 
@@ -133,11 +134,9 @@ export const MapServiceComponent: FC = () => {
   return (
     <View style={[styles.container, {overflow: openSearch ? 'hidden' : 'visible'}]}>
       <MapNavigatorComponent />
-      <GestureDetector gesture={composedGesture}>
-        <Animated.View style={[styles.mapView, animatedStyleMap]}>
-          <MapSvgComponent onPress={onPress}/>
-        </Animated.View>
-      </GestureDetector>
+        <View style={[styles.mapView]}>
+          <Map3dGraphic />
+        </View>
 
       {objectsContext?.selectedObject.areas && <>
         <View style={styles.titleContainer}>

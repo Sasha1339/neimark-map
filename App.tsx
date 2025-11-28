@@ -24,7 +24,6 @@ export default function App() {
   if (!loaded && !error) return null;
 
   return (
-    <GestureHandlerRootView style={{flex: 1}}>
       <SafeAreaProvider>
         <SafeAreaView style={styles.areaContent}>
           <MapNavigatorProvider>
@@ -34,7 +33,6 @@ export default function App() {
           </MapNavigatorProvider>
         </SafeAreaView>
       </SafeAreaProvider>
-    </GestureHandlerRootView>
   );
 }
 
