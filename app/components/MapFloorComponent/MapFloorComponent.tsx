@@ -8,15 +8,18 @@ import {Hotel} from "../../shared/types";
 import {getNumberFloorByType, getNumberHotelByType, getSvgFloorsByType} from "./data";
 import {Floor} from "./types";
 import {SvgProps} from "react-native-svg";
+import {HotelMapInfo} from "../MapSvgComponent/Hotels/types";
+import {hotelsData} from "../MapSvgComponent/data";
 
 
 type Props = {
   hotel: Hotel;
   isOpen: boolean;
+  data: HotelMapInfo[];
   onClose: () => void;
 }
 
-export const MapFloorComponent: FC<Props> = ({isOpen, hotel, onClose, ...props}) => {
+export const MapFloorComponent: FC<Props> = ({isOpen, hotel, data, onClose, ...props}) => {
 
   const translateY = useSharedValue(0);
   const startY = useSharedValue(0);
@@ -84,7 +87,7 @@ export const MapFloorComponent: FC<Props> = ({isOpen, hotel, onClose, ...props})
             <View style={styles.touchBorder}></View>
           </View>
           <View style={styles.searchContainer}>
-            <Text style={styles.searchInput}>Корпус {getNumberHotelByType(hotel)}</Text>
+            <Text style={styles.searchInput}>{data.find(e => e.type === hotel)?.name}</Text>
           </View>
           <View style={styles.resultContainer}>
             {currentFloorSvg}
@@ -164,10 +167,17 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
 
-    width: '100%',
+    width: '90%',
     justifyContent: 'space-evenly',
     alignItems: 'center',
     flexDirection: 'row',
+    backgroundColor: colors.white,
+    elevation: 10,
+    shadowColor: colors.black,
+    shadowOffset: {width: 0, height: 0},
+    shadowRadius: 10,
+    shadowOpacity: 0.2,
+    borderRadius: 4
   },
   buttonText: {
     fontSize: font_sizes.h1_main,
@@ -180,13 +190,6 @@ const styles = StyleSheet.create({
   button: {
     paddingHorizontal: 7,
     paddingVertical: 3,
-    backgroundColor: colors.white,
-    elevation: 10,
-    shadowColor: colors.black,
-    shadowOffset: {width: 0, height: 0},
-    shadowRadius: 10,
-    shadowOpacity: 0.2,
-    borderRadius: 4
   },
   buttonActive: {
     paddingHorizontal: 7,

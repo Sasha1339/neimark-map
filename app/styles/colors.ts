@@ -5,8 +5,8 @@ const colors = {
   white: '#FFFFFF',
   blue_main: '#4C648F',
   black: '#000000',
-  background_hotel: '#E8E9FE',
-  color_stroke_hotel: '#8E92FB' ,
+  background_hotel: '#EAE9E8',
+  color_stroke_hotel: '#8F8F8E' ,
   mainRed: '#FF0000' ,
 };
 
