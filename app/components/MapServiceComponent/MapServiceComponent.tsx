@@ -47,6 +47,14 @@ export const MapServiceComponent: FC = () => {
 
   const scaleButton = useSharedValue(1);
 
+  useEffect(() => {
+    if (objectsContext?.selectedObject.hotel) {
+      setTimeout(() => {
+        setOpenFloors(objectsContext?.selectedObject.hotel)
+      }, 700)
+    }
+  }, [objectsContext?.selectedObject.hotel]);
+
   const animatedStyleSearch = useAnimatedStyle(() => ({
     transform: [{scale: scaleButton.value}],
   }));
@@ -130,29 +138,10 @@ export const MapServiceComponent: FC = () => {
           <MapSvgComponent onPress={onPress}/>
         </Animated.View>
       </GestureDetector>
-      {objectsContext?.selectedObject.hotel && <View style={styles.hintContainer}>
-        <TouchableOpacity style={styles.hintRow} onPress={() => setOpenFloors(objectsContext.selectedObject.hotel)}>
-          <Text style={styles.hintText}>Открыть</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.hintRow} onPress={() => setRouteHotel('from', objectsContext.selectedObject.hotel)}>
-          <Text style={styles.hintText}>Маршрут отсюда</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.hintRow} onPress={() => setRouteHotel('to', objectsContext.selectedObject.hotel)}>
-          <Text style={styles.hintText}>Маршрут сюда</Text>
-        </TouchableOpacity>
-      </View>}
 
       {objectsContext?.selectedObject.areas && <>
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>{objectsContext.selectedObject.areas}</Text>
-        </View>
-        <View style={styles.hintContainer}>
-          <TouchableOpacity style={styles.hintRow}>
-            <Text style={styles.hintText}>Маршрут отсюда</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.hintRow}>
-            <Text style={styles.hintText}>Маршрут сюда</Text>
-          </TouchableOpacity>
         </View>
       </>}
       <Pressable style={styles.touchContainer}
@@ -169,7 +158,7 @@ export const MapServiceComponent: FC = () => {
       </Pressable>
       {(openSearch || openFloors) && <View style={styles.overlay}></View>}
       {openSearch && <MapSearchingComponent isOpen={openSearch} onClose={onCloseSearch}/>}
-      {!!openFloors && <MapFloorComponent hotel={openFloors} isOpen={!!openFloors} onClose={onCloseFloor}/>}
+      {!!openFloors && <MapFloorComponent hotel={openFloors} data={hotelsData} isOpen={!!openFloors} onClose={onCloseFloor}/>}
     </View>
   )
 

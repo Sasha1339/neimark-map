@@ -26,7 +26,7 @@ export const MapHotelSvgComponent: FC<Props> = ({data, typeHotelSelected, transf
   const ref = useRef<Path>(null);
   const objectsContext = useContext(MapObjectsContext);
 
-  const [layout, setLayout] = useState<{width: number, height: number} | undefined>(undefined);
+  const [layout, setLayout] = useState<{ width: number, height: number } | undefined>(undefined);
 
   useEffect(() => {
     const [x1, y1, x2, y2] = svgPathBbox(data.dProps);
@@ -49,22 +49,25 @@ export const MapHotelSvgComponent: FC<Props> = ({data, typeHotelSelected, transf
 
 
   return (
-    <><G fillOpacity={typeHotelSelected === data.type || typeHotelSelected === undefined ? 1 : 0.2}
-       transform={`translate(${data.x}, ${data.y})`} >
+    <><G fillOpacity={typeHotelSelected === data.type || typeHotelSelected === undefined ? 1 : 0}
+         transform={`translate(${data.x}, ${data.y})`}>
       <AnimatedPath
         ref={ref}
         fill={typeHotelSelected === data.type ? colors.white : colors.background_hotel}
         stroke={colors.color_stroke_hotel}
         strokeWidth={20}
-        strokeOpacity={typeHotelSelected === data.type || typeHotelSelected === undefined ? 0.5 : 0.2}
+        strokeOpacity={typeHotelSelected === data.type || typeHotelSelected === undefined ? 0.5 : 0}
         d={data.dProps}
         transform={transform(data.type)}
 
       />
-      {!!layout && <Text x={layout.width / 2} y={layout.height / 2} fontSize={150} fill={colors.color_stroke_hotel}
-                       fontFamily={font_family.Biform} textAnchor="middle">
+      {!!layout && <><Text x={layout.width / 2} y={layout.height / 2} fontSize={150} fill={colors.color_stroke_hotel}
+                   fontFamily={font_family.Biform} textAnchor="middle">
+        {data.name}
+      </Text><Text x={layout.width / 2} y={layout.height / 2 + 190} fontSize={150} fill={colors.color_stroke_hotel}
+                   fontFamily={font_family.Biform} textAnchor="middle">
         {`Корпус  ${Object.keys(Hotel).indexOf(data.type) + 1}`}
-      </Text>}
+      </Text></>}
 
     </G></>
   )

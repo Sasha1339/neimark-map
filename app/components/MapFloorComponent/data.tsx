@@ -19,6 +19,7 @@ import FloorsHotelFourteen from "./Floors/HotelFourteen";
 import FloorsHotelFifteen from "./Floors/HotelFifteen";
 import FloorsHotelSixteen from "./Floors/HotelSixteen";
 import FloorsHotelSeventeen from "./Floors/HotelSeventeen";
+import {HotelMapInfo} from "../MapSvgComponent/Hotels/types";
 
 export const getNumberHotelByType = (type: Hotel) => {
   switch (type) {
