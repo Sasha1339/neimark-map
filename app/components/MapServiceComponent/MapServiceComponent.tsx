@@ -2,48 +2,37 @@ import {
   StyleSheet,
   View,
   Text,
-  useWindowDimensions,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  Pressable, GestureResponderEvent
+  Pressable
 } from "react-native";
-import Animated, {runOnJS, withSpring, withTiming} from 'react-native-reanimated'
-import {FC, MutableRefObject, RefObject, useContext, useEffect, useRef, useState} from "react";
-import {MapSvgComponent} from "../MapSvgComponent/MapSvgComponent";
-import {Gesture, GestureDetector, GestureType, PinchGesture} from "react-native-gesture-handler";
+import Animated, {withSpring} from 'react-native-reanimated'
+import {FC, useEffect, useRef, useState} from "react";
 import {useAnimatedStyle, useSharedValue} from "react-native-reanimated";
 import colors from "../../styles/colors";
 import {font_family, font_sizes} from "../../styles/fonts";
 import {MapSearchingComponent} from "../MapSearchingComponent/MapSearchingComponent";
-import {Hotel, ObjectsMapRefCoords} from "../../shared/types";
-import {MapFloorComponent} from "../MapFloorComponent/MapFloorComponent";
-import {MapObjectsContext} from "../../providers/Objects/MapObjectsContext";
-import {hotelsData, mainHeight, mainWidth, svgHeight, svgWidth} from "../MapSvgComponent/data";
+import {mainHeight, mainWidth} from "../MapSvgComponent/data";
 import {MapNavigatorComponent} from "../MapNavigatorComponent/MapNavigatorComponent";
-import {useRouterHotel} from "./hooks/useRouterHotel";
+import MapView, {Polygon} from "react-native-maps";
+import {lightMapStyle} from "../../shared/constants/const";
+import {default as MapFeatures} from "./map/test.json";
+
+const overlayArea = [
+  { latitude: 56.315852, longitude: 43.981306 },
+  { latitude: 56.315671, longitude: 43.980914 },
+  { latitude: 56.315689, longitude: 43.980277 },
+  { latitude: 56.314821, longitude: 43.979054 },
+  { latitude: 56.313958, longitude: 43.981762 },
+  { latitude: 56.314846, longitude: 43.982508 },
+  { latitude: 56.315132, longitude: 43.981879 },
+  { latitude: 56.315476, longitude: 43.981472 },
+];
+
+const mapsObjects = MapFeatures.features.filter(feature => feature.geometry.type === 'Polygon')
 
 export const MapServiceComponent: FC = () => {
 
-  const {
-    translateX,
-    translateY,
-    startX,
-    startY,
-    focalX,
-    focalY,
-    startScale,
-    scale,
-    onPress,
-    clearSelection,
-    setRouteHotel,
-    onCenterWindowFocal,
-    onDefaultWindowFocal
-  } = useRouterHotel()
-
   const [openSearch, setOpenSearch] = useState(false);
-  const [openFloors, setOpenFloors] = useState<Hotel | undefined>(undefined);
-
-  const objectsContext = useContext(MapObjectsContext);
+  const mapRef = useRef<MapView>(null);
 
   const scaleButton = useSharedValue(1);
 
@@ -51,110 +40,58 @@ export const MapServiceComponent: FC = () => {
     transform: [{scale: scaleButton.value}],
   }));
 
-  const pinchGesture = Gesture.Pinch()
-    .onBegin((e) => {
-      startScale.value = scale.value;
-
-    })
-      .onStart((e) => {
-
-      })
-    .onUpdate((e) => {
-      const newScale = Math.min(Math.max(0.5, startScale.value * e.scale), 3);
-
-      scale.value = newScale;
-    });
-
-
-
-
-  const panGesture = Gesture.Pan()
-    .onStart((e) => {
-      startX.value = translateX.value;
-      startY.value = translateY.value;
-      runOnJS(clearSelection)();
-
-    })
-    .onUpdate((event) => {
-
-      if (scale.value > 0.8) {
-        runOnJS(onCenterWindowFocal)();
-      } else {
-        runOnJS(onDefaultWindowFocal)();
-      }
-
-
-      if (mainWidth / 2 - (startX.value + event.translationX) / scale.value > 0 && mainWidth / 2 - (startX.value + event.translationX) / scale.value < mainWidth) {
-        translateX.value = startX.value + event.translationX / (scale.value > 0.8 ? scale.value : 1);
-      } else if (mainWidth / 2 - (startX.value + event.translationX) / scale.value  <= 0) {
-        translateX.value = mainWidth / 2 * scale.value;
-      } else if (mainWidth / 2 - (startX.value + event.translationX) / scale.value >= mainWidth) {
-        translateX.value = -mainWidth / 2 * scale.value;
-      }
-      if (mainHeight / 2 - (startY.value + event.translationY) / scale.value > 0 && mainHeight / 2 - (startY.value + event.translationY) / scale.value < mainHeight) {
-        translateY.value = startY.value + event.translationY / (scale.value > 0.8 ? scale.value : 1);
-      } else if (mainHeight / 2 - (startY.value + event.translationY) / scale.value  <= 0) {
-        translateY.value = mainHeight / 2 * scale.value
-      } else if (mainHeight / 2 - (startY.value + event.translationY) / scale.value >= mainHeight) {
-        translateY.value = -mainHeight / 2 * scale.value;
-      }
-
-
-    });
-
-  const composedGesture = Gesture.Simultaneous(panGesture, pinchGesture);
-
-  const animatedStyleMap = useAnimatedStyle(() => ({
-    transformOrigin: [focalX.value, focalY.value, 0],
-    transform: [
-      {translateX: translateX.value},
-      {translateY: translateY.value},
-      {scale: scale.value}
-    ],
-  }));
+  useEffect(() => {
+    // Принудительное приближение после загрузки
+    mapRef.current?.animateToRegion({
+      latitude: 56.314931,
+      longitude: 43.980980,
+      latitudeDelta: 0.01,  // Сильное приближение
+      longitudeDelta: 0.01,
+    }, 500);
+  }, []);
 
   const onCloseSearch = () => {
     setOpenSearch(false);
   }
 
-  const onCloseFloor = () => {
-    setOpenFloors(undefined);
-  }
-
-
   return (
     <View style={[styles.container, {overflow: openSearch ? 'hidden' : 'visible'}]}>
       <MapNavigatorComponent />
-      <GestureDetector gesture={composedGesture}>
-        <Animated.View style={[styles.mapView, animatedStyleMap]}>
-          <MapSvgComponent onPress={onPress}/>
-        </Animated.View>
-      </GestureDetector>
-      {objectsContext?.selectedObject.hotel && <View style={styles.hintContainer}>
-        <TouchableOpacity style={styles.hintRow} onPress={() => setOpenFloors(objectsContext.selectedObject.hotel)}>
-          <Text style={styles.hintText}>Открыть</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.hintRow} onPress={() => setRouteHotel('from', objectsContext.selectedObject.hotel)}>
-          <Text style={styles.hintText}>Маршрут отсюда</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.hintRow} onPress={() => setRouteHotel('to', objectsContext.selectedObject.hotel)}>
-          <Text style={styles.hintText}>Маршрут сюда</Text>
-        </TouchableOpacity>
-      </View>}
+        <Animated.View style={[styles.mapView]}>
+          <MapView ref={mapRef} style={styles.map}
+                   pitchEnabled={true}
+                   rotateEnabled={true}
+                   showsBuildings={false}
+                   userInterfaceStyle="light"
+                   customMapStyle={lightMapStyle}
+                   initialRegion={
+                     {
+                       latitude: 56.314931,
+                       longitude: 43.980980,
+                       latitudeDelta: 0.001,
+                       longitudeDelta: 0.001
+                     }
 
-      {objectsContext?.selectedObject.areas && <>
-        <View style={styles.titleContainer}>
-          <Text style={styles.titleText}>{objectsContext.selectedObject.areas}</Text>
-        </View>
-        <View style={styles.hintContainer}>
-          <TouchableOpacity style={styles.hintRow}>
-            <Text style={styles.hintText}>Маршрут отсюда</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.hintRow}>
-            <Text style={styles.hintText}>Маршрут сюда</Text>
-          </TouchableOpacity>
-        </View>
-      </>}
+                   }
+          >
+            <Polygon
+              coordinates={overlayArea}
+              fillColor="#f5f5f5" // Белый фон
+              strokeColor="transparent"
+              zIndex={1} // Поверх других элементов
+            />
+            {mapsObjects.map((e, i) => (
+              <Polygon
+                key={i}
+                coordinates={(e.geometry.coordinates as number[][][])[0].map((e) => ({latitude: e[1], longitude: e[0]}))}
+                fillColor="#ff0000" // Белый фон
+                strokeColor="transparent"
+                zIndex={1} // Поверх других элементов
+              />
+            ))}
+          </MapView>
+        </Animated.View>
+
       <Pressable style={styles.touchContainer}
                  onPressIn={() => {
                    scaleButton.value = withSpring(0.95);
@@ -167,9 +104,8 @@ export const MapServiceComponent: FC = () => {
           <Text style={styles.text}>Поиск</Text>
         </Animated.View>
       </Pressable>
-      {(openSearch || openFloors) && <View style={styles.overlay}></View>}
+      {(openSearch) && <View style={styles.overlay}></View>}
       {openSearch && <MapSearchingComponent isOpen={openSearch} onClose={onCloseSearch}/>}
-      {!!openFloors && <MapFloorComponent hotel={openFloors} isOpen={!!openFloors} onClose={onCloseFloor}/>}
     </View>
   )
 
@@ -180,6 +116,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  map: {
+    width: '100%',
+    height: '100%',
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
