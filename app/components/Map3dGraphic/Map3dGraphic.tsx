@@ -29,17 +29,17 @@ export const Map3dGraphic: FC<Props> = () => {
           }
         }}>
         <ambientLight intensity={3}/>
-        <directionalLight position={[10, 10, 5]} intensity={0.5}/>
+        {/*<directionalLight position={[10, 10, 5]} intensity={0.5}/>*/}
         <Suspense>
           <Model/>
 
           <OrbitControls
-            enablePan={false}
+            enablePan={true}
             enableZoom={true}
             enableRotate={true}
             minPolarAngle={0}
             maxPolarAngle={8 * Math.PI / 18}
-            panSpeed={0}
+            panSpeed={1}
             zoomSpeed={0.5}
             rotateSpeed={1}
           />

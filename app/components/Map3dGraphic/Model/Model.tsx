@@ -9,28 +9,121 @@ interface MaterialMesh extends THREE.Mesh {
   material: THREE.Material | THREE.Material[];
 }
 
+interface SpotLight {
+  position?: [number, number, number];
+  mesh: MaterialMesh;
+}
+
 export const Model = () => {
 
 
   const model = require('../neimark-hotel-without-textures.glb');
 
   const modelRef = useRef<any>(null);
+  const groupRef = useRef<THREE.Group>(null);
 
-  const gltf: (GLTF & ObjectMap) | (GLTF & ObjectMap)[]= useGLTF(model);
+  const gltf: (GLTF & ObjectMap) | (GLTF & ObjectMap)[] = useGLTF(model);
 
   let gltfModel: (GLTF & ObjectMap)
 
-  const [selectedObject, setSelectedObject] = useState<THREE.Object3D | null>(null);
+  // const [selectedObject, setSelectedObject] = useState<string | null>(null);
+  // Создаем ref для хранения выбранного объекта, который будет обновляться синхронно
+  const selectedObjectRef = useRef<THREE.Object3D | null>(null);
+
+
+  const [spotLightPlaces, setSpotLightPlaces] = useState<SpotLight[]>([]);
+
+  const spotLightRefUp = useRef<THREE.SpotLight>(null);
+
+  const findObjectsByName = (searchString: string) => {
+    const foundObjects: MaterialMesh[] = [];
+
+    modelRef.current?.traverse((child: any) => {
+      if (child.isMesh && child.name.includes(searchString)) {
+        foundObjects.push(child as MaterialMesh);
+      }
+    });
+
+    return foundObjects;
+  };
 
   const handleClick = (event: any) => {
     event.stopPropagation();
     const object = event.object as MaterialMesh;
 
+    if (object.name.includes('Building') && !object.name.includes('_')) {
+      // const meshes = findObjectsByName(object.name).filter((e) => e.name.includes('_'));
+      //
+      // const lights = meshes.map((e) => {
+      //   const boundingBox = new THREE.Box3().setFromObject(e);
+      //
+      //   // Получаем центр объекта
+      //   const center = new THREE.Vector3();
+      //   boundingBox.getCenter(center);
+      //   const position = [
+      //     center.x,
+      //     center.y,
+      //     center.z,
+      //   ]
+      //
+      //   return {position: position, mesh: e} as SpotLight;
+      // })
+
+      selectedObjectRef.current = object;
+    } else {
+      selectedObjectRef.current = null;
+    }
+
     console.log('🎯 КЛИК! Объект:', object.name);
-    // locationContext[1](object ? object.name : null);
-    // console.log(new Date())
-    setSelectedObject(object);
+    // Сразу сохраняем объект в ref
+    // setSelectedObject(object.uuid);
+    // selectedObjectRef.current = object;
   };
+
+  // useEffect(() => {
+  //   console.log(selectedObjectRef.current);
+  //   // console.log(spotLightRefUp.current)
+  // }, [selectedObject]);
+
+  useFrame(() => {
+
+    // console.log(selectedObjectRef.current);
+
+    if (selectedObjectRef.current
+      && spotLightRefUp.current
+     ) {
+      // Получаем bounding box объекта
+      const boundingBox = new THREE.Box3().setFromObject(selectedObjectRef.current);
+
+      // Получаем центр объекта
+      const center = new THREE.Vector3();
+      boundingBox.getCenter(center);
+
+      // console.log('center:'+center.y)
+
+      // Устанавливаем позицию света
+
+      if (!(spotLightRefUp.current.visible && spotLightRefUp.current.target === selectedObjectRef.current)) {
+        spotLightRefUp.current.position.set(
+          center.x,
+          center.y + 3, // Над объектом на половине его высоты
+          center.z
+        );
+
+        // Направляем свет на объект
+        spotLightRefUp.current.target = selectedObjectRef.current;
+
+        // Включаем свет
+        spotLightRefUp.current.visible = true;
+      }
+
+
+
+    } else if (spotLightRefUp.current) {
+      // Если объект не выбран, выключаем свет
+      spotLightRefUp.current.visible = false;
+    }
+  });
 
   if (Array.isArray(gltf)) {
     //console.log(gltf);
@@ -40,45 +133,29 @@ export const Model = () => {
     gltfModel = gltf;
   }
 
-  // useEffect(() => {
-  //   if (modelRef.current) {
-  //     modelRef.current.addEventListener('click', handleClick);
-  //   }
-  // }, [modelRef.current])
-
-  // const { gl } = useThree();
-  //
-  // const fixAndroidTextures = (scene: any, gl: any) => {
-  //   scene.traverse((child: any) => {
-  //     if (child.isMesh && child.material) {
-  //       const materials = Array.isArray(child.material) ? child.material : [child.material];
-  //
-  //       materials.forEach((material: any) => {
-  //         material.needsUpdate = true;
-  //
-  //         if (material.map) {
-  //           // Устанавливаем правильный colorSpace
-  //           material.map.colorSpace = THREE.SRGBColorSpace;
-  //           material.map.flipY = false;
-  //           material.map.needsUpdate = true;
-  //
-  //           // Принудительно инициализируем текстуру в WebGL
-  //           gl.initTexture(material.map);
-  //         }
-  //       });
-  //     }
-  //   });
-  // };
+  return (
+    <group ref={groupRef}>
+      <primitive ref={modelRef} object={gltfModel.scene} onPointerDown={handleClick}/>
 
 
-  // useEffect(() => {
-  //   if (gltfModel && gltfModel.scene) {
-  //     fixAndroidTextures(gltfModel.scene, gl);
-  //   }
-  // }, [gltfModel, gl]);
+      <spotLight
+        ref={spotLightRefUp}
+        color={0xFFD29A}
+        intensity={30}
+        distance={50}
+        angle={Math.PI /30}
+        penumbra={0.1}
+        decay={2}
+        visible={false}
+        castShadow={true}
+        shadow-mapSize-width={2048}
+        shadow-mapSize-height={2048}
+        shadow-bias={-0.0001}
+        shadow-camera-near={0.1}
+        shadow-camera-far={50}
+      />
 
-  return <primitive ref={modelRef} object={gltfModel.scene} onPointerDown={handleClick} onDoubleClick={() => {
-    console.log('Pointer up!');
-  }} />;
+    </group>
+  );
 
 }
