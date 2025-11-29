@@ -4,14 +4,10 @@ import {ObjectMap, useFrame, useThree} from "@react-three/fiber/native";
 import {MeshStandardMaterial} from 'three'
 import {useGLTF} from "@react-three/drei/native";
 import * as THREE from "three";
+import {SpotLight} from "../SpotLight/SpotLight";
 
-interface MaterialMesh extends THREE.Mesh {
+export interface MaterialMesh extends THREE.Mesh {
   material: THREE.Material | THREE.Material[];
-}
-
-interface SpotLight {
-  position?: [number, number, number];
-  mesh: MaterialMesh;
 }
 
 export const Model = () => {
@@ -26,12 +22,8 @@ export const Model = () => {
 
   let gltfModel: (GLTF & ObjectMap)
 
-  // const [selectedObject, setSelectedObject] = useState<string | null>(null);
-  // Создаем ref для хранения выбранного объекта, который будет обновляться синхронно
   const selectedObjectRef = useRef<THREE.Object3D | null>(null);
-
-
-  const [spotLightPlaces, setSpotLightPlaces] = useState<SpotLight[]>([]);
+  const allObjectsWithBuilding = useRef<MaterialMesh[]>([]);
 
   const spotLightRefUp = useRef<THREE.SpotLight>(null);
 
@@ -52,38 +44,17 @@ export const Model = () => {
     const object = event.object as MaterialMesh;
 
     if (object.name.includes('Building') && !object.name.includes('_')) {
-      // const meshes = findObjectsByName(object.name).filter((e) => e.name.includes('_'));
-      //
-      // const lights = meshes.map((e) => {
-      //   const boundingBox = new THREE.Box3().setFromObject(e);
-      //
-      //   // Получаем центр объекта
-      //   const center = new THREE.Vector3();
-      //   boundingBox.getCenter(center);
-      //   const position = [
-      //     center.x,
-      //     center.y,
-      //     center.z,
-      //   ]
-      //
-      //   return {position: position, mesh: e} as SpotLight;
-      // })
+      const meshes = findObjectsByName(object.name).filter((e) => e.name.includes('_'));
 
       selectedObjectRef.current = object;
+      allObjectsWithBuilding.current = meshes;
     } else {
       selectedObjectRef.current = null;
+      allObjectsWithBuilding.current = []
     }
 
     console.log('🎯 КЛИК! Объект:', object.name);
-    // Сразу сохраняем объект в ref
-    // setSelectedObject(object.uuid);
-    // selectedObjectRef.current = object;
   };
-
-  // useEffect(() => {
-  //   console.log(selectedObjectRef.current);
-  //   // console.log(spotLightRefUp.current)
-  // }, [selectedObject]);
 
   useFrame(() => {
 
@@ -116,8 +87,6 @@ export const Model = () => {
         // Включаем свет
         spotLightRefUp.current.visible = true;
       }
-
-
 
     } else if (spotLightRefUp.current) {
       // Если объект не выбран, выключаем свет
@@ -154,6 +123,8 @@ export const Model = () => {
         shadow-camera-near={0.1}
         shadow-camera-far={50}
       />
+
+      <SpotLight MAX_AMOUNT={5} selectedBuilding={selectedObjectRef} allObjectsWithBuilding={allObjectsWithBuilding} />
 
     </group>
   );
