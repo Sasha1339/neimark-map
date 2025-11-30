@@ -1,12 +1,24 @@
-import {createContext} from "react";
+import React, {createContext, RefObject} from "react";
 import {Hotel, ObjectsMapRefCoords, ObjectsType} from "../../shared/types";
+import * as THREE from "three";
 
-
-interface MapObjectsContextValue {
-  refs: {hotels: ObjectsMapRefCoords[], areas: ObjectsMapRefCoords[]};
-  addHotelRef: (info: ObjectsMapRefCoords, type: ObjectsType) => void;
+/**
+Deprecated
+ */
+interface MapObjectsContextValueOld {
   selectedObject: { hotel?: Hotel, areas?: string }
   setSelectedObjects: (obj: { hotel?: Hotel, areas?: string }) => void;
 }
 
-export const MapObjectsContext = createContext<MapObjectsContextValue | null>(null);
+
+interface MapObjectsContextValue {
+  selectedObjectRef: RefObject<THREE.Object3D | null>;
+  selectedObject: string | null
+  setSelectedObjects: (building: string | null) => void;
+}
+
+export const MapObjectsContext = createContext<MapObjectsContextValue>({
+  selectedObjectRef: React.createRef<THREE.Object3D | null>(),
+  selectedObject: '',
+  setSelectedObjects: (building: string | null) => {},
+});

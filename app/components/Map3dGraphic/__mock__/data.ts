@@ -1,11 +1,12 @@
 type BuildingProps = {
+  number: number;
   name: string;
   places: Record<string, { id: string, title: string }>
 };
 
 export const data: Record<string, BuildingProps> = {
   'Building1': {
-
+    number: 1,
     name: 'Ресепшен',
     places: {
       "Enter1":
@@ -22,5 +23,10 @@ export const data: Record<string, BuildingProps> = {
             'Ресепшен'
         }
     }
+  },
+  'Building7': {
+    number: 7,
+    name: 'Брайцев',
+    places: {}
   }
 }

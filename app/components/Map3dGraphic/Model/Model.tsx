@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState} from "react";
+import {useCallback, useContext, useEffect, useRef, useState} from "react";
 import {GLTF} from "three-stdlib";
 import {ObjectMap, useFrame, useThree} from "@react-three/fiber/native";
 import {MeshStandardMaterial} from 'three'
@@ -9,6 +9,8 @@ import {DescriptionText} from "../DescriptionText/DescriptionText";
 import {MarkerText} from "../MarkerText/MarkerText";
 import {RotationText} from "../RotationtText/RotationText";
 import {data} from "../__mock__/data";
+import {MapObjectsContext} from "../../../providers/Objects/MapObjectsContext";
+import {PrimitiveElement} from "../ PrimitiveElement/PrimitiveElement";
 
 export interface MaterialMesh extends THREE.Mesh {
   material: THREE.Material | THREE.Material[];
@@ -26,11 +28,12 @@ export const Model = () => {
 
   const [gltfModel, setGltfModel] =useState<(GLTF & ObjectMap) | null>(null);
 
-  const selectedObjectRef = useRef<THREE.Object3D | null>(null);
+
   const allObjectsWithBuilding = useRef<MaterialMesh[]>([]);
   const allBuilding = useRef<MaterialMesh[]>([]);
 
   const spotLightRefUp = useRef<THREE.SpotLight>(null);
+  const objectContext = useContext(MapObjectsContext);
 
 
 
@@ -69,32 +72,33 @@ export const Model = () => {
     }
   }, [gltf])
 
-  const handleClick = (event: any) => {
-    event.stopPropagation();
-    const object = event.object as MaterialMesh;
+  const handleClick = useCallback((event: any) => {
+    if (!objectContext.selectedObjectRef.current || objectContext.selectedObjectRef.current && !Object.keys(data).includes(objectContext.selectedObjectRef.current.name)) {
+      event.stopPropagation();
+      const object = event.object as MaterialMesh;
 
-    if (object.name.includes('Building') && !object.name.includes('_')) {
-      const meshes = findObjectsByName(object.name).filter((e) => e.name.includes('_'));
+      if (object.name.includes('Building') && !object.name.includes('_')) {
+        const meshes = findObjectsByName(object.name).filter((e) => e.name.includes('_'));
 
-      selectedObjectRef.current = object;
-      allObjectsWithBuilding.current = meshes;
-    } else {
-      selectedObjectRef.current = null;
-      allObjectsWithBuilding.current = []
+        objectContext.selectedObjectRef.current = object;
+        allObjectsWithBuilding.current = meshes;
+        objectContext?.setSelectedObjects(data[object.name] ? object.name : null)
+      }
+
+      //console.log('🎯 КЛИК! Объект:', object.name);
     }
 
-    console.log('🎯 КЛИК! Объект:', object.name);
-  };
+  }, []);
 
   useFrame(() => {
 
     // console.log(selectedObjectRef.current);
 
-    if (selectedObjectRef.current
+    if (objectContext?.selectedObjectRef.current
       && spotLightRefUp.current
      ) {
       // Получаем bounding box объекта
-      const boundingBox = new THREE.Box3().setFromObject(selectedObjectRef.current);
+      const boundingBox = new THREE.Box3().setFromObject(objectContext.selectedObjectRef.current);
 
       // Получаем центр объекта
       const center = new THREE.Vector3();
@@ -104,7 +108,7 @@ export const Model = () => {
 
       // Устанавливаем позицию света
 
-      if (!(spotLightRefUp.current.visible && spotLightRefUp.current.target === selectedObjectRef.current)) {
+      if (!(spotLightRefUp.current.visible && spotLightRefUp.current.target === objectContext.selectedObjectRef.current)) {
         spotLightRefUp.current.position.set(
           center.x,
           center.y + 2, // Над объектом на половине его высоты
@@ -112,7 +116,7 @@ export const Model = () => {
         );
 
         // Направляем свет на объект
-        spotLightRefUp.current.target = selectedObjectRef.current;
+        spotLightRefUp.current.target = objectContext.selectedObjectRef.current;
 
         // Включаем свет
         spotLightRefUp.current.visible = true;
@@ -126,8 +130,7 @@ export const Model = () => {
 
   return (
     <group ref={groupRef}>
-      {gltfModel && <primitive ref={modelRef} object={gltfModel.scene} onPointerDown={handleClick}/>}
-
+      <PrimitiveElement gltfModel={gltfModel} modelRef={modelRef} handleClick={handleClick} />
 
       <spotLight
         ref={spotLightRefUp}
@@ -146,9 +149,10 @@ export const Model = () => {
         shadow-camera-far={50}
       />
 
-      <SpotLight MAX_AMOUNT={2} selectedBuilding={selectedObjectRef} allObjectsWithBuilding={allObjectsWithBuilding} />
-      <DescriptionText MAX_AMOUNT={2} selectedBuilding={selectedObjectRef} allObjectsWithBuilding={allObjectsWithBuilding} />
-      <MarkerText MAX_AMOUNT={2} selectedBuilding={selectedObjectRef} allObjectsWithBuilding={allObjectsWithBuilding} />
+
+      <SpotLight MAX_AMOUNT={2} selectedBuilding={objectContext.selectedObjectRef} allObjectsWithBuilding={allObjectsWithBuilding} />
+      <DescriptionText MAX_AMOUNT={2} selectedBuilding={objectContext.selectedObjectRef} allObjectsWithBuilding={allObjectsWithBuilding} />
+      <MarkerText MAX_AMOUNT={2} selectedBuilding={objectContext.selectedObjectRef} allObjectsWithBuilding={allObjectsWithBuilding} />
       <RotationText allBuildings={allBuilding} />
 
     </group>

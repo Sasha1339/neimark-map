@@ -1,11 +1,12 @@
-import {Canvas, ObjectMap, useFrame} from "@react-three/fiber/native";
+import {Canvas, ObjectMap, useFrame, useThree, Vector3} from "@react-three/fiber/native";
 import {useGLTF} from "@react-three/drei/native";
-import React, {FC, Suspense, useRef} from "react";
+import React, {FC, Suspense, useContext, useRef} from "react";
 import {GLTF} from 'three-stdlib'
 import {Model} from "./Model/Model";
 import useControls from "r3f-native-orbitcontrols";
 import {View} from "react-native";
-import {THREE} from "expo-three";
+import * as THREE from 'three';
+import {MapObjectsContext} from "../../providers/Objects/MapObjectsContext";
 
 type Props = {
 
@@ -15,11 +16,19 @@ export const Map3dGraphic: FC<Props> = () => {
 
   const [OrbitControls, events] = useControls();
 
+  // const {camera} = useThree();
+
+  const objectsContext = useContext(MapObjectsContext);
+
+  const orbitControlsRef = useRef<THREE.Vector3 | undefined>(undefined);
+
+  // useFrame(() =>)
+
   return (
     <View style={{flex: 1}} {...events}>
       <Canvas
         shadows={true}
-        camera={{ position: [5, 5, 5] }}
+        camera={{ position: [0, 5, 0] }}
         gl={{
           powerPreference: "low-power",
           antialias: false, // что-то из них сделало экран темным

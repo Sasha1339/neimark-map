@@ -8,18 +8,19 @@ import {Hotel} from "../../shared/types";
 import {getNumberFloorByType, getNumberHotelByType, getSvgFloorsByType} from "./data";
 import {Floor} from "./types";
 import {SvgProps} from "react-native-svg";
-import {HotelMapInfo} from "../MapSvgComponent/Hotels/types";
-import {hotelsData} from "../MapSvgComponent/data";
+import {HotelMapInfo} from "../MapServiceComponent/types";
+import {hotelsData} from "../MapServiceComponent/data";
+import {data} from "../Map3dGraphic/__mock__/data";
+
 
 
 type Props = {
-  hotel: Hotel;
+  hotel: string;
   isOpen: boolean;
-  data: HotelMapInfo[];
   onClose: () => void;
 }
 
-export const MapFloorComponent: FC<Props> = ({isOpen, hotel, data, onClose, ...props}) => {
+export const MapFloorComponent: FC<Props> = ({isOpen, hotel, onClose, ...props}) => {
 
   const translateY = useSharedValue(0);
   const startY = useSharedValue(0);
@@ -87,7 +88,7 @@ export const MapFloorComponent: FC<Props> = ({isOpen, hotel, data, onClose, ...p
             <View style={styles.touchBorder}></View>
           </View>
           <View style={styles.searchContainer}>
-            <Text style={styles.searchInput}>{data.find(e => e.type === hotel)?.name}</Text>
+            <Text style={styles.searchInput}>{data[hotel].name}</Text>
           </View>
           <View style={styles.resultContainer}>
             {currentFloorSvg}

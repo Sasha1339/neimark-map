@@ -1,6 +1,7 @@
-import {Hotel} from "../../../shared/types";
+
 import {RefObject} from "react";
 import {Path} from "react-native-svg";
+import {Hotel} from "../../shared/types";
 
 export interface HotelRefData {
   ref: RefObject<Path | null>;

@@ -5,159 +5,76 @@ import {
   useWindowDimensions,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  Pressable, GestureResponderEvent
+  Pressable, GestureResponderEvent, Dimensions
 } from "react-native";
-import Animated, {runOnJS, withSpring, withTiming} from 'react-native-reanimated'
-import {FC, MutableRefObject, RefObject, useContext, useEffect, useRef, useState} from "react";
-import {MapSvgComponent} from "../MapSvgComponent/MapSvgComponent";
-import {Gesture, GestureDetector, GestureType, PinchGesture} from "react-native-gesture-handler";
-import {useAnimatedStyle, useSharedValue} from "react-native-reanimated";
+
+import {FC, useContext, useEffect, useRef, useState} from "react";
 import colors from "../../styles/colors";
 import {font_family, font_sizes} from "../../styles/fonts";
-import {MapSearchingComponent} from "../MapSearchingComponent/MapSearchingComponent";
-import {Hotel, ObjectsMapRefCoords} from "../../shared/types";
+import {Hotel} from "../../shared/types";
 import {MapFloorComponent} from "../MapFloorComponent/MapFloorComponent";
 import {MapObjectsContext} from "../../providers/Objects/MapObjectsContext";
-import {hotelsData, mainHeight, mainWidth, svgHeight, svgWidth} from "../MapSvgComponent/data";
-import {MapNavigatorComponent} from "../MapNavigatorComponent/MapNavigatorComponent";
-import {useRouterHotel} from "./hooks/useRouterHotel";
 import {Map3dGraphic} from "../Map3dGraphic/Map3dGraphic";
+import {GestureDetectorProvider} from "react-native-screens/gesture-handler";
+import {useSafeAreaInsets} from "react-native-safe-area-context";
+import {GestureHandlerRootView} from "react-native-gesture-handler";
+import {data} from "../Map3dGraphic/__mock__/data";
+
 
 export const MapServiceComponent: FC = () => {
 
-  const {
-    translateX,
-    translateY,
-    startX,
-    startY,
-    focalX,
-    focalY,
-    startScale,
-    scale,
-    onPress,
-    clearSelection,
-    setRouteHotel,
-    onCenterWindowFocal,
-    onDefaultWindowFocal
-  } = useRouterHotel()
+  const insets = useSafeAreaInsets();
+  const {width, height} = useWindowDimensions();
 
   const [openSearch, setOpenSearch] = useState(false);
-  const [openFloors, setOpenFloors] = useState<Hotel | undefined>(undefined);
+  const [openFloors, setOpenFloors] = useState<string | null>(null);
 
   const objectsContext = useContext(MapObjectsContext);
 
-  const scaleButton = useSharedValue(1);
-
-  useEffect(() => {
-    if (objectsContext?.selectedObject.hotel) {
-      setTimeout(() => {
-        setOpenFloors(objectsContext?.selectedObject.hotel)
-      }, 700)
-    }
-  }, [objectsContext?.selectedObject.hotel]);
-
-  const animatedStyleSearch = useAnimatedStyle(() => ({
-    transform: [{scale: scaleButton.value}],
-  }));
-
-  const pinchGesture = Gesture.Pinch()
-    .onBegin((e) => {
-      startScale.value = scale.value;
-
-    })
-      .onStart((e) => {
-
-      })
-    .onUpdate((e) => {
-      const newScale = Math.min(Math.max(0.5, startScale.value * e.scale), 3);
-
-      scale.value = newScale;
-    });
-
-
-
-
-  const panGesture = Gesture.Pan()
-    .onStart((e) => {
-      startX.value = translateX.value;
-      startY.value = translateY.value;
-      runOnJS(clearSelection)();
-
-    })
-    .onUpdate((event) => {
-
-      if (scale.value > 0.8) {
-        runOnJS(onCenterWindowFocal)();
-      } else {
-        runOnJS(onDefaultWindowFocal)();
-      }
-
-
-      if (mainWidth / 2 - (startX.value + event.translationX) / scale.value > 0 && mainWidth / 2 - (startX.value + event.translationX) / scale.value < mainWidth) {
-        translateX.value = startX.value + event.translationX / (scale.value > 0.8 ? scale.value : 1);
-      } else if (mainWidth / 2 - (startX.value + event.translationX) / scale.value  <= 0) {
-        translateX.value = mainWidth / 2 * scale.value;
-      } else if (mainWidth / 2 - (startX.value + event.translationX) / scale.value >= mainWidth) {
-        translateX.value = -mainWidth / 2 * scale.value;
-      }
-      if (mainHeight / 2 - (startY.value + event.translationY) / scale.value > 0 && mainHeight / 2 - (startY.value + event.translationY) / scale.value < mainHeight) {
-        translateY.value = startY.value + event.translationY / (scale.value > 0.8 ? scale.value : 1);
-      } else if (mainHeight / 2 - (startY.value + event.translationY) / scale.value  <= 0) {
-        translateY.value = mainHeight / 2 * scale.value
-      } else if (mainHeight / 2 - (startY.value + event.translationY) / scale.value >= mainHeight) {
-        translateY.value = -mainHeight / 2 * scale.value;
-      }
-
-
-    });
-
-  const composedGesture = Gesture.Simultaneous(panGesture, pinchGesture);
-
-  const animatedStyleMap = useAnimatedStyle(() => ({
-    transformOrigin: [focalX.value, focalY.value, 0],
-    transform: [
-      {translateX: translateX.value},
-      {translateY: translateY.value},
-      {scale: scale.value}
-    ],
-  }));
-
-  const onCloseSearch = () => {
-    setOpenSearch(false);
+  const resetContext = () => {
+    objectsContext.selectedObjectRef.current = null;
+    objectsContext.setSelectedObjects(null)
   }
 
+
   const onCloseFloor = () => {
-    setOpenFloors(undefined);
+    setOpenFloors(null);
   }
 
 
   return (
-    <View style={[styles.container, {overflow: openSearch ? 'hidden' : 'visible'}]}>
-      <MapNavigatorComponent />
-        <View style={[styles.mapView]}>
+    <View style={[styles.container]}>
+
+        <View style={[styles.mapView, {height: height, width: width, transform: [{translateY: -insets.top}]}]}>
           <Map3dGraphic />
         </View>
 
-      {objectsContext?.selectedObject.areas && <>
-        <View style={styles.titleContainer}>
-          <Text style={styles.titleText}>{objectsContext.selectedObject.areas}</Text>
+      {objectsContext?.selectedObject && <View style={styles.closeButton}>
+        <Text style={styles.text}  onPress={() => resetContext()}>Закрыть</Text>
+      </View>}
+
+      {objectsContext?.selectedObject && <View style={styles.searchButton}>
+        <View style={styles.buttons}>
+          <TouchableOpacity onPress={() => setOpenFloors(objectsContext.selectedObject)}>
+            <Text style={styles.text}>Этажи</Text>
+          </TouchableOpacity>
+
         </View>
-      </>}
-      <Pressable style={styles.touchContainer}
-                 onPressIn={() => {
-                   scaleButton.value = withSpring(0.95);
-                 }}
-                 onPressOut={() => {
-                   scaleButton.value = withSpring(1);
-                   setOpenSearch(true);
-                 }}>
-        <Animated.View style={[styles.searchButton, animatedStyleSearch]}>
-          <Text style={styles.text}>Поиск</Text>
-        </Animated.View>
-      </Pressable>
-      {(openSearch || openFloors) && <View style={styles.overlay}></View>}
-      {openSearch && <MapSearchingComponent isOpen={openSearch} onClose={onCloseSearch}/>}
-      {!!openFloors && <MapFloorComponent hotel={openFloors} data={hotelsData} isOpen={!!openFloors} onClose={onCloseFloor}/>}
+
+        <View
+          style={{
+            borderBottomColor: colors.blue_main,
+            borderBottomWidth: StyleSheet.hairlineWidth,
+            width: '100%'
+          }}
+        />
+          <Text style={styles.text}>{data[objectsContext?.selectedObject].name}</Text>
+        </View>}
+
+
+        {(openSearch || openFloors) && <View style={[styles.overlay, {height: height, width: width, transform: [{translateY: -insets.top}]}]}></View>}
+        {!!openFloors && <MapFloorComponent hotel={openFloors} isOpen={!!openFloors} onClose={onCloseFloor}/>}
+
     </View>
   )
 
@@ -167,25 +84,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    position: 'relative',
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: 'rgba(0, 0, 0, 0.4)'
   },
-  hintContainer: {
-    position: 'absolute',
-    justifyContent: 'center',
+  buttons: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
     alignItems: 'center',
-    backgroundColor: colors.white,
-    borderRadius: 10,
-    bottom: 30,
-    gap: 2,
-    elevation: 8,
-    shadowColor: colors.black,
-    shadowOffset: {width: 0, height: 5},
-    shadowRadius: 10,
-    shadowOpacity: 0.2,
+    width: '100%',
   },
   titleContainer: {
     position: 'absolute',
@@ -211,8 +121,9 @@ const styles = StyleSheet.create({
     color: colors.black
   },
   mapView: {
-    height: mainHeight,
-    width: mainWidth,
+    ...StyleSheet.absoluteFillObject,
+    width: '100%',
+    height: '100%',
   },
   touchContainer: {
     position: 'absolute',
@@ -221,8 +132,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  searchButton: {
-    width: '90%',
+  closeButton: {
+    ...StyleSheet.absoluteFillObject,
+    top: 0,
+    right: '5%',
+    left: 'auto',
+    bottom: 'auto',
     paddingVertical: 10,
     paddingHorizontal: 20,
     boxSizing: 'border-box',
@@ -233,12 +148,33 @@ const styles = StyleSheet.create({
     shadowOffset: {width: 0, height: 5},
     shadowRadius: 10,
     shadowOpacity: 0.2,
+    gap: 10,
+    alignItems: 'center'
+  },
+  searchButton: {
+    ...StyleSheet.absoluteFillObject,
+    bottom: 0,
+    left: '5%',
+    width: '90%',
+    top: 'auto',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    boxSizing: 'border-box',
+    backgroundColor: colors.white,
+    borderRadius: 10,
+    elevation: 10,
+    shadowColor: colors.black,
+    shadowOffset: {width: 0, height: 5},
+    shadowRadius: 10,
+    shadowOpacity: 0.2,
+    gap: 10,
+    alignItems: 'center'
   },
   text: {
     fontSize: font_sizes.h3_main,
     fontFamily: font_family.Biform,
     color: colors.blue_main,
-    opacity: 0.5
+    opacity: 1
   }
 
 })

@@ -1,9 +1,10 @@
 import {useFrame, useThree} from '@react-three/fiber/native';
-import React, {FC, RefObject, useRef} from 'react';
+import React, {FC, RefObject, useContext, useEffect, useRef} from 'react';
 import * as THREE from 'three';
 import {Center, Text3D} from '@react-three/drei/native';
 import {MaterialMesh} from "../Model/Model";
 import {data} from "../__mock__/data";
+import {MapObjectsContext} from "../../../providers/Objects/MapObjectsContext";
 
 type Props = {
   allBuildings: RefObject<MaterialMesh[]>;
@@ -15,6 +16,33 @@ export const RotationText: FC<Props> = ({allBuildings}) => {
   const textRefs = useRef(Array(Object.keys(data).length).fill(null).map(() => React.createRef<THREE.Mesh>()));
   const numbersRefs = useRef(Array(Object.keys(data).length).fill(null).map(() => React.createRef<THREE.Mesh>()));
   const {camera} = useThree();
+  const objectContext = useContext(MapObjectsContext);
+
+  useEffect(() => {
+    if (objectContext?.selectedObject) {
+      textRefs.current.forEach((e) => {
+        if (e.current) {
+          e.current.visible = false;
+        }
+      })
+      numbersRefs.current.forEach((e) => {
+        if (e.current) {
+          e.current.visible = false;
+        }
+      })
+    } else {
+      textRefs.current.forEach((e) => {
+        if (e.current) {
+          e.current.visible = true;
+        }
+      })
+      numbersRefs.current.forEach((e) => {
+        if (e.current) {
+          e.current.visible = true;
+        }
+      })
+    }
+  }, [objectContext?.selectedObject]);
 
   useFrame(() => {
 
@@ -22,6 +50,7 @@ export const RotationText: FC<Props> = ({allBuildings}) => {
 
       const cameraPosition = new THREE.Vector3();
       camera.getWorldPosition(cameraPosition);
+
       for (let key in data) {
 
         const index = Object.keys(data).indexOf(key);
@@ -68,7 +97,7 @@ return (
           size={0.05}
           height={0.005}
         >
-          {data[Object.keys(data)[index]].name}
+          {`«${data[Object.keys(data)[index]].name}»`}
 
           <meshStandardMaterial color={0xFFFFFF}/>
         </Text3D>
@@ -78,7 +107,7 @@ return (
           size={0.05}
           height={0.005}
         >
-          {'Rjhgec'}
+          {`Корпус ${data[Object.keys(data)[index]].number}`}
 
           <meshStandardMaterial color={0xFFFFFF}/>
         </Text3D>

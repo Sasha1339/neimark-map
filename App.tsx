@@ -5,10 +5,9 @@ import {useFonts} from "expo-font";
 import * as SplashScreen from 'expo-splash-screen';
 import {useEffect, useRef, useState} from "react";
 import {SafeAreaProvider, SafeAreaView} from "react-native-safe-area-context";
-import {GestureHandlerRootView} from "react-native-gesture-handler";
 import {MapServiceComponent} from "./app/components/MapServiceComponent/MapServiceComponent";
 import {MapObjectsProvider} from "./app/providers/Objects/MapObjectsProvider";
-import {MapNavigatorProvider} from "./app/providers/Navigator/MapNavigatorProvider";
+import {GestureHandlerRootView} from "react-native-gesture-handler";
 
 export default function App() {
   const [loaded, error] = useFonts({
@@ -26,11 +25,11 @@ export default function App() {
   return (
       <SafeAreaProvider>
         <SafeAreaView style={styles.areaContent}>
-          <MapNavigatorProvider>
-            <MapObjectsProvider>
-              <MapServiceComponent/>
-            </MapObjectsProvider>
-          </MapNavigatorProvider>
+          <GestureHandlerRootView>
+          <MapObjectsProvider>
+            <MapServiceComponent/>
+          </MapObjectsProvider>
+          </GestureHandlerRootView>
         </SafeAreaView>
       </SafeAreaProvider>
   );
@@ -39,7 +38,7 @@ export default function App() {
 const styles = StyleSheet.create({
   areaContent: {
     flex: 1,
-    backgroundColor: colors.background_main,
+    backgroundColor: 'transparent',
     overflow: 'hidden',
   },
   pageView: {

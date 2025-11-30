@@ -3,8 +3,9 @@ import {GestureResponderEvent} from "react-native";
 import {RefObject} from "react";
 import {Path} from "react-native-svg";
 import {svgPathBbox} from 'svg-path-bbox';
-import {HotelMapInfo, HotelRefData} from "./Hotels/types";
+
 import {withTiming} from "react-native-reanimated";
+import {HotelMapInfo} from "./types";
 
 export const mainWidth = 893.58;
 export const mainHeight = 1000;

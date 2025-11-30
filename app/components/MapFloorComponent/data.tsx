@@ -19,7 +19,6 @@ import FloorsHotelFourteen from "./Floors/HotelFourteen";
 import FloorsHotelFifteen from "./Floors/HotelFifteen";
 import FloorsHotelSixteen from "./Floors/HotelSixteen";
 import FloorsHotelSeventeen from "./Floors/HotelSeventeen";
-import {HotelMapInfo} from "../MapSvgComponent/Hotels/types";
 
 export const getNumberHotelByType = (type: Hotel) => {
   switch (type) {
@@ -83,9 +82,10 @@ export const getNumberFloorByType = (type: Floor) => {
   }
 }
 
-export const getSvgFloorsByType = (type: Hotel) => {
-  switch (type) {
-    case Hotel.ONE:
+export const getSvgFloorsByType = (name: string) => {
+  const number = Number(name.replace('Building', ''));
+  switch (number) {
+    case 1:
       return {
         [Floor.FIRST]: <FloorsHotelOne.FirstFloorSvgComponent/>,
         [Floor.SECOND]: <FloorsHotelOne.SecondFloorSvgComponent/>,
@@ -94,7 +94,7 @@ export const getSvgFloorsByType = (type: Hotel) => {
         [Floor.FIFTH]: <FloorsHotelOne.FifthFloorSvgComponent/>,
         [Floor.SIXTH]: <FloorsHotelOne.SixthFloorSvgComponent/>
       };
-    case Hotel.TWO:
+    case 2:
       return {
         [Floor.FIRST]: <FloorsHotelTwo.FirstFloorSvgComponent/>,
         [Floor.SECOND]: <FloorsHotelTwo.SecondFloorSvgComponent/>,
@@ -103,14 +103,14 @@ export const getSvgFloorsByType = (type: Hotel) => {
         [Floor.FIFTH]: <FloorsHotelTwo.FifthFloorSvgComponent/>,
         [Floor.SIXTH]: <FloorsHotelTwo.SixthFloorSvgComponent/>
       };
-    case Hotel.THREE:
+    case 3:
       return {
         [Floor.FIRST]: <FloorsHotelThree.FirstFloorSvgComponent/>,
         [Floor.SECOND]: <FloorsHotelThree.SecondFloorSvgComponent/>,
         [Floor.THIRD]: <FloorsHotelThree.ThirdFloorSvgComponent/>,
         [Floor.FOURTH]: <FloorsHotelThree.FourthFloorSvgComponent/>,
       };
-    case Hotel.FOUR:
+    case 4:
       return {
         [Floor.FIRST]: <FloorsHotelFour.FirstFloorSvgComponent/>,
         [Floor.SECOND]: <FloorsHotelFour.SecondFloorSvgComponent/>,
@@ -119,7 +119,7 @@ export const getSvgFloorsByType = (type: Hotel) => {
         [Floor.FIFTH]: <FloorsHotelFour.FifthFloorSvgComponent/>,
         [Floor.SIXTH]: <FloorsHotelFour.SixthFloorSvgComponent/>
       };
-    case Hotel.FIVE:
+    case 5:
       return {
         [Floor.FIRST]: <FloorsHotelFive.FirstFloorSvgComponent/>,
         [Floor.SECOND]: <FloorsHotelFive.SecondFloorSvgComponent/>,
@@ -128,7 +128,7 @@ export const getSvgFloorsByType = (type: Hotel) => {
         [Floor.FIFTH]: <FloorsHotelFive.FifthFloorSvgComponent/>,
         [Floor.SIXTH]: <FloorsHotelFive.SixthFloorSvgComponent/>
       };
-    case Hotel.SIX:
+    case 6:
       return {
         [Floor.FIRST]: <FloorsHotelSix.FirstFloorSvgComponent/>,
         [Floor.SECOND]: <FloorsHotelSix.SecondFloorSvgComponent/>,
@@ -137,7 +137,7 @@ export const getSvgFloorsByType = (type: Hotel) => {
         [Floor.FIFTH]: <FloorsHotelSix.FifthFloorSvgComponent/>,
         [Floor.SIXTH]: <FloorsHotelSix.SixthFloorSvgComponent/>
       };
-    case Hotel.NINE:
+    case 9:
       return {
         [Floor.FIRST]: <FloorsHotelNine.FirstFloorSvgComponent/>,
         [Floor.SECOND]: <FloorsHotelNine.SecondFloorSvgComponent/>,
@@ -146,14 +146,14 @@ export const getSvgFloorsByType = (type: Hotel) => {
         [Floor.FIFTH]: <FloorsHotelNine.FifthFloorSvgComponent/>,
         [Floor.SIXTH]: <FloorsHotelNine.SixthFloorSvgComponent/>
       };
-    case Hotel.SEVEN:
+    case 7:
       return {
         [Floor.FIRST]: <FloorsHotelSeven.FirstFloorSvgComponent/>,
         [Floor.SECOND]: <FloorsHotelSeven.SecondFloorSvgComponent/>,
         [Floor.THIRD]: <FloorsHotelSeven.ThirdFloorSvgComponent/>,
         [Floor.FOURTH]: <FloorsHotelSeven.FourthFloorSvgComponent/>
       };
-    case Hotel.EIGHT:
+    case 8:
       return {
         [Floor.FIRST]: <FloorsHotelEight.FirstFloorSvgComponent/>,
         [Floor.SECOND]: <FloorsHotelEight.SecondFloorSvgComponent/>,
@@ -162,14 +162,14 @@ export const getSvgFloorsByType = (type: Hotel) => {
         [Floor.FIFTH]: <FloorsHotelEight.FifthFloorSvgComponent/>,
         [Floor.SIXTH]: <FloorsHotelEight.SixthFloorSvgComponent/>
       };
-    case Hotel.TEN:
+    case 10:
       return {
         [Floor.FIRST]: <FloorsHotelTen.FirstFloorSvgComponent/>,
         [Floor.SECOND]: <FloorsHotelTen.SecondFloorSvgComponent/>,
         [Floor.THIRD]: <FloorsHotelTen.ThirdFloorSvgComponent/>,
         [Floor.FOURTH]: <FloorsHotelTen.FourthFloorSvgComponent/>
       };
-    case Hotel.ELEVEN:
+    case 11:
       return {
         [Floor.FIRST]: <FloorsHotelEleven.FirstFloorSvgComponent/>,
         [Floor.SECOND]: <FloorsHotelEleven.SecondFloorSvgComponent/>,
@@ -178,7 +178,7 @@ export const getSvgFloorsByType = (type: Hotel) => {
         [Floor.FIFTH]: <FloorsHotelEleven.FifthFloorSvgComponent/>,
         [Floor.SIXTH]: <FloorsHotelEleven.SixthFloorSvgComponent/>
       };
-    case Hotel.TWELVE:
+    case 12:
       return {
         [Floor.FIRST]: <FloorsHotelTwelve.FirstFloorSvgComponent/>,
         [Floor.SECOND]: <FloorsHotelTwelve.SecondFloorSvgComponent/>,
@@ -187,14 +187,14 @@ export const getSvgFloorsByType = (type: Hotel) => {
         [Floor.FIFTH]: <FloorsHotelTwelve.FifthFloorSvgComponent/>,
         [Floor.SIXTH]: <FloorsHotelTwelve.SixthFloorSvgComponent/>
       };
-    case Hotel.THIRTEEN:
+    case 13:
       return {
         [Floor.FIRST]: <FloorsHotelThirteen.FirstFloorSvgComponent/>,
         [Floor.SECOND]: <FloorsHotelThirteen.SecondFloorSvgComponent/>,
         [Floor.THIRD]: <FloorsHotelThirteen.ThirdFloorSvgComponent/>,
         [Floor.FOURTH]: <FloorsHotelThirteen.FourthFloorSvgComponent/>
       };
-    case Hotel.FOURTEEN:
+    case 14:
       return {
         [Floor.FIRST]: <FloorsHotelFourteen.FirstFloorSvgComponent/>,
         [Floor.SECOND]: <FloorsHotelFourteen.SecondFloorSvgComponent/>,
@@ -203,7 +203,7 @@ export const getSvgFloorsByType = (type: Hotel) => {
         [Floor.FIFTH]: <FloorsHotelFourteen.FifthFloorSvgComponent/>,
         [Floor.SIXTH]: <FloorsHotelFourteen.SixthFloorSvgComponent/>
       };
-    case Hotel.FIFTEEN:
+    case 15:
       return {
         [Floor.FIRST]: <FloorsHotelFifteen.FirstFloorSvgComponent/>,
         [Floor.SECOND]: <FloorsHotelFifteen.SecondFloorSvgComponent/>,
@@ -212,7 +212,7 @@ export const getSvgFloorsByType = (type: Hotel) => {
         [Floor.FIFTH]: <FloorsHotelFifteen.FifthFloorSvgComponent/>,
         [Floor.SIXTH]: <FloorsHotelFifteen.SixthFloorSvgComponent/>
       };
-    case Hotel.SIXTEEN:
+    case 16:
       return {
         [Floor.FIRST]: <FloorsHotelSixteen.FirstFloorSvgComponent/>,
         [Floor.SECOND]: <FloorsHotelSixteen.SecondFloorSvgComponent/>,
@@ -221,7 +221,7 @@ export const getSvgFloorsByType = (type: Hotel) => {
         [Floor.FIFTH]: <FloorsHotelSixteen.FifthFloorSvgComponent/>,
         [Floor.SIXTH]: <FloorsHotelSixteen.SixthFloorSvgComponent/>
       };
-    case Hotel.SEVENTEEN:
+    case 17:
       return {
         [Floor.FIRST]: <FloorsHotelSeventeen.FirstFloorSvgComponent/>,
         [Floor.SECOND]: <FloorsHotelSeventeen.SecondFloorSvgComponent/>,
@@ -230,7 +230,7 @@ export const getSvgFloorsByType = (type: Hotel) => {
         [Floor.FIFTH]: <FloorsHotelSeventeen.FifthFloorSvgComponent/>,
         [Floor.SIXTH]: <FloorsHotelSeventeen.SixthFloorSvgComponent/>
       };
-    case Hotel.EIGHTEEN:
+    case 18:
       return {
         [Floor.FIRST]: <FloorsHotelEighteen.FirstFloorSvgComponent/>,
         [Floor.SECOND]: <FloorsHotelEighteen.SecondFloorSvgComponent/>,
