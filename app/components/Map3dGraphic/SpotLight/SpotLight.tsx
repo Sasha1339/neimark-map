@@ -2,6 +2,7 @@ import React, {Component, FC, RefObject, useRef} from "react";
 import * as THREE from "three";
 import {useFrame} from "@react-three/fiber/native";
 import {MaterialMesh} from "../Model/Model";
+import {data} from "../__mock__/data";
 
 type Props = {
   MAX_AMOUNT: number;
@@ -18,11 +19,15 @@ export const SpotLight: FC<Props> = ({MAX_AMOUNT, selectedBuilding, allObjectsWi
     if (selectedBuilding.current && allObjectsWithBuilding.current.length > 0) {
 
       allObjectsWithBuilding.current.forEach((e) => {
-        if (e.name.includes('Light')) {
-          const idEnter = e.name.split('_')[1];
-          const locationObject = allObjectsWithBuilding.current.find((e) => e.name.includes(`${idEnter}_Location`))
+        const idBuilding = e.name.split('_')[0];
+        const idEnter = e.name.split('_')[1];
+
+        if (e.name.includes('Location') && data[idBuilding] && data[idBuilding].places[idEnter]) {
+          const locationObject = allObjectsWithBuilding.current.find((e) => e.name.includes(`${idEnter}_Text`))
 
           const boundingBox = new THREE.Box3().setFromObject(e);
+          const size = new THREE.Vector3();
+          boundingBox.getSize(size);
 
           // Получаем центр объекта
           const center = new THREE.Vector3();
@@ -34,7 +39,7 @@ export const SpotLight: FC<Props> = ({MAX_AMOUNT, selectedBuilding, allObjectsWi
             if (!(currentRefLight.current.visible && currentRefLight.current.target === locationObject)) {
               currentRefLight.current.position.set(
                 center.x,
-                center.y, // Над объектом на половине его высоты
+                center.y + 0.01, // Над объектом на половине его высоты
                 center.z
               );
 
@@ -70,12 +75,12 @@ export const SpotLight: FC<Props> = ({MAX_AMOUNT, selectedBuilding, allObjectsWi
         <spotLight
           key={index}
           ref={lightRefs.current[index]}
-          color={0x9000FF}
-          intensity={20}
-          distance={10}
-          angle={Math.PI / 5}
-          penumbra={1}
-          decay={1}
+          color={0xFF0000}
+          intensity={0.5}
+
+          angle={Math.PI / 3}
+          penumbra={0.5}
+          decay={2}
           visible={false}
           castShadow={true}
           shadow-mapSize-width={2048}
