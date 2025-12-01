@@ -6,6 +6,8 @@ export const MapObjectsProvider: FC<PropsWithChildren> = ({children}) => {
 
   const selectedObjectRef = useRef<THREE.Object3D | null>(null);
 
+  const rotationAngleRef = useRef<number | null>(0);
+
   const [selectedObject, setSelectedObject] = useState<string | null>(null)
 
   const setNewSelectedObjects = useCallback((obj: string | null) => {
@@ -14,7 +16,7 @@ export const MapObjectsProvider: FC<PropsWithChildren> = ({children}) => {
 
 
   return (
-    <MapObjectsContext value={{selectedObjectRef, selectedObject, setSelectedObjects: setNewSelectedObjects}}>
+    <MapObjectsContext value={{rotationAngleRef, selectedObjectRef, selectedObject, setSelectedObjects: setNewSelectedObjects}}>
       {children}
     </MapObjectsContext>
   )

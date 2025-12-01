@@ -21,7 +21,14 @@ export const Map3dGraphic: FC<Props> = () => {
     <View style={{flex: 1}} {...events}>
       <Canvas
         shadows={true}
-        camera={{position: [0, 5, 0] }}
+        camera={{
+          position: [0, 5, 0], // Измените Z на положительное значение
+          // quaternion: [- Math.PI / 2, 0, 6 * Math.PI / 18, 0],
+          rotation: [-Math.PI / 2, 0, 6 * Math.PI / 18],
+          fov: 50,
+          near: 0.1,
+          far: 1000
+        }}
         gl={{
           powerPreference: "low-power",
           antialias: false, // что-то из них сделало экран темным

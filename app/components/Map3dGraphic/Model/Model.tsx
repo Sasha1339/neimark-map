@@ -73,9 +73,11 @@ export const Model = () => {
   }, [gltf])
 
   const handleClick = useCallback((event: any) => {
-    if (!objectContext.selectedObjectRef.current || objectContext.selectedObjectRef.current && !Object.keys(data).includes(objectContext.selectedObjectRef.current.name)) {
-      event.stopPropagation();
-      const object = event.object as MaterialMesh;
+    event.stopPropagation();
+    const object = event.object as MaterialMesh;
+
+    if (!objectContext.selectedObjectRef.current && Object.keys(data).includes(object.name)) {
+
 
       if (object.name.includes('Building') && !object.name.includes('_')) {
         const meshes = findObjectsByName(object.name).filter((e) => e.name.includes('_'));

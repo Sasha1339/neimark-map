@@ -19,6 +19,7 @@ import {GestureDetectorProvider} from "react-native-screens/gesture-handler";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 import {GestureHandlerRootView} from "react-native-gesture-handler";
 import {data} from "../Map3dGraphic/__mock__/data";
+import Slider from "@react-native-community/slider";
 
 
 export const MapServiceComponent: FC = () => {
@@ -34,6 +35,7 @@ export const MapServiceComponent: FC = () => {
   const resetContext = () => {
     objectsContext.selectedObjectRef.current = null;
     objectsContext.setSelectedObjects(null)
+    objectsContext.rotationAngleRef.current = 0;
   }
 
 
@@ -45,35 +47,58 @@ export const MapServiceComponent: FC = () => {
   return (
     <View style={[styles.container]}>
 
-        <View style={[styles.mapView, {height: height, width: width, transform: [{translateY: -insets.top}]}]}>
-          <Map3dGraphic />
-        </View>
+      <View style={[styles.mapView, {height: height, width: width, transform: [{translateY: -insets.top}]}]}>
+        <Map3dGraphic/>
+      </View>
 
-      {objectsContext?.selectedObject && <View style={styles.closeButton}>
-        <Text style={styles.text}  onPress={() => resetContext()}>Закрыть</Text>
+      {objectsContext?.selectedObject && <View style={styles.header}>
+        <View style={styles.closeButton}>
+
+          <Text style={styles.text} onPress={() => resetContext()}>{`«${data[objectsContext?.selectedObject].name}»`}</Text>
+        </View>
+        <View style={styles.closeButton}>
+
+        <Text style={[styles.text, {color: colors.mainRed}]} onPress={() => resetContext()}>Закрыть</Text>
+      </View>
       </View>}
 
-      {objectsContext?.selectedObject && <View style={styles.searchButton}>
-        <View style={styles.buttons}>
-          <TouchableOpacity onPress={() => setOpenFloors(objectsContext.selectedObject)}>
-            <Text style={styles.text}>Этажи</Text>
-          </TouchableOpacity>
+      {objectsContext?.selectedObject && <>
+        <View style={styles.searchButton}>
+          <Text style={styles.text}>Вращать корпус</Text>
+          <Slider
+            style={{width: '100%', height: 40}}
+            onValueChange={(e) => objectsContext.rotationAngleRef.current = e}
+            minimumValue={0}
+            maximumValue={Math.PI}
+            step={Math.PI / 180}
+            minimumTrackTintColor={colors.background_hotel}
+            maximumTrackTintColor={colors.blue_main}
+          />
+
+          <View
+            style={{
+              borderBottomColor: colors.blue_main,
+              borderBottomWidth: StyleSheet.hairlineWidth,
+              width: '100%'
+            }}
+          />
+
+          <View style={styles.buttons}>
+
+            <TouchableOpacity onPress={() => setOpenFloors(objectsContext.selectedObject)}>
+              <Text style={styles.text}>Открыть этажи</Text>
+            </TouchableOpacity>
+
+          </View>
+
 
         </View>
-
-        <View
-          style={{
-            borderBottomColor: colors.blue_main,
-            borderBottomWidth: StyleSheet.hairlineWidth,
-            width: '100%'
-          }}
-        />
-          <Text style={styles.text}>{data[objectsContext?.selectedObject].name}</Text>
-        </View>}
+      </>}
 
 
-        {(openSearch || openFloors) && <View style={[styles.overlay, {height: height, width: width, transform: [{translateY: -insets.top}]}]}></View>}
-        {!!openFloors && <MapFloorComponent hotel={openFloors} isOpen={!!openFloors} onClose={onCloseFloor}/>}
+      {(openSearch || openFloors) &&
+        <View style={[styles.overlay, {height: height, width: width, transform: [{translateY: -insets.top}]}]}></View>}
+      {!!openFloors && <MapFloorComponent hotel={openFloors} isOpen={!!openFloors} onClose={onCloseFloor}/>}
 
     </View>
   )
@@ -132,12 +157,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  closeButton: {
+  header: {
     ...StyleSheet.absoluteFillObject,
+    width: '90%',
     top: 0,
-    right: '5%',
-    left: 'auto',
     bottom: 'auto',
+    left: '5%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+
+  closeButton: {
     paddingVertical: 10,
     paddingHorizontal: 20,
     boxSizing: 'border-box',
