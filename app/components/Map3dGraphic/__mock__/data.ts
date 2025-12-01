@@ -27,6 +27,26 @@ export const data: Record<string, BuildingProps> = {
   'Building7': {
     number: 7,
     name: 'Брайцев',
-    places: {}
+    places: {
+      "Enter1":
+        {
+          id: '1',
+          title:
+            'Wildberries',
+        }
+      ,
+      "Enter0":
+        {
+          id: '1',
+          title:
+            'Яндекс Маркет'
+        },
+      "Enter2":
+        {
+          id: '1',
+          title:
+            'Школа ин. языков'
+        }
+    }
   }
 }

@@ -69,8 +69,8 @@ export const MapServiceComponent: FC = () => {
             style={{width: '100%', height: 40}}
             onValueChange={(e) => objectsContext.rotationAngleRef.current = e}
             minimumValue={0}
-            maximumValue={Math.PI}
-            step={Math.PI / 180}
+            maximumValue={Math.PI * 2}
+            step={Math.PI / 64}
             minimumTrackTintColor={colors.background_hotel}
             maximumTrackTintColor={colors.blue_main}
           />

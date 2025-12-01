@@ -38,7 +38,7 @@ export const CameraControl: FC<Props> = ({OrbitControls}) => {
 
 
       const ROTATION_RADIUS = 1;
-      const ROTATION_HEIGHT = 1.5;
+      const ROTATION_HEIGHT = 1;
 
 
       if (objectsContext.rotationAngleRef.current !== null) {

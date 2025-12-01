@@ -152,9 +152,9 @@ export const Model = () => {
       />
 
 
-      <SpotLight MAX_AMOUNT={2} selectedBuilding={objectContext.selectedObjectRef} allObjectsWithBuilding={allObjectsWithBuilding} />
-      <DescriptionText MAX_AMOUNT={2} selectedBuilding={objectContext.selectedObjectRef} allObjectsWithBuilding={allObjectsWithBuilding} />
-      <MarkerText MAX_AMOUNT={2} selectedBuilding={objectContext.selectedObjectRef} allObjectsWithBuilding={allObjectsWithBuilding} />
+      <SpotLight MAX_AMOUNT={5} selectedBuilding={objectContext.selectedObjectRef} allObjectsWithBuilding={allObjectsWithBuilding} />
+      <DescriptionText MAX_AMOUNT={5} selectedBuilding={objectContext.selectedObjectRef} allObjectsWithBuilding={allObjectsWithBuilding} />
+      <MarkerText MAX_AMOUNT={5} selectedBuilding={objectContext.selectedObjectRef} allObjectsWithBuilding={allObjectsWithBuilding} />
       <RotationText allBuildings={allBuilding} />
 
     </group>

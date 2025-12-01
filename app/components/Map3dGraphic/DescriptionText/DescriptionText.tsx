@@ -59,15 +59,26 @@ export const DescriptionText: FC<Props> = ({MAX_AMOUNT, selectedBuilding, allObj
               boundingBox.getSize(size);
 
 
+              // currentRefText3d.current.position.set(
+              //   center.x + (0.016 * (data[idBuilding].places[idEnter].title.length / 2)) * Math.sin(e.rotation.y),
+              //   center.y,
+              //   center.z + (- 0.016 * (data[idBuilding].places[idEnter].title.length / 2)) * Math.cos(e.rotation.y)
+              // );
+
               currentRefText3d.current.position.set(
-                center.x + (e.rotation.y < 0 ? 0 : - 0.035),
-                center.y, // Над объектом на половине его высоты
-                center.z + (e.rotation.y < 0 ? 0.027 * (data[idBuilding].places[idEnter].title.length / 2) : -0.027 * data[idBuilding].places[idEnter].title.length / 2)
+                center.x,
+                center.y,
+                center.z
               );
 
+              const ALPHA = -90 / 180 * Math.PI;
+              const ALPHA_X = Math.atan((Math.cos(e.rotation.y) / (1 / Math.tan(ALPHA))));
+              const ALPHA_Z = Math.atan((Math.cos(Math.PI / 2 - e.rotation.y) / (1 / Math.tan(ALPHA))));
 
+              console.log(e.name)
+              console.log(e.rotation.y)
 
-              currentRefText3d.current.rotation.set(-Math.PI / 2, 0, e.rotation.y < 0 ? e.rotation.y + Math.PI / 2 : -e.rotation.y - Math.PI / 2);
+              currentRefText3d.current.rotation.set(e.rotation.x, e.rotation.y < 0 ? e.rotation.y + Math.PI / 2 : e.rotation.y - Math.PI / 2, e.rotation.z);
 
 
               // Включаем свет

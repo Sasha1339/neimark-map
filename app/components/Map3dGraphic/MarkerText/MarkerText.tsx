@@ -27,7 +27,7 @@ export const MarkerText: FC<Props> = ({MAX_AMOUNT, selectedBuilding, allObjectsW
         const idBuilding = e.name.split('_')[0];
         const idEnter = e.name.split('_')[1];
 
-        if (e.name.includes('Text') && data[idBuilding] && data[idBuilding].places[idEnter]) {
+        if (e.name.includes('Light') && data[idBuilding] && data[idBuilding].places[idEnter]) {
 
 
           const boundingBox = new THREE.Box3().setFromObject(e);
@@ -43,10 +43,10 @@ export const MarkerText: FC<Props> = ({MAX_AMOUNT, selectedBuilding, allObjectsW
               currentRefText3d.current.position.set(
                 center.x,
                 center.y, // Над объектом на половине его высоты
-                center.z + (e.rotation.y < 0 ? 0.015 : -0.015)
+                center.z
               );
 
-              currentRefText3d.current.rotation.set(-Math.PI / 2, 0, e.rotation.y < 0 ? e.rotation.y : -e.rotation.y + Math.PI);
+              currentRefText3d.current.rotation.set(e.rotation.x, e.rotation.y, e.rotation.z);
 
 
               // Включаем свет
