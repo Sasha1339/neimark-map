@@ -1,4 +1,4 @@
-import React, {FC, forwardRef, RefObject, useRef, useState} from "react";
+import React, {FC, forwardRef, RefObject, useImperativeHandle, useRef, useState} from "react";
 import * as THREE from "three";
 import {MaterialMesh} from "../Model/Model";
 import {useFrame} from "@react-three/fiber/native";
@@ -14,61 +14,75 @@ type Props = {
   allObjectsWithBuilding: RefObject<MaterialMesh[]>;
 }
 
-export const MarkerText: FC<Props> = ({MAX_AMOUNT, selectedBuilding, allObjectsWithBuilding}) => {
+export const MarkerText = forwardRef<any, Props>(({MAX_AMOUNT, selectedBuilding, allObjectsWithBuilding}, ref) => {
 
   const textRefs = useRef(Array(MAX_AMOUNT).fill(null).map(() => React.createRef<THREE.Mesh>()));
-  const [textTitles, setTextTitles] = useState<string[]>(Array(MAX_AMOUNT).fill('Text'));
 
-  useFrame(() => {
+  useImperativeHandle(ref, () => ({
+    showMarkerText: () => {
+      if (selectedBuilding.current && allObjectsWithBuilding.current.length > 0) {
 
-    if (selectedBuilding.current && allObjectsWithBuilding.current.length > 0) {
+        allObjectsWithBuilding.current.forEach((e) => {
+          const idBuilding = e.name.split('_')[0];
+          const idEnter = e.name.split('_')[1];
 
-      allObjectsWithBuilding.current.forEach((e) => {
-        const idBuilding = e.name.split('_')[0];
-        const idEnter = e.name.split('_')[1];
-
-        if (e.name.includes('Light') && data[idBuilding] && data[idBuilding].places[idEnter]) {
-
-
-          const boundingBox = new THREE.Box3().setFromObject(e);
-
-          // Получаем центр объекта
-          const center = new THREE.Vector3();
-          boundingBox.getCenter(center);
-
-          const currentRefText3d = textRefs.current[Number(idEnter.replace('Enter', ''))];
-
-          if (currentRefText3d.current) {
-            if (!(currentRefText3d.current.visible)) {
-              currentRefText3d.current.position.set(
-                center.x,
-                center.y, // Над объектом на половине его высоты
-                center.z
-              );
-
-              currentRefText3d.current.rotation.set(e.rotation.x, e.rotation.y, e.rotation.z);
+          if (e.name.includes('Light') && data[idBuilding] && data[idBuilding].places[idEnter]) {
 
 
-              // Включаем свет
-              currentRefText3d.current.visible = true;
+            const boundingBox = new THREE.Box3().setFromObject(e);
+
+            // Получаем центр объекта
+            const center = new THREE.Vector3();
+            boundingBox.getCenter(center);
+
+            const currentRefText3d = textRefs.current[Number(idEnter.replace('Enter', ''))];
+
+            if (currentRefText3d.current) {
+              if (!(currentRefText3d.current.visible)) {
+
+
+                // Создаем матрицу вращения для дополнительного поворота по Z
+                const zRotation = new THREE.Matrix4().makeRotationZ(Math.PI / 2);
+
+                // Создаем матрицу вращения объекта
+                const objectRotation = new THREE.Matrix4().makeRotationFromEuler(e.rotation);
+
+                // Комбинируем матрицы: сначала Z-поворот, затем поворот объекта
+                const combinedMatrix = new THREE.Matrix4();
+                combinedMatrix.multiplyMatrices(objectRotation, zRotation);
+
+                currentRefText3d.current.position.set(
+                  center.x,
+                  center.y, // Над объектом на половине его высоты
+                  center.z
+                );
+
+                const eulerRotation = new THREE.Euler();
+                eulerRotation.setFromRotationMatrix(combinedMatrix);
+                currentRefText3d.current.rotation.copy(eulerRotation);
+
+
+                // Включаем свет
+                currentRefText3d.current.visible = true;
+              }
             }
+
+
+          } else {
+            return;
           }
+        });
 
-
-        } else {
-          return;
-        }
-      });
-
-    } else {
+      }
+    },
+    hideMarkerText: () => {
       textRefs.current.forEach((e) => {
         if (e.current) {
           e.current.visible = false;
         }
       })
     }
-
-  })
+  }));
 
   return (
     <>
@@ -89,4 +103,4 @@ export const MarkerText: FC<Props> = ({MAX_AMOUNT, selectedBuilding, allObjectsW
     </>
   )
 
-}
+})

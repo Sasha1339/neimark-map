@@ -1,4 +1,14 @@
-import {useCallback, useContext, useEffect, useRef, useState} from "react";
+import {
+  FC,
+  forwardRef,
+  RefObject,
+  useCallback,
+  useContext,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState
+} from "react";
 import {GLTF} from "three-stdlib";
 import {ObjectMap, useFrame, useThree} from "@react-three/fiber/native";
 import {MeshStandardMaterial} from 'three'
@@ -16,13 +26,22 @@ export interface MaterialMesh extends THREE.Mesh {
   material: THREE.Material | THREE.Material[];
 }
 
-export const Model = () => {
+type Props = {
+  primitiveRef: RefObject<any>
+}
 
+export const Model = forwardRef<any, Props>(({primitiveRef, ...props}, ref) => {
+
+
+  const modelRef = useRef<any>(null);
 
   const model = require('../neimark-hotel-join-and-compression.glb');
 
-  const modelRef = useRef<any>(null);
   const groupRef = useRef<THREE.Group>(null);
+  const rotationRef = useRef<any>(null);
+  const spotLightRef = useRef<any>(null);
+  const descriptionTextRef = useRef<any>(null);
+  const markerTextRef = useRef<any>(null);
 
   const gltf: (GLTF & ObjectMap) | (GLTF & ObjectMap)[] = useGLTF(model);
 
@@ -35,6 +54,86 @@ export const Model = () => {
   const spotLightRefUp = useRef<THREE.SpotLight>(null);
   const objectContext = useContext(MapObjectsContext);
 
+  const isObjectSelected = () => {
+    spotLightRef.current.showSpotLight();
+    descriptionTextRef.current.showDescriptionText();
+    markerTextRef.current.showMarkerText();
+    turnOnSpotLight();
+  }
+
+  useImperativeHandle(ref, () => ({
+
+    resetSelectedObject: () => {
+      objectContext.selectedObjectRef.current = null;
+      allObjectsWithBuilding.current = [];
+      objectContext?.setSelectedObjects(null)
+      rotationRef.current.show();
+      spotLightRef.current.hideSpotLight();
+      descriptionTextRef.current.hideDescriptionText();
+      markerTextRef.current.hideMarkerText();
+      turnOffSpotLight();
+    },
+
+    turnOnPlacesMode: () => {
+
+      modelRef.current?.traverse((child: any) => {
+        if (child.isMesh && (child as THREE.Mesh).material && child.name.includes('Building') && !child.name.includes('_')) {
+          const material = Array.isArray((child as THREE.Mesh).material)
+            ? (child as THREE.Mesh).material
+            : [(child as THREE.Mesh).material];
+
+          if (!Array.isArray(material)) return;
+          material.forEach((material) => {
+            if (material && !Array.isArray(material)) {
+              // Просто делаем материал прозрачным, текстуры остаются
+              material.opacity = 0.2;
+              material.transparent = true;
+
+              // Важно для корректного отображения прозрачности:
+              material.depthWrite = false; // Улучшает blending прозрачных объектов
+              material.alphaTest = 0.1; // Убирает артефакты на краях
+
+              // Для правильного смешивания прозрачных объектов
+              material.blending = THREE.NormalBlending;
+
+              material.needsUpdate = true;
+            }
+          });
+        }
+      });
+
+    },
+
+    turnOnBuildingsMode: () => {
+
+      modelRef.current?.traverse((child: any) => {
+        if (child.isMesh && (child as THREE.Mesh).material && child.name.includes('Building') && !child.name.includes('_')) {
+          const material = Array.isArray((child as THREE.Mesh).material)
+            ? (child as THREE.Mesh).material
+            : [(child as THREE.Mesh).material];
+
+          if (!Array.isArray(material)) return;
+          material.forEach((material) => {
+            if (material && !Array.isArray(material)) {
+              // Просто делаем материал прозрачным, текстуры остаются
+              material.opacity = 1;
+              material.transparent = false;
+
+              // Важно для корректного отображения прозрачности:
+              material.depthWrite = true; // Включаем обратно
+              material.alphaTest = 0; // Отключаем alphaTesх
+
+              // Для правильного смешивания прозрачных объектов
+              material.blending = THREE.NormalBlending;
+
+              material.needsUpdate = true;
+            }
+          });
+        }
+      });
+
+    }
+  }), [gltfModel]);
 
 
   const findObjectsByName = (searchString: string) => {
@@ -72,9 +171,7 @@ export const Model = () => {
     }
   }, [gltf])
 
-  const handleClick = useCallback((event: any) => {
-    event.stopPropagation();
-    const object = event.object as MaterialMesh;
+  const handleClick = useCallback((object: any) => {
 
     if (!objectContext.selectedObjectRef.current && Object.keys(data).includes(object.name)) {
 
@@ -85,6 +182,8 @@ export const Model = () => {
         objectContext.selectedObjectRef.current = object;
         allObjectsWithBuilding.current = meshes;
         objectContext?.setSelectedObjects(data[object.name] ? object.name : null)
+        rotationRef.current.hide();
+        isObjectSelected();
       }
 
       //console.log('🎯 КЛИК! Объект:', object.name);
@@ -92,47 +191,40 @@ export const Model = () => {
 
   }, []);
 
-  useFrame(() => {
+  const turnOffSpotLight = () => {
+    if (spotLightRefUp.current) {
+      spotLightRefUp.current.visible = false;
+    }
+  }
 
-    // console.log(selectedObjectRef.current);
+  const turnOnSpotLight = () => {
 
     if (objectContext?.selectedObjectRef.current
       && spotLightRefUp.current
      ) {
-      // Получаем bounding box объекта
       const boundingBox = new THREE.Box3().setFromObject(objectContext.selectedObjectRef.current);
 
-      // Получаем центр объекта
       const center = new THREE.Vector3();
       boundingBox.getCenter(center);
-
-      // console.log('center:'+center.y)
-
-      // Устанавливаем позицию света
 
       if (!(spotLightRefUp.current.visible && spotLightRefUp.current.target === objectContext.selectedObjectRef.current)) {
         spotLightRefUp.current.position.set(
           center.x,
-          center.y + 2, // Над объектом на половине его высоты
+          center.y + 2,
           center.z
         );
 
-        // Направляем свет на объект
         spotLightRefUp.current.target = objectContext.selectedObjectRef.current;
 
-        // Включаем свет
         spotLightRefUp.current.visible = true;
       }
 
-    } else if (spotLightRefUp.current) {
-      // Если объект не выбран, выключаем свет
-      spotLightRefUp.current.visible = false;
     }
-  });
+  }
 
   return (
     <group ref={groupRef}>
-      <PrimitiveElement gltfModel={gltfModel} modelRef={modelRef} handleClick={handleClick} />
+      <PrimitiveElement ref={primitiveRef} gltfModel={gltfModel} modelRef={modelRef} handleClick={handleClick} />
 
       <spotLight
         ref={spotLightRefUp}
@@ -152,12 +244,12 @@ export const Model = () => {
       />
 
 
-      <SpotLight MAX_AMOUNT={5} selectedBuilding={objectContext.selectedObjectRef} allObjectsWithBuilding={allObjectsWithBuilding} />
-      <DescriptionText MAX_AMOUNT={5} selectedBuilding={objectContext.selectedObjectRef} allObjectsWithBuilding={allObjectsWithBuilding} />
-      <MarkerText MAX_AMOUNT={5} selectedBuilding={objectContext.selectedObjectRef} allObjectsWithBuilding={allObjectsWithBuilding} />
-      <RotationText allBuildings={allBuilding} />
+      <SpotLight ref={spotLightRef} MAX_AMOUNT={5} selectedBuilding={objectContext.selectedObjectRef} allObjectsWithBuilding={allObjectsWithBuilding} />
+      <DescriptionText ref={descriptionTextRef} MAX_AMOUNT={5} selectedBuilding={objectContext.selectedObjectRef} allObjectsWithBuilding={allObjectsWithBuilding} />
+      <MarkerText ref={markerTextRef} MAX_AMOUNT={5} selectedBuilding={objectContext.selectedObjectRef} allObjectsWithBuilding={allObjectsWithBuilding} />
+      <RotationText ref={rotationRef} allBuildings={allBuilding} />
 
     </group>
   );
 
-}
+});

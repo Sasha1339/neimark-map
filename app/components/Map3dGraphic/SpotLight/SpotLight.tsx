@@ -1,6 +1,5 @@
-import React, {Component, FC, RefObject, useRef} from "react";
+import React, {Component, FC, forwardRef, RefObject, useImperativeHandle, useRef} from "react";
 import * as THREE from "three";
-import {useFrame} from "@react-three/fiber/native";
 import {MaterialMesh} from "../Model/Model";
 import {data} from "../__mock__/data";
 
@@ -10,64 +9,65 @@ type Props = {
   allObjectsWithBuilding: RefObject<MaterialMesh[]>;
 }
 
-export const SpotLight: FC<Props> = ({MAX_AMOUNT, selectedBuilding, allObjectsWithBuilding}) => {
+export const SpotLight = forwardRef<any, Props>(({MAX_AMOUNT, selectedBuilding, allObjectsWithBuilding}, ref) => {
 
   const lightRefs = useRef(Array(MAX_AMOUNT).fill(null).map(() => React.createRef<THREE.SpotLight>()));
 
-  useFrame(() => {
+  useImperativeHandle(ref, () => ({
+    showSpotLight: () => {
+      if (selectedBuilding.current && allObjectsWithBuilding.current.length > 0) {
 
-    if (selectedBuilding.current && allObjectsWithBuilding.current.length > 0) {
+        allObjectsWithBuilding.current.forEach((e) => {
+          const idBuilding = e.name.split('_')[0];
+          const idEnter = e.name.split('_')[1];
 
-      allObjectsWithBuilding.current.forEach((e) => {
-        const idBuilding = e.name.split('_')[0];
-        const idEnter = e.name.split('_')[1];
+          if (e.name.includes('Location') && data[idBuilding] && data[idBuilding].places[idEnter]) {
+            const locationObject = allObjectsWithBuilding.current.find((e) => e.name.includes(`${idEnter}_Text`))
 
-        if (e.name.includes('Location') && data[idBuilding] && data[idBuilding].places[idEnter]) {
-          const locationObject = allObjectsWithBuilding.current.find((e) => e.name.includes(`${idEnter}_Text`))
+            const boundingBox = new THREE.Box3().setFromObject(e);
+            const size = new THREE.Vector3();
+            boundingBox.getSize(size);
 
-          const boundingBox = new THREE.Box3().setFromObject(e);
-          const size = new THREE.Vector3();
-          boundingBox.getSize(size);
+            // Получаем центр объекта
+            const center = new THREE.Vector3();
+            boundingBox.getCenter(center);
 
-          // Получаем центр объекта
-          const center = new THREE.Vector3();
-          boundingBox.getCenter(center);
+            const currentRefLight = lightRefs.current[Number(idEnter.replace('Enter', ''))];
 
-          const currentRefLight = lightRefs.current[Number(idEnter.replace('Enter', ''))];
+            if (currentRefLight.current && locationObject) {
+              if (!(currentRefLight.current.visible && currentRefLight.current.target === locationObject)) {
+                currentRefLight.current.position.set(
+                  center.x,
+                  center.y + 0.01, // Над объектом на половине его высоты
+                  center.z
+                );
 
-          if (currentRefLight.current && locationObject) {
-            if (!(currentRefLight.current.visible && currentRefLight.current.target === locationObject)) {
-              currentRefLight.current.position.set(
-                center.x,
-                center.y + 0.01, // Над объектом на половине его высоты
-                center.z
-              );
+                // Направляем свет на объект
+                currentRefLight.current.target = locationObject;
 
-              // Направляем свет на объект
-              currentRefLight.current.target = locationObject;
-
-              // Включаем свет
-              currentRefLight.current.visible = true;
+                // Включаем свет
+                currentRefLight.current.visible = true;
+              }
             }
+
+
+          } else {
+            return;
           }
+        });
+      }
 
 
+    },
 
-        } else {
-          return;
-        }
-      });
-
-    } else {
+    hideSpotLight: () => {
       lightRefs.current.forEach((e) => {
         if (e.current) {
           e.current.visible = false;
         }
       })
     }
-
-  })
-
+  }))
 
   return (
     <>
@@ -93,4 +93,4 @@ export const SpotLight: FC<Props> = ({MAX_AMOUNT, selectedBuilding, allObjectsWi
     </>
   )
 
-}
+})

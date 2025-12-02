@@ -20,12 +20,7 @@ export const CameraControl: FC<Props> = ({OrbitControls}) => {
 
   const objectsContext = useContext(MapObjectsContext);
 
-
-  const [target, setTarget] = useState<THREE.Vector3>(new THREE.Vector3(0, 5, 0));
-
-
   const building = useRef(false)
-
 
   useFrame((state, delta, frame) => {
 
@@ -37,7 +32,7 @@ export const CameraControl: FC<Props> = ({OrbitControls}) => {
       building.current = true;
 
 
-      const ROTATION_RADIUS = 1;
+      const ROTATION_RADIUS = 1.5;
       const ROTATION_HEIGHT = 1;
 
 

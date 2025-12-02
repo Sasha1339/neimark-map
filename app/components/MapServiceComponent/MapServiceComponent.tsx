@@ -26,15 +26,26 @@ export const MapServiceComponent: FC = () => {
 
   const insets = useSafeAreaInsets();
   const {width, height} = useWindowDimensions();
+  const graphicRef = useRef<any>(null);
 
   const [openSearch, setOpenSearch] = useState(false);
   const [openFloors, setOpenFloors] = useState<string | null>(null);
+  const [isEnv, setIsEnv] = useState(false);
 
   const objectsContext = useContext(MapObjectsContext);
 
+  const turnOnPlacesMode = () => {
+    graphicRef.current.placesMode();
+    setIsEnv(true)
+  }
+
+  const turnOnBuildingMode = () => {
+    graphicRef.current.buildingsMode();
+    setIsEnv(false)
+  }
+
   const resetContext = () => {
-    objectsContext.selectedObjectRef.current = null;
-    objectsContext.setSelectedObjects(null)
+    graphicRef.current.reset();
     objectsContext.rotationAngleRef.current = 0;
   }
 
@@ -48,8 +59,16 @@ export const MapServiceComponent: FC = () => {
     <View style={[styles.container]}>
 
       <View style={[styles.mapView, {height: height, width: width, transform: [{translateY: -insets.top}]}]}>
-        <Map3dGraphic/>
+        <Map3dGraphic ref={graphicRef}/>
       </View>
+
+      {!objectsContext?.selectedObject && <View style={styles.headerButton}>
+        <View style={styles.closeButton}>
+
+          {isEnv ? <Text style={styles.text} onPress={() => turnOnBuildingMode()}>Режим корпусов</Text> : <Text style={styles.text} onPress={() => turnOnPlacesMode()}>Режим окружения</Text>}
+        </View>
+
+      </View>}
 
       {objectsContext?.selectedObject && <View style={styles.header}>
         <View style={styles.closeButton}>
@@ -166,7 +185,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-
+  headerButton: {
+    ...StyleSheet.absoluteFillObject,
+    width: '90%',
+    top: 5,
+    bottom: 'auto',
+    left: '5%',
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
   closeButton: {
     paddingVertical: 10,
     paddingHorizontal: 20,

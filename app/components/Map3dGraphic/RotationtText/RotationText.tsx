@@ -1,5 +1,5 @@
 import {useFrame, useThree} from '@react-three/fiber/native';
-import React, {FC, RefObject, useContext, useEffect, useRef} from 'react';
+import React, {FC, forwardRef, RefObject, useContext, useEffect, useImperativeHandle, useRef} from 'react';
 import * as THREE from 'three';
 import {Center, Text3D} from '@react-three/drei/native';
 import {MaterialMesh} from "../Model/Model";
@@ -10,13 +10,42 @@ type Props = {
   allBuildings: RefObject<MaterialMesh[]>;
 }
 
-export const RotationText: FC<Props> = ({allBuildings}) => {
+export const RotationText = forwardRef<any, Props>(({allBuildings}, ref) => {
 
   const groupRefs = useRef(Array(Object.keys(data).length).fill(null).map(() => React.createRef<THREE.Group>()));
   const textRefs = useRef(Array(Object.keys(data).length).fill(null).map(() => React.createRef<THREE.Mesh>()));
   const numbersRefs = useRef(Array(Object.keys(data).length).fill(null).map(() => React.createRef<THREE.Mesh>()));
   const {camera} = useThree();
   const objectContext = useContext(MapObjectsContext);
+
+  useImperativeHandle(ref, () => ({
+
+    hide: () => {
+      textRefs.current.forEach((e) => {
+        if (e.current) {
+          e.current.visible = false;
+        }
+      })
+      numbersRefs.current.forEach((e) => {
+        if (e.current) {
+          e.current.visible = false;
+        }
+      })
+    },
+    show: () => {
+      textRefs.current.forEach((e) => {
+        if (e.current) {
+          e.current.visible = true;
+        }
+      })
+      numbersRefs.current.forEach((e) => {
+        if (e.current) {
+          e.current.visible = true;
+        }
+      })
+    }
+
+  }))
 
   useEffect(() => {
     if (objectContext?.selectedObject) {
@@ -117,4 +146,4 @@ return (
   </>
 );
 
-}
+})
