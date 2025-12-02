@@ -13,7 +13,7 @@ export const data: Record<string, BuildingProps> = {
         {
           id: '1',
           sideText: 'left',
-          color: '#ff0000',
+          color: '#0058ff',
           title:
             'Школа искусств',
         }
@@ -22,7 +22,7 @@ export const data: Record<string, BuildingProps> = {
         {
           id: '1',
           sideText: 'right',
-          color: '#ff0000',
+          color: '#ff00f5',
           title:
             'Ресепшен'
         }
@@ -36,7 +36,7 @@ export const data: Record<string, BuildingProps> = {
         {
           id: '1',
           sideText: 'left',
-          color: '#ff0000',
+          color: '#66D300',
           title:
             'Цветы'
         },
@@ -44,7 +44,7 @@ export const data: Record<string, BuildingProps> = {
         {
           id: '1',
           sideText: 'right',
-          color: '#ff0000',
+          color: '#ff8600',
           title:
             'Mola Mola'
         }
@@ -58,7 +58,7 @@ export const data: Record<string, BuildingProps> = {
         {
           id: '1',
           sideText: 'left',
-          color: '#ff0000',
+          color: '#83ff00',
           title:
             'Starbucks'
         }
@@ -72,7 +72,7 @@ export const data: Record<string, BuildingProps> = {
         {
           id: '1',
           sideText: 'left',
-          color: '#ff0000',
+          color: '#489400',
           title:
             'Овощи и фрукты',
         }
@@ -81,7 +81,7 @@ export const data: Record<string, BuildingProps> = {
         {
           id: '1',
           sideText: 'right',
-          color: '#ff0000',
+          color: '#006FFF',
           title:
             'Групповые тренировки'
         },
@@ -89,7 +89,7 @@ export const data: Record<string, BuildingProps> = {
         {
           id: '1',
           sideText: 'left',
-          color: '#ff0000',
+          color: '#FF2596',
           title:
             'Массаж'
         }
@@ -104,7 +104,7 @@ export const data: Record<string, BuildingProps> = {
           id: '1',
 
           sideText: 'left',
-          color: '#ff0000',
+          color: '#05fff0',
           title:
             'Прачка',
         }
@@ -113,7 +113,7 @@ export const data: Record<string, BuildingProps> = {
         {
           id: '1',
           sideText: 'left',
-          color: '#ff0000',
+          color: '#34ff00',
           title:
             'Библиотека'
         },
@@ -121,7 +121,7 @@ export const data: Record<string, BuildingProps> = {
         {
           id: '1',
           sideText: 'left',
-          color: '#ff0000',
+          color: '#00ffcc',
           title:
             'Фотостудия'
         }
@@ -135,7 +135,7 @@ export const data: Record<string, BuildingProps> = {
         {
           id: '1',
           sideText: 'left',
-          color: '#ff0000',
+          color: '#faff00',
           title:
             'Коворкинг',
         }
@@ -144,7 +144,7 @@ export const data: Record<string, BuildingProps> = {
         {
           id: '1',
           sideText: 'right',
-          color: '#ff0000',
+          color: '#5100FF',
           title:
             'Неймарк'
         },
@@ -166,7 +166,7 @@ export const data: Record<string, BuildingProps> = {
         {
           id: '1',
           sideText: 'left',
-          color: '#ff0000',
+          color: '#5100FF',
           title:
             'Wildberries',
         }
@@ -189,15 +189,15 @@ export const data: Record<string, BuildingProps> = {
         {
           id: '1',
           sideText: 'right',
-          color: '#ff0000',
+          color: '#00cdff',
           title:
             'Оптика'
         },
       "Enter1":
         {
           id: '1',
-          sideText: 'left',
-          color: '#ff0000',
+          sideText: 'right',
+          color: '#7D0002',
           title:
             'Компьютерный клуб'
         }
@@ -211,7 +211,7 @@ export const data: Record<string, BuildingProps> = {
         {
           id: '1',
           sideText: 'left',
-          color: '#ff0000',
+          color: '#00ccff',
           title:
             'Мини кино',
         }
@@ -220,7 +220,7 @@ export const data: Record<string, BuildingProps> = {
         {
           id: '1',
           sideText: 'right',
-          color: '#ff0000',
+          color: '#CCECAA',
           title:
             'Столовая'
         },
@@ -228,7 +228,7 @@ export const data: Record<string, BuildingProps> = {
         {
           id: '1',
           sideText: 'left',
-          color: '#ff0000',
+          color: '#00ffef',
           title:
             'Ремонт гаджетов'
         }
@@ -242,7 +242,7 @@ export const data: Record<string, BuildingProps> = {
         {
           id: '1',
           sideText: 'left',
-          color: '#ff0000',
+          color: '#ff8100',
           title:
             'Кондитерская',
         }
@@ -251,7 +251,7 @@ export const data: Record<string, BuildingProps> = {
         {
           id: '1',
           sideText: 'left',
-          color: '#ff0000',
+          color: '#7400ff',
           title:
             'Место встречи'
         }
@@ -265,7 +265,7 @@ export const data: Record<string, BuildingProps> = {
         {
           id: '1',
           sideText: 'left',
-          color: '#ff0000',
+          color: '#00c9ff',
           title:
             'Мед. помощь',
         }
@@ -274,7 +274,7 @@ export const data: Record<string, BuildingProps> = {
         {
           id: '1',
           sideText: 'right',
-          color: '#ff0000',
+          color: '#00ff42',
           title:
             'Центр здоровья'
         },
@@ -282,7 +282,7 @@ export const data: Record<string, BuildingProps> = {
         {
           id: '1',
           sideText: 'left',
-          color: '#ff0000',
+          color: '#ff00f3',
           title:
             'Место встречи'
         }
@@ -296,7 +296,7 @@ export const data: Record<string, BuildingProps> = {
         {
           id: '1',
           sideText: 'left',
-          color: '#ff0000',
+          color: '#ff4a00',
           title:
             'Коворкинг',
         }
@@ -310,7 +310,7 @@ export const data: Record<string, BuildingProps> = {
         {
           id: '1',
           sideText: 'left',
-          color: '#ff0000',
+          color: '#00ff45',
           title:
             'Салон красоты',
         }
@@ -319,7 +319,7 @@ export const data: Record<string, BuildingProps> = {
         {
           id: '1',
           sideText: 'left',
-          color: '#ff0000',
+          color: '#00ffce',
           title:
             'Стоматология'
         }
@@ -333,7 +333,7 @@ export const data: Record<string, BuildingProps> = {
         {
           id: '1',
           sideText: 'left',
-          color: '#ff0000',
+          color: '#7aff00',
           title:
             'Кабинет матери',
         }
@@ -342,7 +342,7 @@ export const data: Record<string, BuildingProps> = {
         {
           id: '1',
           sideText: 'right',
-          color: '#ff0000',
+          color: '#ff8500',
           title:
             'Кафе'
         }
@@ -356,7 +356,7 @@ export const data: Record<string, BuildingProps> = {
         {
           id: '1',
           sideText: 'right',
-          color: '#ff0000',
+          color: '#ff3800',
           title:
             'Coffee Like',
         }
@@ -379,7 +379,7 @@ export const data: Record<string, BuildingProps> = {
         {
           id: '1',
           sideText: 'left',
-          color: '#ff0000',
+          color: '#7bff00',
           title:
             'Витрина инноваций',
         }
@@ -393,7 +393,7 @@ export const data: Record<string, BuildingProps> = {
         {
           id: '1',
           sideText: 'left',
-          color: '#ff0000',
+          color: '#5500ff',
           title:
             'Карьерный центр',
         }

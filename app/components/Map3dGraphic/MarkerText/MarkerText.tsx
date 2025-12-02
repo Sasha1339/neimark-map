@@ -39,7 +39,12 @@ export const MarkerText = forwardRef<any, Props>(({MAX_AMOUNT, selectedBuilding,
 
             if (currentRefText3d.current) {
               if (!(currentRefText3d.current.visible)) {
-
+                currentRefText3d.current.material = new THREE.MeshStandardMaterial({
+                  color: new THREE.Color(data[idBuilding].places[idEnter].color), // Красный
+                  // emissive: 0x222222, // Свечение
+                  metalness: 0.1,
+                  roughness: 0.5
+                });
 
                 // Создаем матрицу вращения для дополнительного поворота по Z
                 const zRotation = new THREE.Matrix4().makeRotationZ(Math.PI / 2);

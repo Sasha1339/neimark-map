@@ -44,6 +44,7 @@ export const SpotLight = forwardRef<any, Props>(({MAX_AMOUNT, selectedBuilding, 
 
                 // Направляем свет на объект
                 currentRefLight.current.target = locationObject;
+                currentRefLight.current.color.set(new THREE.Color(data[idBuilding].places[idEnter].color))
 
                 // Включаем свет
                 currentRefLight.current.visible = true;
@@ -75,7 +76,6 @@ export const SpotLight = forwardRef<any, Props>(({MAX_AMOUNT, selectedBuilding, 
         <spotLight
           key={index}
           ref={lightRefs.current[index]}
-          color={0xFF0000}
           intensity={0.5}
 
           angle={Math.PI / 3}

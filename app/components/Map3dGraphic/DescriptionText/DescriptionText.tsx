@@ -51,6 +51,13 @@ export const DescriptionText = forwardRef<any, Props>(({MAX_AMOUNT, selectedBuil
                   depth: 0.005,
                 });
 
+                currentRefText3d.current.material = new THREE.MeshStandardMaterial({
+                  color: new THREE.Color(data[idBuilding].places[idEnter].color), // Красный
+                  // emissive: 0x222222, // Свечение
+                  metalness: 0.1,
+                  roughness: 0.5
+                });
+
                 const boundingBox = new THREE.Box3().setFromObject(currentRefText3d.current);
 
                 // Получаем центр объекта
@@ -73,14 +80,22 @@ export const DescriptionText = forwardRef<any, Props>(({MAX_AMOUNT, selectedBuil
                 const tempPosition = new THREE.Vector3();
                 tempPosition.copy(center).add(translate);
 
+                // Создаем матрицу вращения для дополнительного поворота по Z
+                const zRotation = new THREE.Matrix4().makeRotationX(-Math.PI / 6);
+
+                // Создаем матрицу вращения объекта
+                const objectRotation = new THREE.Matrix4().makeRotationFromEuler(e.rotation);
+
+                // Комбинируем матрицы: сначала Z-поворот, затем поворот объекта
+                const combinedMatrix = new THREE.Matrix4();
+                combinedMatrix.multiplyMatrices(objectRotation, zRotation);
+
 
                 currentRefText3d.current.position.copy(tempPosition);
 
-                const ALPHA = -90 / 180 * Math.PI;
-                const ALPHA_X = Math.atan((Math.cos(e.rotation.y) / (1 / Math.tan(ALPHA))));
-                const ALPHA_Z = Math.atan((Math.cos(Math.PI / 2 - e.rotation.y) / (1 / Math.tan(ALPHA))));
-
-                currentRefText3d.current.rotation.set(e.rotation.x, e.rotation.y, e.rotation.z);
+                const eulerRotation = new THREE.Euler();
+                eulerRotation.setFromRotationMatrix(combinedMatrix);
+                currentRefText3d.current.rotation.copy(eulerRotation);
 
 
                 // Включаем свет
@@ -118,7 +133,7 @@ export const DescriptionText = forwardRef<any, Props>(({MAX_AMOUNT, selectedBuil
           height={0.005}
         >
 
-          <meshStandardMaterial color={0xFF0000}/>
+          {/*<meshStandardMaterial color={0xFF0000}/>*/}
         </Text3D>
       ))}
     </>
