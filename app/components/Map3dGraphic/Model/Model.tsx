@@ -21,6 +21,7 @@ import {RotationText} from "../RotationtText/RotationText";
 import {data} from "../__mock__/data";
 import {MapObjectsContext} from "../../../providers/Objects/MapObjectsContext";
 import {PrimitiveElement} from "../ PrimitiveElement/PrimitiveElement";
+import {useModelInit} from "../hooks/useModelInit";
 
 export interface MaterialMesh extends THREE.Mesh {
   material: THREE.Material | THREE.Material[];
@@ -35,21 +36,16 @@ export const Model = forwardRef<any, Props>(({primitiveRef, ...props}, ref) => {
 
   const modelRef = useRef<any>(null);
 
-  const model = require('../neimark-hotel-join-and-compression.glb');
-
-  const groupRef = useRef<THREE.Group>(null);
-  const rotationRef = useRef<any>(null);
-  const spotLightRef = useRef<any>(null);
-  const descriptionTextRef = useRef<any>(null);
-  const markerTextRef = useRef<any>(null);
-
-  const gltf: (GLTF & ObjectMap) | (GLTF & ObjectMap)[] = useGLTF(model);
-
-  const [gltfModel, setGltfModel] =useState<(GLTF & ObjectMap) | null>(null);
-
-
-  const allObjectsWithBuilding = useRef<MaterialMesh[]>([]);
-  const allBuilding = useRef<MaterialMesh[]>([]);
+  const {
+  groupRef,
+    rotationRef,
+    spotLightRef,
+    descriptionTextRef,
+    markerTextRef,
+    gltfModel,
+    allObjectsWithBuilding,
+    allBuilding,
+} = useModelInit('');
 
   const spotLightRefUp = useRef<THREE.SpotLight>(null);
   const objectContext = useContext(MapObjectsContext);
@@ -147,29 +143,6 @@ export const Model = forwardRef<any, Props>(({primitiveRef, ...props}, ref) => {
 
     return foundObjects;
   };
-
-  useEffect(() => {
-    if (gltf) {
-      if (Array.isArray(gltf)) {
-        //console.log(gltf);
-        gltf[0].scene.traverse((child) => {
-          child.castShadow = true;  // объект отбрасывает тень
-          child.receiveShadow = true; // объект получает тень
-        });
-        setGltfModel(gltf[0]);
-      } else {
-        //console.log(gltf);
-        gltf.scene.traverse((child) => {
-          child.castShadow = true;  // объект отбрасывает тень
-          child.receiveShadow = true; // объект получает тень
-          if (child.name.includes('Building')) {
-            allBuilding.current.push(child as MaterialMesh)
-          }
-        });
-        setGltfModel(gltf);
-      }
-    }
-  }, [gltf])
 
   const handleClick = useCallback((object: any) => {
 

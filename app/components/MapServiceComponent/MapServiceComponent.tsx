@@ -65,7 +65,7 @@ export const MapServiceComponent: FC = () => {
       {!objectsContext?.selectedObject && <View style={styles.headerButton}>
         <View style={styles.closeButton}>
 
-          {isEnv ? <Text style={styles.text} onPress={() => turnOnBuildingMode()}>Режим корпусов</Text> : <Text style={styles.text} onPress={() => turnOnPlacesMode()}>Режим окружения</Text>}
+          {isEnv ? <Text style={styles.text} onPress={() => turnOnBuildingMode()}>Показать корпуса</Text> : <Text style={styles.text} onPress={() => turnOnPlacesMode()}>Показать окружение</Text>}
         </View>
 
       </View>}
