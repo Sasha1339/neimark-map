@@ -72,6 +72,7 @@ export const Model = forwardRef<any, Props>(({primitiveRef, ...props}, ref) => {
 
     turnOnPlacesMode: () => {
 
+      // rotationRef.current.hide();
       modelRef.current?.traverse((child: any) => {
         if (child.isMesh && (child as THREE.Mesh).material && child.name.includes('Building') && !child.name.includes('_')) {
           const material = Array.isArray((child as THREE.Mesh).material)
@@ -102,6 +103,7 @@ export const Model = forwardRef<any, Props>(({primitiveRef, ...props}, ref) => {
 
     turnOnBuildingsMode: () => {
 
+      // rotationRef.current.show();
       modelRef.current?.traverse((child: any) => {
         if (child.isMesh && (child as THREE.Mesh).material && child.name.includes('Building') && !child.name.includes('_')) {
           const material = Array.isArray((child as THREE.Mesh).material)

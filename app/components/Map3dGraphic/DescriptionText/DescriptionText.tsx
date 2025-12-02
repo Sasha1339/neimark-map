@@ -53,7 +53,7 @@ export const DescriptionText = forwardRef<any, Props>(({MAX_AMOUNT, selectedBuil
 
                 currentRefText3d.current.material = new THREE.MeshStandardMaterial({
                   color: new THREE.Color(data[idBuilding].places[idEnter].color), // Красный
-                  // emissive: 0x222222, // Свечение
+                  // emissive: 0xffffff, // Свечение
                   metalness: 0.1,
                   roughness: 0.5
                 });
@@ -71,7 +71,7 @@ export const DescriptionText = forwardRef<any, Props>(({MAX_AMOUNT, selectedBuil
                 //   center.z + (- 0.016 * (data[idBuilding].places[idEnter].title.length / 2)) * Math.cos(e.rotation.y)
                 // );
 
-                const d = data[idBuilding].places[idEnter].sideText === 'left' ? 0.022 * data[idBuilding].places[idEnter].title.length : 0;
+                const d = data[idBuilding].places[idEnter].sideText === 'left' ? 0.025 * data[idBuilding].places[idEnter].title.length : 0;
 
                 const translate = new THREE.Vector3();
                 translate.set(-d, 0.01, 0)

@@ -58,7 +58,7 @@ export const CameraControl: FC<Props> = ({OrbitControls}) => {
 
       camera.position.set(0, 5, 0);
 
-      camera.position.applyEuler(new THREE.Euler(0, 0, Math.PI, "XYZ"))
+      // camera.position.applyEuler(new THREE.Euler(0, 0, Math.PI, "XYZ"))
 
       building.current = false;
 
