@@ -11,6 +11,7 @@ export const useModelInit = (src: string) => {
 
   const groupRef = useRef<THREE.Group>(null);
   const rotationRef = useRef<any>(null);
+  const rotationAreasRef = useRef<any>(null);
   const spotLightRef = useRef<any>(null);
   const descriptionTextRef = useRef<any>(null);
   const markerTextRef = useRef<any>(null);
@@ -81,6 +82,6 @@ export const useModelInit = (src: string) => {
   }, [gltf])
 
 
-  return {gltfModel, groupRef, rotationRef, spotLightRef, descriptionTextRef, markerTextRef, allObjectsWithBuilding, allBuilding};
+  return {gltfModel, groupRef, rotationAreasRef, rotationRef, spotLightRef, descriptionTextRef, markerTextRef, allObjectsWithBuilding, allBuilding};
 
 }

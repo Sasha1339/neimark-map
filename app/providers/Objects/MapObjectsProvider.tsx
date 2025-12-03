@@ -8,6 +8,8 @@ export const MapObjectsProvider: FC<PropsWithChildren> = ({children}) => {
 
   const cameraControlRef = useRef<any>(null);
 
+  const mode = useRef<'building' | 'env' | null>('building');
+
   const [selectedObject, setSelectedObject] = useState<string | null>(null)
 
   const setNewSelectedObjects = useCallback((obj: string | null) => {
@@ -16,7 +18,7 @@ export const MapObjectsProvider: FC<PropsWithChildren> = ({children}) => {
 
 
   return (
-    <MapObjectsContext value={{cameraControlRef, selectedObjectRef, selectedObject, setSelectedObjects: setNewSelectedObjects}}>
+    <MapObjectsContext value={{mode, cameraControlRef, selectedObjectRef, selectedObject, setSelectedObjects: setNewSelectedObjects}}>
       {children}
     </MapObjectsContext>
   )

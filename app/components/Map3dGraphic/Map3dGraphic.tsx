@@ -23,8 +23,8 @@ export const Map3dGraphic = forwardRef<any, {}>(({}, ref) => {
 
   useImperativeHandle(ref, () => ({
 
-    reset: () => {
-      modelRef.current?.resetSelectedObject();
+    reset: (isEnv: boolean) => {
+      modelRef.current?.resetSelectedObject(isEnv);
     },
 
     placesMode: () => {

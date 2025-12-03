@@ -25,7 +25,7 @@ export const RotationText = forwardRef<any, Props>(({allBuildings}, ref) => {
         if (e.current) {
           e.current.visible = false;
         }
-      })
+      });
       numbersRefs.current.forEach((e) => {
         if (e.current) {
           e.current.visible = false;
@@ -37,7 +37,7 @@ export const RotationText = forwardRef<any, Props>(({allBuildings}, ref) => {
         if (e.current) {
           e.current.visible = true;
         }
-      })
+      });
       numbersRefs.current.forEach((e) => {
         if (e.current) {
           e.current.visible = true;
@@ -46,32 +46,6 @@ export const RotationText = forwardRef<any, Props>(({allBuildings}, ref) => {
     }
 
   }))
-
-  useEffect(() => {
-    if (objectContext?.selectedObject) {
-      textRefs.current.forEach((e) => {
-        if (e.current) {
-          e.current.visible = false;
-        }
-      })
-      numbersRefs.current.forEach((e) => {
-        if (e.current) {
-          e.current.visible = false;
-        }
-      })
-    } else {
-      textRefs.current.forEach((e) => {
-        if (e.current) {
-          e.current.visible = true;
-        }
-      })
-      numbersRefs.current.forEach((e) => {
-        if (e.current) {
-          e.current.visible = true;
-        }
-      })
-    }
-  }, [objectContext?.selectedObject]);
 
   useFrame(() => {
 

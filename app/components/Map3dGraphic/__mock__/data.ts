@@ -1,5 +1,6 @@
 type BuildingProps = {
   number: number;
+  id: string;
   name: string;
   places: Record<string, { id: string, title: string, sideText: 'right' | 'left', color?: string }>
 };
@@ -7,6 +8,7 @@ type BuildingProps = {
 export const data: Record<string, BuildingProps> = {
   'Building1': {
     number: 1,
+    id: 'Building1',
     name: 'Ресепшен',
     places: {
       "Enter1":
@@ -30,6 +32,7 @@ export const data: Record<string, BuildingProps> = {
   },
   'Building2': {
     number: 2,
+    id: 'Building2',
     name: 'Бетанкур',
     places: {
       "Enter0":
@@ -52,6 +55,7 @@ export const data: Record<string, BuildingProps> = {
   },
   'Building3': {
     number: 3,
+    id: 'Building3',
     name: 'Лобачевский',
     places: {
       "Enter0":
@@ -66,6 +70,7 @@ export const data: Record<string, BuildingProps> = {
   },
   'Building4': {
     number: 4,
+    id: 'Building4',
     name: 'Калашников',
     places: {
       "Enter0":
@@ -97,6 +102,7 @@ export const data: Record<string, BuildingProps> = {
   },
   'Building5': {
     number: 5,
+    id: 'Building5',
     name: 'Ляпунов',
     places: {
       "Enter0":
@@ -129,6 +135,7 @@ export const data: Record<string, BuildingProps> = {
   },
   'Building6': {
     number: 6,
+    id: 'Building6',
     name: 'Стеклов',
     places: {
       "Enter0":
@@ -160,6 +167,7 @@ export const data: Record<string, BuildingProps> = {
   },
   'Building7': {
     number: 7,
+    id: 'Building7',
     name: 'Брайцев',
     places: {
       "Enter1":
@@ -183,6 +191,7 @@ export const data: Record<string, BuildingProps> = {
   },
   'Building8': {
     number: 8,
+    id: 'Building8',
     name: 'Галонов-Грехов',
     places: {
       "Enter0":
@@ -205,6 +214,7 @@ export const data: Record<string, BuildingProps> = {
   },
   'Building9': {
     number: 9,
+    id: 'Building9',
     name: 'Андронов',
     places: {
       "Enter0":
@@ -236,6 +246,7 @@ export const data: Record<string, BuildingProps> = {
   },
   'Building10': {
     number: 10,
+    id: 'Building10',
     name: 'Харитон',
     places: {
       "Enter0":
@@ -259,6 +270,7 @@ export const data: Record<string, BuildingProps> = {
   },
   'Building11': {
     number: 11,
+    id: 'Building11',
     name: 'Боголюбов',
     places: {
       "Enter0":
@@ -290,6 +302,7 @@ export const data: Record<string, BuildingProps> = {
   },
   'Building12': {
     number: 12,
+    id: 'Building12',
     name: 'Африканов',
     places: {
       "Enter0":
@@ -304,6 +317,7 @@ export const data: Record<string, BuildingProps> = {
   },
   'Building13': {
     number: 13,
+    id: 'Building13',
     name: 'Алексеев',
     places: {
       "Enter0":
@@ -327,6 +341,7 @@ export const data: Record<string, BuildingProps> = {
   },
   'Building14': {
     number: 14,
+    id: 'Building14',
     name: 'Гинзбург',
     places: {
       "Enter0":
@@ -350,6 +365,7 @@ export const data: Record<string, BuildingProps> = {
   },
   'Building15': {
     number: 15,
+    id: 'Building15',
     name: 'Неймарк',
     places: {
       "Enter0":
@@ -373,6 +389,7 @@ export const data: Record<string, BuildingProps> = {
   },
   'Building16': {
     number: 16,
+    id: 'Building16',
     name: 'Баталова',
     places: {
       "Enter0":
@@ -387,6 +404,7 @@ export const data: Record<string, BuildingProps> = {
   },
   'Building17': {
     number: 17,
+    id: 'Building17',
     name: 'Сахаров',
     places: {
       "Enter0":
@@ -401,6 +419,7 @@ export const data: Record<string, BuildingProps> = {
   },
   'Building18': {
     number: 18,
+    id: 'Building18',
     name: 'Афраймович',
     places: {}
   },

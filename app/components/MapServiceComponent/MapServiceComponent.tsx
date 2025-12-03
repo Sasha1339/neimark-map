@@ -31,16 +31,18 @@ export const MapServiceComponent: FC = () => {
 
   const turnOnPlacesMode = () => {
     graphicRef.current.placesMode();
-    setIsEnv(true)
+    setIsEnv(true);
+    objectsContext.mode.current = 'env';
   }
 
   const turnOnBuildingMode = () => {
     graphicRef.current.buildingsMode();
-    setIsEnv(false)
+    setIsEnv(false);
+    objectsContext.mode.current = 'building';
   }
 
   const resetContext = () => {
-    graphicRef.current.reset();
+    graphicRef.current.reset(isEnv);
   }
 
 

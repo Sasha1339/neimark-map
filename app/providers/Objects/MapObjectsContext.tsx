@@ -14,7 +14,8 @@ interface MapObjectsContextValueOld {
 interface MapObjectsContextValue {
   selectedObjectRef: RefObject<THREE.Object3D | null>;
   cameraControlRef: RefObject<any>;
-  selectedObject: string | null
+  selectedObject: string | null;
+  mode: RefObject<'building' | 'env' | null>;
   setSelectedObjects: (building: string | null) => void;
 }
 
@@ -22,5 +23,6 @@ export const MapObjectsContext = createContext<MapObjectsContextValue>({
   selectedObjectRef: React.createRef<THREE.Object3D | null>(),
   cameraControlRef:  React.createRef<any>(),
   selectedObject: '',
+  mode: React.createRef<'building' | 'env' | null>(),
   setSelectedObjects: (building: string | null) => {},
 });

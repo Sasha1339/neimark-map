@@ -22,6 +22,7 @@ import {data} from "../__mock__/data";
 import {MapObjectsContext} from "../../../providers/Objects/MapObjectsContext";
 import {PrimitiveElement} from "../ PrimitiveElement/PrimitiveElement";
 import {useModelInit} from "../hooks/useModelInit";
+import {RotationTextAreas} from "../RotationtTextAreas/RotationTextAreas";
 
 export interface MaterialMesh extends THREE.Mesh {
   material: THREE.Material | THREE.Material[];
@@ -41,6 +42,7 @@ export const Model = forwardRef<any, Props>(({primitiveRef, ...props}, ref) => {
     rotationRef,
     spotLightRef,
     descriptionTextRef,
+    rotationAreasRef,
     markerTextRef,
     gltfModel,
     allObjectsWithBuilding,
@@ -54,17 +56,20 @@ export const Model = forwardRef<any, Props>(({primitiveRef, ...props}, ref) => {
     spotLightRef.current.showSpotLight();
     descriptionTextRef.current.showDescriptionText();
     markerTextRef.current.showMarkerText();
+    rotationRef.current.hide();
+    rotationAreasRef.current.hideAreas();
     turnOnSpotLight();
     objectContext.cameraControlRef.current.lookAtBuildingPosition();
   }
 
   useImperativeHandle(ref, () => ({
 
-    resetSelectedObject: () => {
+    resetSelectedObject: (isEnv: boolean) => {
       objectContext.selectedObjectRef.current = null;
       allObjectsWithBuilding.current = [];
       objectContext?.setSelectedObjects(null)
-      rotationRef.current.show();
+      !isEnv && rotationRef.current.show();
+      isEnv && rotationAreasRef.current.showAreas();
       spotLightRef.current.hideSpotLight();
       descriptionTextRef.current.hideDescriptionText();
       markerTextRef.current.hideMarkerText();
@@ -74,7 +79,8 @@ export const Model = forwardRef<any, Props>(({primitiveRef, ...props}, ref) => {
 
     turnOnPlacesMode: () => {
 
-      // rotationRef.current.hide();
+      rotationRef.current.hide();
+      rotationAreasRef.current.showAreas();
       modelRef.current?.traverse((child: any) => {
         if (child.isMesh && (child as THREE.Mesh).material && child.name.includes('Building') && !child.name.includes('_')) {
           const material = Array.isArray((child as THREE.Mesh).material)
@@ -105,7 +111,8 @@ export const Model = forwardRef<any, Props>(({primitiveRef, ...props}, ref) => {
 
     turnOnBuildingsMode: () => {
 
-      // rotationRef.current.show();
+      rotationRef.current.show();
+      rotationAreasRef.current.hideAreas();
       modelRef.current?.traverse((child: any) => {
         if (child.isMesh && (child as THREE.Mesh).material && child.name.includes('Building') && !child.name.includes('_')) {
           const material = Array.isArray((child as THREE.Mesh).material)
@@ -159,7 +166,7 @@ export const Model = forwardRef<any, Props>(({primitiveRef, ...props}, ref) => {
         objectContext.selectedObjectRef.current = object;
         allObjectsWithBuilding.current = meshes;
         objectContext?.setSelectedObjects(data[object.name] ? object.name : null)
-        rotationRef.current.hide();
+
         isObjectSelected();
       }
 
@@ -225,6 +232,7 @@ export const Model = forwardRef<any, Props>(({primitiveRef, ...props}, ref) => {
       <DescriptionText ref={descriptionTextRef} MAX_AMOUNT={5} selectedBuilding={objectContext.selectedObjectRef} allObjectsWithBuilding={allObjectsWithBuilding} />
       <MarkerText ref={markerTextRef} MAX_AMOUNT={5} selectedBuilding={objectContext.selectedObjectRef} allObjectsWithBuilding={allObjectsWithBuilding} />
       <RotationText ref={rotationRef} allBuildings={allBuilding} />
+      <RotationTextAreas ref={rotationAreasRef} allBuildings={allBuilding} />
 
     </group>
   );
