@@ -1,14 +1,14 @@
-import React, {forwardRef, useContext, useImperativeHandle, useMemo, useRef, useState} from "react";
+import React, {forwardRef, memo, useContext, useImperativeHandle, useMemo, useRef, useState} from "react";
 import {OrbitControlsProps} from "r3f-native-orbitcontrols";
 import {useFrame, useThree} from "@react-three/fiber/native";
-import {MapObjectsContext} from "../../../providers/Objects/MapObjectsContext";
 import * as THREE from "three";
+import {SelectedObjectContext} from "../../../providers/SelectedObjectContext/SelectedObjectContext";
 
 type Props = {
   OrbitControls: (props: OrbitControlsProps) => any;
 }
 
-export const CameraControl = forwardRef<any, Props>(({OrbitControls}, ref) => {
+export const CameraControl = memo(forwardRef<any, Props>(({OrbitControls}, ref) => {
 
   const {camera} = useThree();
 
@@ -19,7 +19,7 @@ export const CameraControl = forwardRef<any, Props>(({OrbitControls}, ref) => {
   const newCameraPosition = useRef<THREE.Vector3>(null);
   const positionBuilding = useRef<THREE.Vector3>(null);
 
-  const objectsContext = useContext(MapObjectsContext);
+  const selectedObjectsContext = useContext(SelectedObjectContext);
 
   const rotationCamera = (rotation: number, position: THREE.Vector3) => {
       const cameraX = position.x + Math.cos(rotation) * ROTATION_RADIUS;
@@ -44,14 +44,14 @@ export const CameraControl = forwardRef<any, Props>(({OrbitControls}, ref) => {
 
     lookAtBuildingPosition: () => {
       oldCameraPosition.current = new THREE.Vector3().copy(camera.position);
-      const position = objectsContext.selectedObjectRef.current?.position;
+      const position = selectedObjectsContext.selectedObjectRef.current?.position;
       if (position) {
         positionBuilding.current = position;
         rotationCamera(0, position);
       }
     },
     rotationCameraOn: (rotation: number) => {
-      const position = objectsContext.selectedObjectRef.current?.position;
+      const position = selectedObjectsContext.selectedObjectRef.current?.position;
       if (position) {
         rotationCamera(rotation, position)
       }
@@ -80,4 +80,4 @@ export const CameraControl = forwardRef<any, Props>(({OrbitControls}, ref) => {
     />
   );
 
-})
+}))

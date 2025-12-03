@@ -1,4 +1,4 @@
-import React, {FC, forwardRef, RefObject, useImperativeHandle, useRef, useState} from "react";
+import React, {FC, forwardRef, memo, RefObject, useContext, useImperativeHandle, useRef, useState} from "react";
 import * as THREE from "three";
 import {MaterialMesh} from "../Model/Model";
 import {useFrame} from "@react-three/fiber/native";
@@ -6,21 +6,24 @@ import {Center, Text3D} from "@react-three/drei/native";
 import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
 import {data} from "../__mock__/data";
+import {MapObjectsContext} from "../../../providers/Objects/MapObjectsContext";
+import {SelectedObjectContext} from "../../../providers/SelectedObjectContext/SelectedObjectContext";
 
 
 type Props = {
   MAX_AMOUNT: number;
-  selectedBuilding: RefObject<THREE.Object3D | null>;
   allObjectsWithBuilding: RefObject<MaterialMesh[]>;
 }
 
-export const MarkerText = forwardRef<any, Props>(({MAX_AMOUNT, selectedBuilding, allObjectsWithBuilding}, ref) => {
+export const MarkerText = memo(forwardRef<any, Props>(({MAX_AMOUNT, allObjectsWithBuilding}, ref) => {
 
   const textRefs = useRef(Array(MAX_AMOUNT).fill(null).map(() => React.createRef<THREE.Mesh>()));
 
+  const selectedObjectContext = useContext(SelectedObjectContext);
+
   useImperativeHandle(ref, () => ({
     showMarkerText: () => {
-      if (selectedBuilding.current && allObjectsWithBuilding.current.length > 0) {
+      if (selectedObjectContext.selectedObjectRef.current && allObjectsWithBuilding.current.length > 0) {
 
         allObjectsWithBuilding.current.forEach((e) => {
           const idBuilding = e.name.split('_')[0];
@@ -108,4 +111,4 @@ export const MarkerText = forwardRef<any, Props>(({MAX_AMOUNT, selectedBuilding,
     </>
   )
 
-})
+}));

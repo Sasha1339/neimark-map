@@ -1,21 +1,24 @@
-import React, {Component, FC, forwardRef, RefObject, useImperativeHandle, useRef} from "react";
+import React, {Component, FC, forwardRef, memo, RefObject, useContext, useImperativeHandle, useRef} from "react";
 import * as THREE from "three";
 import {MaterialMesh} from "../Model/Model";
 import {data} from "../__mock__/data";
+import {MapObjectsContext} from "../../../providers/Objects/MapObjectsContext";
+import {SelectedObjectContext} from "../../../providers/SelectedObjectContext/SelectedObjectContext";
 
 type Props = {
   MAX_AMOUNT: number;
-  selectedBuilding: RefObject<THREE.Object3D | null>;
   allObjectsWithBuilding: RefObject<MaterialMesh[]>;
 }
 
-export const SpotLight = forwardRef<any, Props>(({MAX_AMOUNT, selectedBuilding, allObjectsWithBuilding}, ref) => {
+export const SpotLight = memo(forwardRef<any, Props>(({MAX_AMOUNT, allObjectsWithBuilding}, ref) => {
 
   const lightRefs = useRef(Array(MAX_AMOUNT).fill(null).map(() => React.createRef<THREE.SpotLight>()));
 
+  const selectedObjectContext = useContext(SelectedObjectContext);
+
   useImperativeHandle(ref, () => ({
     showSpotLight: () => {
-      if (selectedBuilding.current && allObjectsWithBuilding.current.length > 0) {
+      if (selectedObjectContext.selectedObjectRef.current && allObjectsWithBuilding.current.length > 0) {
 
         allObjectsWithBuilding.current.forEach((e) => {
           const idBuilding = e.name.split('_')[0];
@@ -93,4 +96,4 @@ export const SpotLight = forwardRef<any, Props>(({MAX_AMOUNT, selectedBuilding, 
     </>
   )
 
-})
+}))

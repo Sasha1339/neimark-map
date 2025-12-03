@@ -1,22 +1,20 @@
 import {useFrame, useThree} from '@react-three/fiber/native';
-import React, {FC, forwardRef, RefObject, useContext, useEffect, useImperativeHandle, useRef} from 'react';
+import React, {FC, forwardRef, memo, RefObject, useContext, useEffect, useImperativeHandle, useRef} from 'react';
 import * as THREE from 'three';
 import {Center, Text3D} from '@react-three/drei/native';
 import {MaterialMesh} from "../Model/Model";
 import {data} from "../__mock__/data";
-import {MapObjectsContext} from "../../../providers/Objects/MapObjectsContext";
 
 type Props = {
   allBuildings: RefObject<MaterialMesh[]>;
 }
 
-export const RotationText = forwardRef<any, Props>(({allBuildings}, ref) => {
+export const RotationText = memo(forwardRef<any, Props>(({allBuildings}, ref) => {
 
   const groupRefs = useRef(Array(Object.keys(data).length).fill(null).map(() => React.createRef<THREE.Group>()));
   const textRefs = useRef(Array(Object.keys(data).length).fill(null).map(() => React.createRef<THREE.Mesh>()));
   const numbersRefs = useRef(Array(Object.keys(data).length).fill(null).map(() => React.createRef<THREE.Mesh>()));
   const {camera} = useThree();
-  const objectContext = useContext(MapObjectsContext);
 
   useImperativeHandle(ref, () => ({
 
@@ -120,4 +118,4 @@ return (
   </>
 );
 
-})
+}))

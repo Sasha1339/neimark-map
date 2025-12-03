@@ -1,18 +1,11 @@
 import {
-  FC,
-  forwardRef,
+  forwardRef, memo,
   RefObject,
   useCallback,
   useContext,
-  useEffect,
-  useImperativeHandle,
+  useImperativeHandle, useMemo,
   useRef,
-  useState
 } from "react";
-import {GLTF} from "three-stdlib";
-import {ObjectMap, useFrame, useThree} from "@react-three/fiber/native";
-import {MeshStandardMaterial} from 'three'
-import {useGLTF} from "@react-three/drei/native";
 import * as THREE from "three";
 import {SpotLight} from "../SpotLight/SpotLight";
 import {DescriptionText} from "../DescriptionText/DescriptionText";
@@ -23,6 +16,7 @@ import {MapObjectsContext} from "../../../providers/Objects/MapObjectsContext";
 import {PrimitiveElement} from "../ PrimitiveElement/PrimitiveElement";
 import {useModelInit} from "../hooks/useModelInit";
 import {RotationTextAreas} from "../RotationtTextAreas/RotationTextAreas";
+import {SelectedObjectContext} from "../../../providers/SelectedObjectContext/SelectedObjectContext";
 
 export interface MaterialMesh extends THREE.Mesh {
   material: THREE.Material | THREE.Material[];
@@ -32,10 +26,11 @@ type Props = {
   primitiveRef: RefObject<any>
 }
 
-export const Model = forwardRef<any, Props>(({primitiveRef, ...props}, ref) => {
-
+export const Model = memo(forwardRef<any, Props>(({primitiveRef, ...props}, ref) => {
 
   const modelRef = useRef<any>(null);
+
+  const MAX_AMOUNT = useMemo(() => 3, []);
 
   const {
   groupRef,
@@ -51,6 +46,7 @@ export const Model = forwardRef<any, Props>(({primitiveRef, ...props}, ref) => {
 
   const spotLightRefUp = useRef<THREE.SpotLight>(null);
   const objectContext = useContext(MapObjectsContext);
+  const selectedObjectContext = useContext(SelectedObjectContext);
 
   const isObjectSelected = () => {
     spotLightRef.current.showSpotLight();
@@ -65,7 +61,7 @@ export const Model = forwardRef<any, Props>(({primitiveRef, ...props}, ref) => {
   useImperativeHandle(ref, () => ({
 
     resetSelectedObject: (isEnv: boolean) => {
-      objectContext.selectedObjectRef.current = null;
+      selectedObjectContext.selectedObjectRef.current = null;
       allObjectsWithBuilding.current = [];
       objectContext?.setSelectedObjects(null)
       !isEnv && rotationRef.current.show();
@@ -157,13 +153,14 @@ export const Model = forwardRef<any, Props>(({primitiveRef, ...props}, ref) => {
 
   const handleClick = useCallback((object: any) => {
 
-    if (!objectContext.selectedObjectRef.current && Object.keys(data).includes(object.name)) {
+    if (!selectedObjectContext.selectedObjectRef.current && Object.keys(data).includes(object.name)) {
 
 
       if (object.name.includes('Building') && !object.name.includes('_')) {
         const meshes = findObjectsByName(object.name).filter((e) => e.name.includes('_'));
 
-        objectContext.selectedObjectRef.current = object;
+        selectedObjectContext.selectedObjectRef.current = object;
+        selectedObjectContext.selectedObjectRef.current = object;
         allObjectsWithBuilding.current = meshes;
         objectContext?.setSelectedObjects(data[object.name] ? object.name : null)
 
@@ -183,22 +180,22 @@ export const Model = forwardRef<any, Props>(({primitiveRef, ...props}, ref) => {
 
   const turnOnSpotLight = () => {
 
-    if (objectContext?.selectedObjectRef.current
+    if (selectedObjectContext.selectedObjectRef.current
       && spotLightRefUp.current
      ) {
-      const boundingBox = new THREE.Box3().setFromObject(objectContext.selectedObjectRef.current);
+      const boundingBox = new THREE.Box3().setFromObject(selectedObjectContext.selectedObjectRef.current);
 
       const center = new THREE.Vector3();
       boundingBox.getCenter(center);
 
-      if (!(spotLightRefUp.current.visible && spotLightRefUp.current.target === objectContext.selectedObjectRef.current)) {
+      if (!(spotLightRefUp.current.visible && spotLightRefUp.current.target === selectedObjectContext.selectedObjectRef.current)) {
         spotLightRefUp.current.position.set(
           center.x,
           center.y + 2,
           center.z
         );
 
-        spotLightRefUp.current.target = objectContext.selectedObjectRef.current;
+        spotLightRefUp.current.target = selectedObjectContext.selectedObjectRef.current;
 
         spotLightRefUp.current.visible = true;
       }
@@ -228,13 +225,13 @@ export const Model = forwardRef<any, Props>(({primitiveRef, ...props}, ref) => {
       />
 
 
-      <SpotLight ref={spotLightRef} MAX_AMOUNT={5} selectedBuilding={objectContext.selectedObjectRef} allObjectsWithBuilding={allObjectsWithBuilding} />
-      <DescriptionText ref={descriptionTextRef} MAX_AMOUNT={5} selectedBuilding={objectContext.selectedObjectRef} allObjectsWithBuilding={allObjectsWithBuilding} />
-      <MarkerText ref={markerTextRef} MAX_AMOUNT={5} selectedBuilding={objectContext.selectedObjectRef} allObjectsWithBuilding={allObjectsWithBuilding} />
+      <SpotLight ref={spotLightRef} MAX_AMOUNT={MAX_AMOUNT} allObjectsWithBuilding={allObjectsWithBuilding} />
+      <DescriptionText ref={descriptionTextRef} MAX_AMOUNT={MAX_AMOUNT} allObjectsWithBuilding={allObjectsWithBuilding} />
+      <MarkerText ref={markerTextRef} MAX_AMOUNT={MAX_AMOUNT} allObjectsWithBuilding={allObjectsWithBuilding} />
       <RotationText ref={rotationRef} allBuildings={allBuilding} />
       <RotationTextAreas ref={rotationAreasRef} allBuildings={allBuilding} />
 
     </group>
   );
 
-});
+}));

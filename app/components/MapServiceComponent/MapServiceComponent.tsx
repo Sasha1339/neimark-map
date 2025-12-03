@@ -23,7 +23,6 @@ export const MapServiceComponent: FC = () => {
   const {width, height} = useWindowDimensions();
   const graphicRef = useRef<any>(null);
 
-  const [openSearch, setOpenSearch] = useState(false);
   const [openFloors, setOpenFloors] = useState<string | null>(null);
   const [isEnv, setIsEnv] = useState(false);
 
@@ -63,22 +62,31 @@ export const MapServiceComponent: FC = () => {
       </View>
 
       {!objectsContext?.selectedObject && <View style={styles.headerButton}>
-        <View style={styles.closeButton}>
-
-          {isEnv ? <Text style={styles.text} onPress={() => turnOnBuildingMode()}>Показать корпуса</Text> : <Text style={styles.text} onPress={() => turnOnPlacesMode()}>Показать окружение</Text>}
-        </View>
+        {isEnv ? <TouchableOpacity>
+            <View style={styles.closeButton}>
+              <Text style={styles.text} onPress={() => turnOnBuildingMode()}>Показать корпуса</Text>
+            </View>
+          </TouchableOpacity>
+          :
+          <TouchableOpacity>
+            <View style={styles.closeButton}>
+              <Text style={styles.text} onPress={() => turnOnPlacesMode()}>Показать окружение</Text>
+            </View>
+          </TouchableOpacity>}
 
       </View>}
 
       {objectsContext?.selectedObject && <View style={styles.header}>
         <View style={styles.closeButton}>
-
-          <Text style={styles.text} onPress={() => resetContext()}>{`«${data[objectsContext?.selectedObject].name}»`}</Text>
+          <Text style={styles.text}>{`«${data[objectsContext?.selectedObject].name}»`}</Text>
         </View>
-        <View style={styles.closeButton}>
 
-        <Text style={[styles.text, {color: colors.mainRed}]} onPress={() => resetContext()}>Закрыть</Text>
-      </View>
+        <TouchableOpacity onPress={() => resetContext()}>
+          <View style={styles.closeButton}>
+            <Text style={[styles.text, {color: colors.mainRed}]}>Закрыть</Text>
+          </View>
+        </TouchableOpacity>
+
       </View>}
 
       {objectsContext?.selectedObject && <>
@@ -115,9 +123,10 @@ export const MapServiceComponent: FC = () => {
       </>}
 
 
-      {(openSearch || openFloors) &&
-        <View style={[styles.overlay, {height: height, width: width, transform: [{translateY: -insets.top}]}]}></View>}
-      {!!openFloors && <MapFloorComponent hotel={openFloors} isOpen={!!openFloors} onClose={onCloseFloor}/>}
+      {!!openFloors && <>
+        <View style={[styles.overlay, {height: height, width: width, transform: [{translateY: -insets.top}]}]}></View>
+        <MapFloorComponent hotel={openFloors} isOpen={!!openFloors} onClose={onCloseFloor}/>
+      </>}
 
     </View>
   )
