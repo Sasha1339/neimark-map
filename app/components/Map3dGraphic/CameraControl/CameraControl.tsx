@@ -1,69 +1,69 @@
-import React, {FC, useContext, useRef, useState} from "react";
+import React, {forwardRef, useContext, useImperativeHandle, useMemo, useRef, useState} from "react";
 import {OrbitControlsProps} from "r3f-native-orbitcontrols";
 import {useFrame, useThree} from "@react-three/fiber/native";
 import {MapObjectsContext} from "../../../providers/Objects/MapObjectsContext";
 import * as THREE from "three";
-import {OrthographicCamera, PerspectiveCamera} from "three";
 
 type Props = {
   OrbitControls: (props: OrbitControlsProps) => any;
 }
 
-const dummy = new THREE.Vector3();
+export const CameraControl = forwardRef<any, Props>(({OrbitControls}, ref) => {
 
-const stepOn = 1;
-const stepOff = 0.05;
+  const {camera} = useThree();
 
-export const CameraControl: FC<Props> = ({OrbitControls}) => {
+  const ROTATION_RADIUS = useMemo(() => 1.5, [])
+  const ROTATION_HEIGHT = useMemo(() => 1, [])
 
-  const {camera} = useThree()
+  const oldCameraPosition = useRef<THREE.Vector3>(null);
+  const newCameraPosition = useRef<THREE.Vector3>(null);
+  const positionBuilding = useRef<THREE.Vector3>(null);
 
   const objectsContext = useContext(MapObjectsContext);
 
-  const building = useRef(false)
+  const rotationCamera = (rotation: number, position: THREE.Vector3) => {
+      const cameraX = position.x + Math.cos(rotation) * ROTATION_RADIUS;
+      const cameraY = position.y + ROTATION_HEIGHT;
+      const cameraZ = position.z + Math.sin(rotation) * ROTATION_RADIUS;
 
-  useFrame((state, delta, frame) => {
+      newCameraPosition.current = new THREE.Vector3(cameraX, cameraY, cameraZ);
+  }
 
+  useFrame(() => {
+    if (positionBuilding.current && newCameraPosition.current) {
+      camera.position.lerp(
+        newCameraPosition.current,
+        1
+      );
 
-    const position = objectsContext.selectedObjectRef.current?.position;
-
-    if (position) {
-
-      building.current = true;
-
-
-      const ROTATION_RADIUS = 1.5;
-      const ROTATION_HEIGHT = 1;
-
-
-      if (objectsContext.rotationAngleRef.current !== null) {
-        const cameraX = position.x + Math.cos(objectsContext.rotationAngleRef.current) * ROTATION_RADIUS;
-        const cameraY = position.y + ROTATION_HEIGHT;
-        const cameraZ = position.z + Math.sin(objectsContext.rotationAngleRef.current) * ROTATION_RADIUS;
-
-
-        camera.position.lerp(
-          new THREE.Vector3(cameraX, cameraY, cameraZ),
-          stepOn
-        );
-      }
-
-
-
-      camera.lookAt(position.x, position.y, position.z);
-
-
-
-    } else if (building.current ) {
-
-      camera.position.set(0, 5, 0);
-
-      // camera.position.applyEuler(new THREE.Euler(0, 0, Math.PI, "XYZ"))
-
-      building.current = false;
-
+      camera.lookAt(positionBuilding.current.x, positionBuilding.current.y, positionBuilding.current.z);
     }
-  });
+  })
+
+  useImperativeHandle(ref, () => ({
+
+    lookAtBuildingPosition: () => {
+      oldCameraPosition.current = new THREE.Vector3().copy(camera.position);
+      const position = objectsContext.selectedObjectRef.current?.position;
+      if (position) {
+        positionBuilding.current = position;
+        rotationCamera(0, position);
+      }
+    },
+    rotationCameraOn: (rotation: number) => {
+      const position = objectsContext.selectedObjectRef.current?.position;
+      if (position) {
+        rotationCamera(rotation, position)
+      }
+    },
+    lookAtOldPosition: () => {
+      if (oldCameraPosition.current) {
+        camera.position.copy(oldCameraPosition.current);
+      }
+      positionBuilding.current = null;
+    }
+
+  }));
 
   return (
     <OrbitControls
@@ -80,4 +80,4 @@ export const CameraControl: FC<Props> = ({OrbitControls}) => {
     />
   );
 
-}
+})

@@ -16,6 +16,7 @@ type Props = {
 export const Map3dGraphic = forwardRef<any, {}>(({}, ref) => {
 
   const [OrbitControls, events] = useControls();
+  const objectContext = useContext(MapObjectsContext);
   const primitiveRef = useRef<any>(null);
   const modelRef= useRef<any>(null);
   const touchEvent = useRef<NativeTouchEvent>(null);
@@ -96,7 +97,7 @@ export const Map3dGraphic = forwardRef<any, {}>(({}, ref) => {
         <Suspense>
           <Model ref={modelRef} primitiveRef={primitiveRef}/>
 
-          <CameraControl OrbitControls={OrbitControls} />
+          <CameraControl ref={objectContext.cameraControlRef} OrbitControls={OrbitControls} />
 
         </Suspense>
       </Canvas>

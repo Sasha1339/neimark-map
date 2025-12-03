@@ -13,14 +13,14 @@ interface MapObjectsContextValueOld {
 
 interface MapObjectsContextValue {
   selectedObjectRef: RefObject<THREE.Object3D | null>;
-  rotationAngleRef: RefObject<number | null>;
+  cameraControlRef: RefObject<any>;
   selectedObject: string | null
   setSelectedObjects: (building: string | null) => void;
 }
 
 export const MapObjectsContext = createContext<MapObjectsContextValue>({
   selectedObjectRef: React.createRef<THREE.Object3D | null>(),
-  rotationAngleRef:  React.createRef<number | null>(),
+  cameraControlRef:  React.createRef<any>(),
   selectedObject: '',
   setSelectedObjects: (building: string | null) => {},
 });

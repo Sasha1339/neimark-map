@@ -55,6 +55,7 @@ export const Model = forwardRef<any, Props>(({primitiveRef, ...props}, ref) => {
     descriptionTextRef.current.showDescriptionText();
     markerTextRef.current.showMarkerText();
     turnOnSpotLight();
+    objectContext.cameraControlRef.current.lookAtBuildingPosition();
   }
 
   useImperativeHandle(ref, () => ({
@@ -68,6 +69,7 @@ export const Model = forwardRef<any, Props>(({primitiveRef, ...props}, ref) => {
       descriptionTextRef.current.hideDescriptionText();
       markerTextRef.current.hideMarkerText();
       turnOffSpotLight();
+      objectContext.cameraControlRef.current.lookAtOldPosition();
     },
 
     turnOnPlacesMode: () => {

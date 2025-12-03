@@ -4,20 +4,15 @@ import {
   Text,
   useWindowDimensions,
   TouchableOpacity,
-  TouchableWithoutFeedback,
-  Pressable, GestureResponderEvent, Dimensions
 } from "react-native";
 
 import {FC, useContext, useEffect, useRef, useState} from "react";
 import colors from "../../styles/colors";
 import {font_family, font_sizes} from "../../styles/fonts";
-import {Hotel} from "../../shared/types";
 import {MapFloorComponent} from "../MapFloorComponent/MapFloorComponent";
 import {MapObjectsContext} from "../../providers/Objects/MapObjectsContext";
 import {Map3dGraphic} from "../Map3dGraphic/Map3dGraphic";
-import {GestureDetectorProvider} from "react-native-screens/gesture-handler";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
-import {GestureHandlerRootView} from "react-native-gesture-handler";
 import {data} from "../Map3dGraphic/__mock__/data";
 import Slider from "@react-native-community/slider";
 
@@ -46,12 +41,15 @@ export const MapServiceComponent: FC = () => {
 
   const resetContext = () => {
     graphicRef.current.reset();
-    objectsContext.rotationAngleRef.current = 0;
   }
 
 
   const onCloseFloor = () => {
     setOpenFloors(null);
+  }
+
+  const onValueChangeAngle = (rotation: number) => {
+    objectsContext.cameraControlRef.current.rotationCameraOn(rotation)
   }
 
 
@@ -86,7 +84,7 @@ export const MapServiceComponent: FC = () => {
           <Text style={styles.text}>Вращать корпус</Text>
           <Slider
             style={{width: '100%', height: 40}}
-            onValueChange={(e) => objectsContext.rotationAngleRef.current = e}
+            onValueChange={onValueChangeAngle}
             minimumValue={0}
             maximumValue={Math.PI * 2}
             step={Math.PI / 64}

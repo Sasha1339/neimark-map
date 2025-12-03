@@ -15,7 +15,7 @@ export const useModelInit = (src: string) => {
   const descriptionTextRef = useRef<any>(null);
   const markerTextRef = useRef<any>(null);
 
-  const model = require('../neimark-hotel-join-and-compression.glb');
+  const model = require('../neimark-hotel-lite.glb');
 
   const gltf: (GLTF & ObjectMap) | (GLTF & ObjectMap)[] = useGLTF(model);
 
