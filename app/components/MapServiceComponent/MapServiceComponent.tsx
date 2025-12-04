@@ -140,6 +140,7 @@ export const MapServiceComponent: FC = () => {
               // Получаем название из свойств GeoJSON (если есть)
               const label = e.properties?.name || `Объект ${i + 1}`;
 
+
               if (center)
 
               return(
