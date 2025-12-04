@@ -12,22 +12,34 @@ import {font_family, font_sizes} from "../../styles/fonts";
 import {MapSearchingComponent} from "../MapSearchingComponent/MapSearchingComponent";
 import {mainHeight, mainWidth} from "../MapSvgComponent/data";
 import {MapNavigatorComponent} from "../MapNavigatorComponent/MapNavigatorComponent";
-import MapView, {Polygon} from "react-native-maps";
+import MapView, {Marker, Polygon, Polyline} from "react-native-maps";
 import {lightMapStyle} from "../../shared/constants/const";
 import {default as MapFeatures} from "./map/test.json";
 
+
 const overlayArea = [
-  { latitude: 56.315852, longitude: 43.981306 },
-  { latitude: 56.315671, longitude: 43.980914 },
-  { latitude: 56.315689, longitude: 43.980277 },
-  { latitude: 56.314821, longitude: 43.979054 },
-  { latitude: 56.313958, longitude: 43.981762 },
-  { latitude: 56.314846, longitude: 43.982508 },
-  { latitude: 56.315132, longitude: 43.981879 },
-  { latitude: 56.315476, longitude: 43.981472 },
+  { latitude: 56.315042, longitude: 43.979515 },
+  { latitude: 56.314889, longitude: 43.979960 },
+  { latitude: 56.314906, longitude: 43.980223 },
+  { latitude: 56.314555, longitude: 43.980293 },
+  { latitude: 56.314503, longitude: 43.980459 },
+  { latitude: 56.314456, longitude: 43.980735 },
+  { latitude: 56.314166, longitude: 43.981225 },
+  { latitude: 56.313951, longitude: 43.981816 },
+  { latitude: 56.313750, longitude: 43.982456 },
+  { latitude: 56.314645, longitude: 43.9830366 },
+  { latitude: 56.315112, longitude: 43.981934 },
+  { latitude: 56.315183, longitude: 43.981821 },
+  { latitude: 56.315469, longitude: 43.981495 },
+  { latitude: 56.315739, longitude: 43.981388 },
+  { latitude: 56.315615, longitude: 43.980365 },
+  { latitude: 56.315524, longitude: 43.980059 },
+  { latitude: 56.315053, longitude: 43.979490 },
+  { latitude: 56.315042, longitude: 43.979515 },
 ];
 
-const mapsObjects = MapFeatures.features.filter(feature => feature.geometry.type === 'Polygon')
+const mapsObjects = MapFeatures.features.filter(feature => feature.geometry.type === 'Polygon');
+const lineObjects = MapFeatures.features.filter(feature => feature.geometry.type === 'LineString');
 
 export const MapServiceComponent: FC = () => {
 
@@ -54,6 +66,23 @@ export const MapServiceComponent: FC = () => {
     setOpenSearch(false);
   }
 
+  const getPolygonCenter = (coordinates: {latitude: number, longitude: number}[]) => {
+    if (coordinates.length === 0) return null;
+
+    let sumLat = 0;
+    let sumLng = 0;
+
+    coordinates.forEach(coord => {
+      sumLat += coord.latitude;
+      sumLng += coord.longitude;
+    });
+
+    return {
+      latitude: sumLat / coordinates.length,
+      longitude: sumLng / coordinates.length
+    };
+  };
+
   return (
     <View style={[styles.container, {overflow: openSearch ? 'hidden' : 'visible'}]}>
       <MapNavigatorComponent />
@@ -76,19 +105,55 @@ export const MapServiceComponent: FC = () => {
           >
             <Polygon
               coordinates={overlayArea}
-              fillColor="#f5f5f5" // Белый фон
-              strokeColor="transparent"
+              fillColor="#DDEFBF" // Белый фон
+              strokeColor="#66D300"
               zIndex={1} // Поверх других элементов
             />
+            {lineObjects.map((e, i) => (
+              <Polyline
+                key={i}
+                coordinates={(e.geometry.coordinates as number[][]).map((e) => ({latitude: e[1], longitude: e[0]}))}
+                strokeColor="#fff"
+                strokeWidth={10}       // Ширина дорожки (основной параметр!)
+                zIndex={1} // Поверх других элементов
+              />
+            ))}
             {mapsObjects.map((e, i) => (
               <Polygon
                 key={i}
                 coordinates={(e.geometry.coordinates as number[][][])[0].map((e) => ({latitude: e[1], longitude: e[0]}))}
-                fillColor="#ff0000" // Белый фон
-                strokeColor="transparent"
-                zIndex={1} // Поверх других элементов
+                fillColor="#EAE9E8" // Белый фон
+                strokeColor="#8F8F8E"
+                zIndex={2} // Поверх других элементов
               />
             ))}
+            {mapsObjects.map((e, i) => {
+
+              const polygonCoords = (e.geometry.coordinates as number[][][])[0].map((coord) =>
+                ({latitude: coord[1], longitude: coord[0]})
+              );
+
+              const center = getPolygonCenter(polygonCoords);
+
+              console.log(center);
+
+              // Получаем название из свойств GeoJSON (если есть)
+              const label = e.properties?.name || `Объект ${i + 1}`;
+
+              if (center)
+
+              return(
+                  <Marker
+                    key={`marker-${i}`}
+                    coordinate={center}
+                    zIndex={5}
+                    tracksViewChanges={false} // Оптимизация производительности
+                  >
+                    <View style={styles.labelContainer}>
+                      <Text style={styles.labelText}>{label}</Text>
+                    </View>
+                  </Marker>
+            )})}
           </MapView>
         </Animated.View>
 
@@ -138,6 +203,24 @@ const styles = StyleSheet.create({
     shadowOffset: {width: 0, height: 5},
     shadowRadius: 10,
     shadowOpacity: 0.2,
+  },
+  labelContainer: {
+    backgroundColor: 'white',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#8F8F8E',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 3,
+  },
+  labelText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#333',
   },
   titleContainer: {
     position: 'absolute',
