@@ -14,12 +14,10 @@ import {Gesture, GestureDetector, GestureType, PinchGesture} from "react-native-
 import {useAnimatedStyle, useSharedValue} from "react-native-reanimated";
 import colors from "../../styles/colors";
 import {font_family, font_sizes} from "../../styles/fonts";
-import {MapSearchingComponent} from "../MapSearchingComponent/MapSearchingComponent";
 import {Hotel, ObjectsMapRefCoords} from "../../shared/types";
 import {MapFloorComponent} from "../MapFloorComponent/MapFloorComponent";
 import {MapObjectsContext} from "../../providers/Objects/MapObjectsContext";
 import {hotelsData, mainHeight, mainWidth, svgHeight, svgWidth} from "../MapSvgComponent/data";
-import {MapNavigatorComponent} from "../MapNavigatorComponent/MapNavigatorComponent";
 import {useRouterHotel} from "./hooks/useRouterHotel";
 
 export const MapServiceComponent: FC = () => {
@@ -45,7 +43,7 @@ export const MapServiceComponent: FC = () => {
 
   const objectsContext = useContext(MapObjectsContext);
 
-  const scaleButton = useSharedValue(1);
+  const allowedPan = useSharedValue(true);
 
   useEffect(() => {
     if (objectsContext?.selectedObject.hotel) {
@@ -55,14 +53,12 @@ export const MapServiceComponent: FC = () => {
     }
   }, [objectsContext?.selectedObject.hotel]);
 
-  const animatedStyleSearch = useAnimatedStyle(() => ({
-    transform: [{scale: scaleButton.value}],
-  }));
 
   const pinchGesture = Gesture.Pinch()
     .onBegin((e) => {
       startScale.value = scale.value;
-
+      runOnJS(clearSelection)();
+      allowedPan.value = false;
     })
       .onStart((e) => {
 
@@ -71,6 +67,9 @@ export const MapServiceComponent: FC = () => {
       const newScale = Math.min(Math.max(0.5, startScale.value * e.scale), 3);
 
       scale.value = newScale;
+    })
+    .onEnd(() => {
+      allowedPan.value = true;
     });
 
 
@@ -85,10 +84,16 @@ export const MapServiceComponent: FC = () => {
     })
     .onUpdate((event) => {
 
+
+
       if (scale.value > 0.8) {
         runOnJS(onCenterWindowFocal)();
       } else {
         runOnJS(onDefaultWindowFocal)();
+      }
+
+      if (!allowedPan.value) {
+        return;
       }
 
 
@@ -132,7 +137,6 @@ export const MapServiceComponent: FC = () => {
 
   return (
     <View style={[styles.container, {overflow: openSearch ? 'hidden' : 'visible'}]}>
-      <MapNavigatorComponent />
       <GestureDetector gesture={composedGesture}>
         <Animated.View style={[styles.mapView, animatedStyleMap]}>
           <MapSvgComponent onPress={onPress}/>
@@ -144,20 +148,7 @@ export const MapServiceComponent: FC = () => {
           <Text style={styles.titleText}>{objectsContext.selectedObject.areas}</Text>
         </View>
       </>}
-      <Pressable style={styles.touchContainer}
-                 onPressIn={() => {
-                   scaleButton.value = withSpring(0.95);
-                 }}
-                 onPressOut={() => {
-                   scaleButton.value = withSpring(1);
-                   setOpenSearch(true);
-                 }}>
-        <Animated.View style={[styles.searchButton, animatedStyleSearch]}>
-          <Text style={styles.text}>Поиск</Text>
-        </Animated.View>
-      </Pressable>
-      {(openSearch || openFloors) && <View style={styles.overlay}></View>}
-      {openSearch && <MapSearchingComponent isOpen={openSearch} onClose={onCloseSearch}/>}
+      {openFloors && <View style={styles.overlay}></View>}
       {!!openFloors && <MapFloorComponent hotel={openFloors} data={hotelsData} isOpen={!!openFloors} onClose={onCloseFloor}/>}
     </View>
   )

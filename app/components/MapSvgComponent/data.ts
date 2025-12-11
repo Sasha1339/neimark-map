@@ -6,11 +6,11 @@ import {svgPathBbox} from 'svg-path-bbox';
 import {HotelMapInfo, HotelRefData} from "./Hotels/types";
 import {withTiming} from "react-native-reanimated";
 
-export const mainWidth = 893.58;
+export const mainWidth = 1000;
 export const mainHeight = 1000;
 
-export const svgWidth = 17122;
-export const svgHeight = 19161;
+export const svgWidth = 28000;
+export const svgHeight = 28000;
 
 export const pathD = (pts: number[][]) => {
     if (pts.length < 2) return "";
@@ -54,24 +54,24 @@ export const propsDHotels = {
 }
 
 export const hotelsData: HotelMapInfo[] = [
-    { type: Hotel.ONE, dProps: propsDHotels[Hotel.ONE], y: 16430.5, x: 983.5, rotationDefault: 0, name: 'Ресeпшен', id: 'h1', idGeoJson: 'entrance_1_1' },
-    { type: Hotel.TWO, dProps: propsDHotels[Hotel.TWO], y: 16475.50, x: 5989.30, rotationDefault: 0, name: 'Бетанкур', id: 'h2', idGeoJson: 'entrance_2_1' },
-    { type: Hotel.THREE, dProps: propsDHotels[Hotel.THREE], y: 16731, x: 8982.97, rotationDefault: 0, name: 'Лобачевский', id: 'h3', idGeoJson: 'entrance_3_1' },
-    { type: Hotel.FOUR, dProps: propsDHotels[Hotel.FOUR], y: 13122.00, x: 1566.24, rotationDefault: 0, name: 'Калашников', id: 'h4', idGeoJson: 'entrance_4_1' },
-    { type: Hotel.FIVE, dProps: propsDHotels[Hotel.FIVE], y: 9860.04, x: 2586.46, rotationDefault: 0, name: 'Ляпунов', id: 'h5', idGeoJson: 'entrance_5_1' },
-    { type: Hotel.SIX, dProps: propsDHotels[Hotel.SIX], y: 12772.8, x: 5993.91, rotationDefault: 0, name: 'Стеклов', id: 'h6', idGeoJson: 'entrance_6_1' },
-    { type: Hotel.SEVEN, dProps: propsDHotels[Hotel.SEVEN], x: 9559.61, y: 13952.5, rotationDefault: 0, name: 'Брайцев', id: 'h7', idGeoJson: 'entrance_7_1' },
-    { type: Hotel.EIGHT, dProps: propsDHotels[Hotel.EIGHT], x: 3287.86, y: 6610.17, rotationDefault: 0, name: 'Галонов-Грехов', id: 'h8', idGeoJson: 'entrance_8_1' },
-    { type: Hotel.NINE, dProps: propsDHotels[Hotel.NINE], y: 9680.63, x: 7717.18, rotationDefault: 0, name: 'Андронов', id: 'h9', idGeoJson: 'entrance_9_1' },
-    { type: Hotel.TEN, dProps: propsDHotels[Hotel.TEN], y: 11193.4, x: 10536.3, rotationDefault: 0, name: 'Харитон', id: 'h10', idGeoJson: 'entrance_10_1' },
-    { type: Hotel.ELEVEN, dProps: propsDHotels[Hotel.ELEVEN], y: 4521.75, x: 5852.66, rotationDefault: 0, name: 'Боголюбов', id: 'h11', idGeoJson: 'entrance_11_1' },
-    { type: Hotel.TWELVE, dProps: propsDHotels[Hotel.TWELVE], y: 6491.02, x: 9633.48, rotationDefault: 0, name: 'Африканов', id: 'h12', idGeoJson: 'entrance_12_1' },
-    { type: Hotel.THIRTEEN, dProps: propsDHotels[Hotel.THIRTEEN], y: 8813.98, x: 12102.0, rotationDefault: 0, name: 'Алексеев', id: 'h13', idGeoJson: 'entrance_13_1' },
-    { type: Hotel.FOURTEEN, dProps: propsDHotels[Hotel.FOURTEEN], y: 837.97, x: 4924.07, rotationDefault: 0, name: 'Гинзбург', id: 'h14', idGeoJson: 'entrance_14_1' },
-    { type: Hotel.FIFTEEN, dProps: propsDHotels[Hotel.FIFTEEN], y: 1363.18, x: 7701.18, rotationDefault: 0, name: 'Неймарк', id: 'h15', idGeoJson: 'entrance_15_1' },
-    { type: Hotel.SIXTEEN, dProps: propsDHotels[Hotel.SIXTEEN], y: 2154.42, x: 10454.1, rotationDefault: 0, name: 'Баталова', id: 'h16', idGeoJson: 'entrance_16_1' },
-    { type: Hotel.SEVENTEEN, dProps: propsDHotels[Hotel.SEVENTEEN], y: 4561.94, x: 12306.0, rotationDefault: 0, name: 'Сахаров', id: 'h17', idGeoJson: 'entrance_17_1' },
-    { type: Hotel.EIGHTEEN, dProps: propsDHotels[Hotel.EIGHTEEN], y: 6816.65, x: 14115.7, rotationDefault: 0, name: 'Афраймович', id: 'h18', idGeoJson: 'entrance_18_1' }
+    { type: Hotel.ONE, dProps: propsDHotels[Hotel.ONE], y: 18730.5, x: 10683.5, rotationDefault: 0, name: 'Ресeпшен', id: 'h1', idGeoJson: 'entrance_1_1' },
+    { type: Hotel.TWO, dProps: propsDHotels[Hotel.TWO], y: 18775.50, x: 15689.30, rotationDefault: 0, name: 'Бетанкур', id: 'h2', idGeoJson: 'entrance_2_1' },
+    { type: Hotel.THREE, dProps: propsDHotels[Hotel.THREE], y: 19031, x: 18682.97, rotationDefault: 0, name: 'Лобачевский', id: 'h3', idGeoJson: 'entrance_3_1' },
+    { type: Hotel.FOUR, dProps: propsDHotels[Hotel.FOUR], y: 15422.00, x: 11266.24, rotationDefault: 0, name: 'Калашников', id: 'h4', idGeoJson: 'entrance_4_1' },
+    { type: Hotel.FIVE, dProps: propsDHotels[Hotel.FIVE], y: 12160.04, x: 12286.46, rotationDefault: 0, name: 'Ляпунов', id: 'h5', idGeoJson: 'entrance_5_1' },
+    { type: Hotel.SIX, dProps: propsDHotels[Hotel.SIX], y: 15072.8, x: 15693.91, rotationDefault: 0, name: 'Стеклов', id: 'h6', idGeoJson: 'entrance_6_1' },
+    { type: Hotel.SEVEN, dProps: propsDHotels[Hotel.SEVEN], x: 19259.61, y: 16252.5, rotationDefault: 0, name: 'Брайцев', id: 'h7', idGeoJson: 'entrance_7_1' },
+    { type: Hotel.EIGHT, dProps: propsDHotels[Hotel.EIGHT], x: 12987.86, y: 8910.17, rotationDefault: 0, name: 'Галонов-Грехов', id: 'h8', idGeoJson: 'entrance_8_1' },
+    { type: Hotel.NINE, dProps: propsDHotels[Hotel.NINE], y: 11980.63, x: 17417.18, rotationDefault: 0, name: 'Андронов', id: 'h9', idGeoJson: 'entrance_9_1' },
+    { type: Hotel.TEN, dProps: propsDHotels[Hotel.TEN], y: 13493.4, x: 20236.3, rotationDefault: 0, name: 'Харитон', id: 'h10', idGeoJson: 'entrance_10_1' },
+    { type: Hotel.ELEVEN, dProps: propsDHotels[Hotel.ELEVEN], y: 6821.75, x: 15552.66, rotationDefault: 0, name: 'Боголюбов', id: 'h11', idGeoJson: 'entrance_11_1' },
+    { type: Hotel.TWELVE, dProps: propsDHotels[Hotel.TWELVE], y: 8791.02, x: 19333.48, rotationDefault: 0, name: 'Африканов', id: 'h12', idGeoJson: 'entrance_12_1' },
+    { type: Hotel.THIRTEEN, dProps: propsDHotels[Hotel.THIRTEEN], y: 11113.98, x: 21802.0, rotationDefault: 0, name: 'Алексеев', id: 'h13', idGeoJson: 'entrance_13_1' },
+    { type: Hotel.FOURTEEN, dProps: propsDHotels[Hotel.FOURTEEN], y: 3137.97, x: 14624.07, rotationDefault: 0, name: 'Гинзбург', id: 'h14', idGeoJson: 'entrance_14_1' },
+    { type: Hotel.FIFTEEN, dProps: propsDHotels[Hotel.FIFTEEN], y: 3663.18, x: 17401.18, rotationDefault: 0, name: 'Неймарк', id: 'h15', idGeoJson: 'entrance_15_1' },
+    { type: Hotel.SIXTEEN, dProps: propsDHotels[Hotel.SIXTEEN], y: 4454.42, x: 20154.1, rotationDefault: 0, name: 'Баталова', id: 'h16', idGeoJson: 'entrance_16_1' },
+    { type: Hotel.SEVENTEEN, dProps: propsDHotels[Hotel.SEVENTEEN], y: 6861.94, x: 22006.0, rotationDefault: 0, name: 'Сахаров', id: 'h17', idGeoJson: 'entrance_17_1' },
+    { type: Hotel.EIGHTEEN, dProps: propsDHotels[Hotel.EIGHTEEN], y: 9116.65, x: 23815.7, rotationDefault: 0, name: 'Афраймович', id: 'h18', idGeoJson: 'entrance_18_1' }
 ]
 
 
@@ -86,8 +86,8 @@ const getPathCenter = (pathData?: string): { x: number; y: number } => {
 export const compareWithHotel = (e: GestureResponderEvent, info: ObjectsMapRefCoords) => {
     const boxHotel = info.ref.current!.getBBox()!;
 
-    return (e.nativeEvent.locationX * 17122 / mainWidth >= info.x && e.nativeEvent.locationX * 17122 / mainWidth <= info.x + boxHotel.width)
-        && (e.nativeEvent.locationY * 19161 / mainHeight >= info.y && e.nativeEvent.locationY * 19161 / mainHeight <= info.y + boxHotel.height);
+    return (e.nativeEvent.locationX * svgWidth / mainWidth >= info.x && e.nativeEvent.locationX * svgWidth / mainWidth <= info.x + boxHotel.width)
+        && (e.nativeEvent.locationY * svgHeight / mainHeight >= info.y && e.nativeEvent.locationY * svgHeight / mainHeight <= info.y + boxHotel.height);
 }
 
 

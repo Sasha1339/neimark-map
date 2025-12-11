@@ -58,8 +58,8 @@ export const useRouterHotel = () => {
         focalX.value = info!.x * mainWidth / svgWidth + (bbox!.width * mainWidth / svgWidth) / 2;
         focalY.value = info!.y * mainHeight / svgHeight + (bbox!.height * mainHeight / svgHeight) / 2;
 
-        translateX.value = withTiming(translateX.value + dFocalX * (scale.value - 1) - pageX - (info!.x * width / 17122) + widthPhone / 2 - (bbox!.width * width / 17122) / 2, {duration: 300})
-        translateY.value = withTiming(translateY.value + dFocalY * (scale.value - 1) - pageY - (info!.y * height / 19161) + heightPhone / 2 - (bbox!.height * height / 19161) / 2, {duration: 300})
+        translateX.value = withTiming(translateX.value + dFocalX * (scale.value - 1) - pageX - (info!.x * width / svgWidth) + widthPhone / 2 - (bbox!.width * width / svgWidth) / 2, {duration: 300})
+        translateY.value = withTiming(translateY.value + dFocalY * (scale.value - 1) - pageY - (info!.y * height / svgHeight) + heightPhone / 2 - (bbox!.height * height / svgHeight) / 2, {duration: 300})
 
         scale.value = withTiming(3, {duration: 1000})
       }
