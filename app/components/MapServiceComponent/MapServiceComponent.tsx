@@ -58,10 +58,10 @@ export const MapServiceComponent: FC = () => {
     .onBegin((e) => {
       startScale.value = scale.value;
       runOnJS(clearSelection)();
-      allowedPan.value = false;
+
     })
       .onStart((e) => {
-
+        allowedPan.value = false;
       })
     .onUpdate((e) => {
       const newScale = Math.min(Math.max(0.5, startScale.value * e.scale), 3);
