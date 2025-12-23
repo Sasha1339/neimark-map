@@ -1,4 +1,5 @@
 import {ReactNode} from "react";
+import * as stream from "node:stream";
 
 export type PropsAreas = {
   id?: string;
@@ -35,4 +36,14 @@ export interface AreasInfo {
   x: number,
   y: number,
   title: string
+}
+
+export interface AccessibleAreas {
+  id: string,
+  x: number,
+  y: number,
+  deg?: number,
+  width?: number,
+  height?: number,
+  d?: string,
 }

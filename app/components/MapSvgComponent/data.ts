@@ -6,8 +6,8 @@ import {svgPathBbox} from 'svg-path-bbox';
 import {HotelMapInfo, HotelRefData} from "./Hotels/types";
 import {withTiming} from "react-native-reanimated";
 
-export const mainWidth = 1000;
-export const mainHeight = 1000;
+export const mainWidth = 1200;
+export const mainHeight = 1200;
 
 export const svgWidth = 28000;
 export const svgHeight = 28000;

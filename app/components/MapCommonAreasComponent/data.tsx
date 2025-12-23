@@ -1,4 +1,4 @@
-import {AreasInfo, AreaType} from "./Areas/types";
+import {AccessibleAreas, AreasInfo, AreaType} from "./Areas/types";
 import {GestureResponderEvent} from "react-native";
 import {mainHeight, mainWidth} from "../MapSvgComponent/data";
 
@@ -33,22 +33,43 @@ export const areas: AreasInfo[] = [
 ]
 
 
-export function wrapText(text: string, fontSize: number, maxWidth: number) {
-  const avg = fontSize * 0.6;
-  const words = text.split(' ');
-  let lines = [];
-  let current = '';
-
-  for (let word of words) {
-    if ((current + ' ' + word).length * avg < maxWidth) {
-      current += (current ? ' ' : '') + word;
-    } else {
-      lines.push(current);
-      current = word;
-    }
+export const accessibleAreas: AccessibleAreas[] = [
+  {
+    id: 'building_1_enter_1',
+    x: 10750,
+    y: 20700,
+    width: 860,
+    height: 1820,
+    deg: 90,
+  },
+  {
+    id: 'building_4_enter_2',
+    x: 11350,
+    y: 15800,
+    width: 860,
+    height: 1820,
+    deg: 10,
+  },
+  {
+    id: 'building_4_enter_1',
+    x: 12250,
+    y: 15650,
+    width: 860,
+    height: 860,
+    deg: 10,
+  },
+  {
+    id: 'building_4_enter_3',
+    x: 12420,
+    y: 16570,
+    width: 860,
+    height: 860,
+    deg: 10,
+  },
+  {
+    id: 'building_2_enter_2',
+    x: 15950,
+    y: 18850,
+    d: "M1741.79 -0.00300491C1769.41 -0.00300474 1791.79 22.3829 1791.79 49.9971L1791.79 1802.1C1791.79 1829.71 1769.41 1852.1 1741.79 1852.1L944.131 1852.1C941.222 1852.1 938.372 1851.85 935.6 1851.37C934.014 1851.53 932.406 1851.6 930.779 1851.6L49.9976 1851.6C22.3834 1851.6 -0.00298337 1829.22 -0.00306251 1801.6L-0.00301361 996.204C-0.00301344 968.589 22.3827 946.203 49.9969 946.203L894.131 946.203L894.13 49.9975C894.13 22.3834 916.516 -0.00295772 944.13 -0.00310743L1741.79 -0.00300491Z",
   }
-
-  if (current) lines.push(current);
-
-  return lines;
-}
+]

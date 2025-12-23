@@ -64,7 +64,7 @@ export const MapServiceComponent: FC = () => {
         allowedPan.value = false;
       })
     .onUpdate((e) => {
-      const newScale = Math.min(Math.max(0.5, startScale.value * e.scale), 3);
+      const newScale = Math.min(Math.max(1, startScale.value * e.scale), 3);
 
       scale.value = newScale;
     })
@@ -86,15 +86,19 @@ export const MapServiceComponent: FC = () => {
 
 
 
-      if (scale.value > 0.8) {
-        runOnJS(onCenterWindowFocal)();
-      } else {
-        runOnJS(onDefaultWindowFocal)();
-      }
+      // if (scale.value > 0.8) {
+      //   runOnJS(onCenterWindowFocal)();
+      // } else {
+      //   runOnJS(onDefaultWindowFocal)();
+      // }
+
+
 
       if (!allowedPan.value) {
         return;
       }
+
+      runOnJS(onCenterWindowFocal)();
 
 
       if (mainWidth / 2 - (startX.value + event.translationX) / scale.value > 0 && mainWidth / 2 - (startX.value + event.translationX) / scale.value < mainWidth) {
@@ -132,6 +136,7 @@ export const MapServiceComponent: FC = () => {
 
   const onCloseFloor = () => {
     setOpenFloors(undefined);
+    clearSelection();
   }
 
 

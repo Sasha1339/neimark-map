@@ -6,14 +6,14 @@ import {ObjectsMapRefCoords} from "../../shared/types";
 import {compareWithHotel, hotelsData, mainHeight, mainWidth, pathD, svgHeight, svgWidth} from "./data";
 import {useAnimationTransform} from "./hooks/useAnimationTransform";
 import {MapCommonAreasComponent} from "../MapCommonAreasComponent/MapCommonAreasComponent";
-import {areas} from "../MapCommonAreasComponent/data";
+import {accessibleAreas, areas} from "../MapCommonAreasComponent/data";
 import {MapHotelSvgComponent} from "./Hotels/MapHotelSvgComponent";
 import {MapObjectsContext} from "../../providers/Objects/MapObjectsContext";
 import {MapNavigatorContext} from "../../providers/Navigator/MapNavigatorContext";
 
 
 type Props = {
-  onPress?: (obj: ObjectsMapRefCoords) => void
+  onPress?: (obj: ObjectsMapRefCoords) => void;
 }
 
 export const MapSvgComponent: FC<Props> = ({onPress, ...props}) => {
